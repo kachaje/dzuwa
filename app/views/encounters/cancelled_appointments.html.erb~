@@ -1,0 +1,15 @@
+<center>
+
+
+<% if @patient.length > 0 %>
+    <h1>Cancelled Appointments for <%= "#{@patient.person.names.first.given_name} #{@patient.person.names.first.family_name}" %></h1>
+
+    <%= render :partial => "form" %>
+       
+    <% form_tag :controller => "location", :action => "list" do %>
+        <%= submit_tag "Back", :class => "smallbutton" %>
+    <% end %>
+            
+<% end %>
+
+</center>    

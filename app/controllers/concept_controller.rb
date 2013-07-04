@@ -1,0 +1,292 @@
+class ConceptController < ApplicationController
+
+    def index
+        
+        @concept = Concept.find(:all, :include => [:sets], :conditions => ["concept_set.concept_id = concept.concept_id AND concept_set.concept_set = ?","1"]).map{|p| p.concept_id}
+  
+        # @procedure = Concept.find(:all, :include => [:sets], :conditions => ["concept_set.concept_id = concept.concept_id AND concept_set.concept_set IN (?)", @concept.join(", ")])
+              
+    end
+    
+    def new_procedure
+         if params[:viewer]
+            if params[:viewer] == "false"
+                @viewer = "none"
+            else
+                @viewer = "block"
+            end
+        end
+        
+        @category = Concept.find(:all, :include => [:sets], :conditions => ["concept_set.concept_id = concept.concept_id AND concept_set.concept_set = ?","1"]).map{|p| p.name.name}
+
+    end
+
+    def create_procedure
+        
+        if params[:concept]
+            @procedure = Concept.new(:retired => 0, :datatype_id => 4, :class_id => 2, :creator => session[:user_id], :date_created => DateTime.now)
+            
+            if @procedure.save
+                
+                @id = @procedure.concept_id
+                
+                @name = ConceptName.new(:concept_id => @id, :name => (params[:concept][:name]).upcase, :creator => session[:user_id], :date_created => DateTime.now, :locale => "en")
+                
+                if @name.save
+                
+                    @description = ConceptDescription.new(:concept_id => @id, :description => params[:concept][:description], :locale => "en", :creator => session[:user_id], :date_created => DateTime.now)
+                    if @description.save
+                        
+                        fld = params[:concept][:category]
+                        
+                        @set_id = Concept.find(:first, :include => [:name], :conditions => ["UPPER(concept_name.name) = ?", fld.upcase.strip])
+                        
+                        unless @set_id
+                        
+                            @set_id = CreateSet(params[:concept][:category])
+                            
+                            unless @set_id                            
+                                flash[:error] = "Failed to create new procedure description"
+                                redirect_to :action => "new_procedure"
+                            end
+                        else
+                            @set_id = @set_id.concept_id   
+                        end                                                      
+                           
+                        @set = ConceptSet.new(:concept_id => @id, :concept_set => @set_id, :sort_weight => 1, :creator => session[:user_id], :date_created => DateTime.now)
+                       
+                        if @set.save
+                            
+                            @answer_id = Concept.find(:first, :include => [:name], :conditions => ["UPPER(concept_name.name) = ?", params[:concept][:time].strip])
+                            
+                            unless @answer_id
+                                @answer_id = CreateTime(params[:concept][:time])
+                                
+                                unless @answer_id                                    
+                                    flash[:error] = "Failed to create new procedure answer"
+                                    redirect_to :action => "new_procedure"
+                                end
+                            else                               
+                                @answer_id = @answer_id.concept_id
+                            end
+                            
+                            @answer = ConceptAnswer.new(:concept_id => @id, :answer_concept => @answer_id, :creator => session[:user_id], :date_created => DateTime.now)                                
+                            if @answer.save                                    
+                                flash[:notice] = "Procedure added successifully!"
+                            else                                    
+                                flash[:error] = "Failed to add procedure time; proceeding"
+                            end  
+                            
+                        else
+                            
+                            flash[:error] = "Failed to add procedure to category but proceeding!"                                                                
+                        end
+                        
+                        redirect_to :action => "index"
+                        
+                    else
+                    
+                        flash[:error] = "Failed to create new procedure description"
+                    
+                        redirect_to :action => "new_procedure"
+                        
+                    end
+                
+                else
+                    flash[:error] = "Failed to create new procedure name"
+                
+                    redirect_to :action => "new_procedure"
+                end
+                
+            else
+                flash[:error] = "Failed to create new procedure"
+                
+                redirect_to :action => "new_procedure"
+            end
+        end
+        
+    end
+    
+    def CreateTime(time)
+        @time = Concept.new(:retired => 0, :datatype_id => 4, :class_id => 2, :creator => session[:user_id], :date_created => DateTime.now)
+        
+        if @time.save
+                       
+                @tid = @time.concept_id
+                
+                @name = ConceptName.new(:concept_id => @tid, :name => (time).upcase, :creator => session[:user_id], :date_created => DateTime.now, :locale => "en")
+                
+                if @name.save
+                    
+                    @description = ConceptDescription.new(:concept_id => @tid, :description => "This procedure takes " + time.capitalize + " minutes to complete", :locale => "en", :creator => session[:user_id], :date_created => DateTime.now)
+                    
+                    if @description.save
+                        
+                        @tset_id = ConceptName.find(:first, :conditions => ["UPPER(name) = ?", "SURGICAL OPERATION TIME"]).concept_id
+                        
+                        @set = ConceptSet.new(:concept_id => @tid, :concept_set => @tset_id, :sort_weight => 1, :creator => session[:user_id], :date_created => DateTime.now)
+                           
+                        if @set.save
+                        
+                            return @tid
+                        
+                        end
+                    end
+                    
+                end
+        end
+        
+        return nil
+    end
+    
+    def CreateSet(category)
+    
+        @category = Concept.new(:retired => 0, :datatype_id => 4, :class_id => 2, :creator => session[:user_id], :date_created => DateTime.now)
+            
+            if @category.save
+                            
+                @cid = @category.concept_id
+                
+                @name = ConceptName.new(:concept_id => @cid, :name => (category).upcase, :creator => session[:user_id], :date_created => DateTime.now, :locale => "en")
+                
+                if @name.save
+                    
+                    @description = ConceptDescription.new(:concept_id => @cid, :description => "This is the set of all procedures that fall under " + category.capitalize, :locale => "en", :creator => session[:user_id], :date_created => DateTime.now)
+                    
+                    if @description.save
+                        
+                        @set_id = ConceptName.find(:first, :conditions => ["UPPER(name) = ?", "SURGICAL PROCEDURES"]).concept_id
+                        
+                        @set = ConceptSet.new(:concept_id => @cid, :concept_set => @set_id, :sort_weight => 1, :creator => session[:user_id], :date_created => DateTime.now)
+                           
+                            if @set.save
+                            
+                                return @cid
+                            
+                            end
+                            
+                    end
+                    
+                end
+            
+            end
+            
+            return nil
+            
+    end
+    
+    def search_cat
+    
+        if params[:search]
+             
+             @category = Concept.find(:all, :include => [[:sets],[:name]], :conditions => ["concept_set.concept_id = concept.concept_id AND concept_set.concept_set = ? AND UPPER(concept_name.name) LIKE ?", "1", "%" + params[:search] + "%"], :order => "concept_name.name")
+            
+        else
+            
+            @category = Concept.find(:all, :include => [[:sets], [:name]], :conditions => ["concept_set.concept_id = concept.concept_id AND concept_set.concept_set = ?","1"], :order => "concept_name.name")
+            
+        end
+        
+        render :text => "<option>" + @category.map{|p| p.name.name.capitalize}.join("</option><option>") + "</option>"
+        
+    end
+    
+    def search_min
+    
+        if params[:search]
+             
+             @min = Concept.find(:all, :include => [[:sets],[:name]], :conditions => ["concept_set.concept_id = concept.concept_id AND concept_set.concept_set = ? AND UPPER(concept_name.name) LIKE ?", "6", "%" + params[:search] + "%"], :order => "concept_name.name")
+            
+        else
+            
+            @min = Concept.find(:all, :include => [:sets], :conditions => ["concept_set.concept_id = concept.concept_id AND concept_set.concept_set = ?","6"], :order => "concept_name.name")
+            
+        end
+        
+        render :text => "<option style='text-align: center'>" + @min.map{|p| p.name.name.capitalize}.join("</option><option style='text-align: center'>") + "</option>"
+        
+    end
+    
+    def search_proc
+        
+        @concept = Concept.find(:all, :include => [:sets], :conditions => ["concept_set.concept_id = concept.concept_id AND concept_set.concept_set = ?","1"]).map{|p| p.concept_id}
+  
+        if params[:search]
+             
+             @proc = Concept.find(:all, :include => [[:sets],[:name]], :conditions => ["concept_set.concept_id = concept.concept_id AND concept_set.concept_set IN (?) AND UPPER(concept_name.name) LIKE ?", @concept, "%" + params[:search] + "%"], :order => "concept_name.name")
+            
+        else
+            
+            @proc = Concept.find(:all, :include => [[:sets],[:name]], :conditions => ["concept_set.concept_id = concept.concept_id AND concept_set.concept_set IN (?)",  @concept], :order => "concept_name.name")
+            
+        end
+        
+        render :text => "<option>" + @proc.map{|p| p.name.name.titleize}.join("</option><option>") + "</option>"
+        
+    end
+    
+    def search_tmr
+        @name = params[:search]
+        
+        @result = Concept.find(:all, :include => [[:sets],[:name]], :conditions => ["concept_set.concept_id = concept.concept_id AND UPPER(concept_name.name) LIKE ?", "%" + params[:search] + "%"])
+        
+        render :text => "#{@result.first.concept_answers.first.answer.concept_names.first.name rescue ""}"
+    end
+    
+    def edit_procedure
+        if params[:viewer]
+            if params[:viewer] == "false"
+                @viewer = "none"
+            else
+                @viewer = "block"
+            end
+        else
+            @viewer = "block"
+        end
+        
+        if params[:proc_id]
+            if params[:proc_id].strip.length > 0
+                @proc = Concept.find(params[:proc_id])
+                
+                @set = Concept.find(@proc.sets.first.concept_set).name.name.titleize rescue nil
+                @set_id = @proc.sets.first.concept_set rescue nil
+                
+                @procedure = @proc.name.name.titleize
+                @description = @proc.descript.description
+                @time = @proc.concept_answers.first.answer.name.name
+                @time_id = @proc.concept_answers.first.answer.name.concept_id
+                @proc_id = params[:proc_id]
+                
+                @edit = true
+            else
+                redirect_to :action => "index"
+            end
+        end
+    end
+    
+    def update_procedure
+        if params[:procedure_id].strip.length > 0       
+            @time = ConceptName.find(:first, :conditions => ["name = ?", params[:concept][:time]]).concept_id rescue nil
+            
+            if @time.nil?
+                @time = CreateTime(params[:concept][:time])
+            end
+            
+            @ans = ConceptAnswer.find(:first, :conditions => ["concept_id = ?", params[:procedure_id]])
+            
+            @ans.update_attributes(:answer_concept => @time)
+            
+            @proc = ConceptName.find(:first, :conditions => ["concept_id = ?", params[:procedure_id]])
+            @proc.update_attributes(:name => params[:concept][:name])
+            
+            @desc = ConceptDescription.find(:first, :conditions => ["concept_id = ?", params[:procedure_id]])            
+            @desc.update_attributes(:description => params[:concept][:description])
+                 
+            flash[:notice] = "Procedure updated"
+            
+            redirect_to :action => "index"
+        else
+            redirect_to :action => "index"
+        end
+    end
+end

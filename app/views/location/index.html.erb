@@ -1,0 +1,30 @@
+<center>
+
+<h1>Hospitals Management Panel</h1>
+<!-- %= link_to "Show", :action => "show" % -->
+<% form_tag ({:action => "create"}, {:id => "frmMain"}) do %>
+    <table cellpadding=5>
+        <tr>
+            <td>
+                <%= submit_tag "Available Hospitals / Clinics", :onclick => "$('frmMain').action = '/location/list'; $('frmMain').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <%= submit_tag "Add New Hospital / Clinic", :onclick => "$('frmMain').action = '/location/new_hospital'; $('frmMain').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <%= submit_tag "Add New Hospital Sub-Unit", :onclick => "$('frmMain').action = '/location/new_venue'; $('frmMain').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <%= submit_tag "Home", :onclick => "$('frmMain').action = '/task/index'; $('frmMain').submit()", :class => "button" %>
+            </td>
+        </tr>
+    </table>
+<% end %>
+            
+</center>

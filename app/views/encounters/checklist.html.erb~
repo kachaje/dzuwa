@@ -1,0 +1,1262 @@
+<script type="text/javascript" language="javascript">
+<!-- 
+    var diff = 60;
+    
+    function $$(id){
+        return document.getElementsByName(id);
+    }
+    
+    function getSelected(id){
+        if($$(id)[0].checked == true){
+            return $$(id)[0].value;
+        } else if($$(id)[1].checked == true){
+            return $$(id)[1].value;
+        } else {
+            return "";
+        }
+    }
+    
+    function ajaxSysIDRequest(aUrl, ctrl, target) {
+        var httpRequest = new XMLHttpRequest(); 
+        httpRequest.onreadystatechange = function() { 
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+	            ctrl.value = httpRequest.responseText;
+	            if(httpRequest.responseText.match(/\w+/)){
+	                target.style.display="none";
+	                ajaxSurgicalsRequest();
+	            } else {
+	                alert("Wrong password or username. Please try again.");
+	            }
+            } 
+        };
+        try {
+            httpRequest.open('GET', aUrl, true);
+	    httpRequest.send(null);    
+        } catch(e){
+        }
+    }	
+    
+    function ajaxCreateEnc(){
+        var httpRequest = new XMLHttpRequest(); 
+        var aUrl = "/encounters/create_chklist_enc?" + 
+                                "app_encounter_id=" + $('app_encounter_id').value
+                                
+        httpRequest.onreadystatechange = function() { 
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var s = httpRequest.responseText;
+                $('encounter_id').value = s;
+            } 
+        };
+        try {
+            httpRequest.open('GET', aUrl, true);
+            httpRequest.send(null);    
+        } catch(e){
+        }
+    }
+    
+    function ajaxSurgicalsRequest() {
+    
+        if($('encounter_id').value.match(/^$/)){
+            ajaxCreateEnc();
+            return;
+        }
+        
+        var httpRequest = new XMLHttpRequest(); 
+        
+        var i = 0;
+        
+        for(i = 0; i<4; i++){
+            var aUrl = ["/encounters/save_chklist_surgicals?" + 
+                                "app_encounter_id=" + $('app_encounter_id').value +
+                                "&encounter_id=" + $('encounter_id').value +
+                                "&tintime=" + $('tintime').value +
+                                "&datetaken=" + $('datetaken').value +
+                                "&hb=" + $('hb').value +
+                                "&wcc=" + $('wcc').value +
+                                "&plts=" + $('plts').value +
+                                "&mps=" + $('mps').value +
+                                "&other=" + $('other').value +
+                                "&ts=" + getSelected('ts') +
+                                "&units=" + (($('units'))?($('units').value):"") +
+                                "&consent=" + $('consent').checked +
+                                "&site=" + getSelected('site') +
+                                "&medic=" + $('medic').value +
+                                "&allergno=" + getSelected('allergno') +
+                                "&adrug=" + (($('adrug'))?($('adrug').value):"") +
+                                "&intern=" + $('intern').value,
+                       "/encounters/save_chklist_surgicals?" + 
+                                "app_encounter_id=" + $('app_encounter_id').value +
+                                "&encounter_id=" + $('encounter_id').value +
+                                "&ate=" + $('ate').value +
+                                "&weight=" + $('weight').value +
+                                "&drank=" + $('drank').value +
+                                "&hr=" + $('hr').value +
+                                "&bp=" + $('bp').value +
+                                "&rr=" + $('rr').value +
+                                "&spo2=" + $('spo2').value +
+                                "&nurse=" + $('nurse').value +
+                                "&risk=" + getSelected('risk') +
+                                "&induction=" + $('inddate').value + " " + $('induction').value +
+                                "&prepstart=" + $('prepstart').value +
+                                "&surg=" + $('surg').checked +
+                                "&surgrev=" + $('surgrev').checked +
+                                "&tout=" + $('tout').value +
+                                "&anaesthrev=" + $('anaesthrev').checked,
+                        "/encounters/save_chklist_surgicals?" + 
+                                "app_encounter_id=" + $('app_encounter_id').value +
+                                "&encounter_id=" + $('encounter_id').value +
+                                "&nurserev=" + $('nurserev').checked +
+                                "&prophy=" + getSelected('prophy') +
+                                "&instrument=" + $('instrument').checked +
+                                "&spec=" + $('spec').checked +
+                                "&equipment=" + $('equipment').checked +
+                                "&surgrecov=" + $('surgrecov').checked +
+                                "&obsrecov=" + $('obsrecov').checked +
+                                "&recovout=" + $('recovout').value +
+                                "&ivi=" + getSelected('ivi') +
+                                "&nextmed=" + $('nextmed').value +
+                                "&taco=" + $('taco').value +
+                                "&freqobs=" + $('freqobs').value,
+                        "/encounters/save_chklist_surgicals?" + 
+                                "app_encounter_id=" + $('app_encounter_id').value +
+                                "&encounter_id=" + $('encounter_id').value +
+                                "&score=" + $('score').value +
+                                "&dest=" + $('dest').value +
+                                "&units=" + $('units').value +
+                                "&imaging=" + getSelected('imaging') +
+                                "&knife=" + $('knife').value +
+                                "&closure=" + $('closure').value +
+                                "&proc=" + $('proc').checked +
+                                "&nbm=" + $('nbm').value +
+                                "&child=" + getSelected('child') +
+                                "&wrist=" + $('wrist').checked +
+                                "&intro=" + $('intro').checked +
+                                "&team=" + $('team').checked +
+                                "&op=" + $('op').checked +
+                                "&nbm=" + $('nbm').value
+                        ];
+            
+            httpRequest.onreadystatechange = function() { 
+                if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+	                var s = httpRequest.responseText;
+	                $('encounter_id').value = s;
+                } 
+            };
+            try {
+                httpRequest.open('GET', aUrl[i], true);
+	            httpRequest.send(null);    
+            } catch(e){
+            }
+        }
+    }	
+
+//-->
+</script>
+
+<center>
+
+<% 
+ 
+    @fields = {}
+    
+    if @encounter_id
+    
+        @obs = Observation.find(:all, :conditions => ["encounter_id = ?", @encounter_id])
+    
+        @obs.each{|o|
+        
+            case o.concept_id
+                
+                when 85
+                                
+                    @fields["tintime"] = o.value_datetime.strftime("%H:%M") rescue Time.now.strftime('%H:%M')
+                
+                when 86
+                    
+                    @fields["datetaken"] = o.value_datetime.strftime("%Y-%m-%d") rescue Time.now.strftime('%Y-%m-%d')                
+                
+                when 87
+                
+                    @fields["hb"] = o.value_text rescue ""
+                
+                when 88
+                
+                    @fields["wcc"] = o.value_text rescue ""
+                
+                when 89
+                
+                    @fields["plts"] = o.value_text rescue ""
+                
+                when 90
+                
+                    @fields["mps"] = o.value_text rescue ""
+                
+                when 91
+                
+                    @fields["other"] = o.value_text rescue ""
+                
+                when 92
+                
+                    @fields["ts"] = o.value_text rescue ""
+                
+                when 94
+                
+                    @fields["units"] = o.value_text rescue ""
+                
+                when 95
+                
+                    @fields["consent"] = o.value_boolean rescue 0
+                
+                when 96
+                
+                    @fields["site"] = o.value_text rescue ""
+                
+                when 97
+                
+                    @fields["medic"] = o.value_text rescue ""
+                
+                when 98
+                
+                    @fields["allergno"] = o.value_text rescue ""
+                
+                when 99
+                
+                    @fields["adrug"] = o.value_text rescue ""
+                
+                when 100
+                
+                    @fields["intern"] = o.value_text rescue ""
+                
+                when 101
+                
+                    @fields["ate"] = o.value_datetime.strftime("%H:%M") rescue Time.now.strftime('%H:%M')
+                
+                when 102
+                
+                    @fields["drank"] = o.value_datetime.strftime("%H:%M") rescue Time.now.strftime('%H:%M')
+                
+                when 103
+                
+                    @fields["weight"] = o.value_text rescue ""
+                
+                when 104
+                
+                    @fields["hr"] = o.value_text rescue ""
+                
+                when 105
+                
+                    @fields["bp"] = o.value_text rescue ""
+                
+                when 106
+                
+                    @fields["rr"] = o.value_text rescue ""
+                
+                when 107
+                
+                    @fields["spo2"] = o.value_text rescue ""
+                
+                when 108
+                
+                    @fields["nurse"] = o.value_text rescue ""
+                
+                when 109
+                
+                    @fields["risk"] = o.value_text rescue ""
+                
+                when 110
+                
+                    @fields["taco"] = o.value_text rescue ""
+                
+                when 111
+                
+                    @fields["induction"] = o.value_datetime rescue Time.now
+                
+                when 112
+                
+                    @fields["prepstart"] = o.value_datetime.strftime("%H:%M") rescue Time.now.strftime('%H:%M')
+                
+                when 113
+                
+                    @fields["surg"] = o.value_boolean rescue 0
+                
+                when 114
+                
+                    @fields["surgrev"] = o.value_boolean rescue 0
+                
+                when 115
+                
+                    @fields["anaesthrev"] = o.value_boolean rescue 0
+                
+                when 116
+                
+                    @fields["nurserev"] = o.value_boolean rescue 0
+                
+                when 117
+                
+                    @fields["prophy"] = o.value_text rescue ""
+                
+                when 118
+                
+                    @fields["imaging"] = o.value_text rescue ""
+                
+                when 119
+                
+                    @fields["knife"] = o.value_datetime.strftime("%H:%M") rescue Time.now.strftime('%H:%M')
+                
+                when 120
+                
+                    @fields["closure"] = o.value_datetime.strftime("%H:%M") rescue Time.now.strftime('%H:%M')
+                
+                when 121
+                                
+                    @fields["proc"] = o.value_boolean rescue 0
+                
+                when 122
+                
+                    @fields["instrument"] = o.value_boolean rescue 0
+                
+                when 123
+                
+                    @fields["spec"] = o.value_boolean rescue 0
+                
+                when 124
+                
+                    @fields["equipment"] = o.value_boolean rescue 0
+                
+                when 125
+                
+                    @fields["tout"] = o.value_datetime.strftime("%H:%M") rescue Time.now.strftime('%H:%M')
+                
+                when 126
+                
+                    @fields["surgrecov"] = o.value_boolean rescue 0
+                
+                when 127
+                
+                    @fields["obsrecov"] = o.value_boolean rescue 0
+                
+                when 128
+                
+                    @fields["nbm"] = o.value_datetime.strftime("%H:%M") rescue Time.now.strftime('%H:%M')
+                
+                when 129
+                
+                    @fields["nextmed"] = o.value_datetime.strftime("%H:%M") rescue Time.now.strftime('%H:%M')
+                
+                when 130
+                
+                    @fields["freqobs"] = o.value_text rescue ""
+                
+                when 131
+                
+                    @fields["score"] = o.value_text rescue ""
+                
+                when 132
+                
+                    @fields["dest"] = o.value_text rescue ""
+                
+                when 133
+                
+                    @fields["recovout"] = o.value_datetime.strftime("%H:%M") rescue Time.now.strftime('%H:%M')
+                
+                when 141
+                
+                    @fields["app_encounter_id"] = o.value_numeric rescue ""
+               
+                when 142
+                
+                    @fields["child"] = o.value_text rescue ""
+               
+                when 143
+                
+                    @fields["ivi"] = o.value_text rescue ""
+               
+                when 144
+                
+                    @fields["wrist"] = o.value_boolean rescue ""
+               
+                when 145
+                
+                    @fields["intro"] = o.value_boolean rescue ""
+               
+                when 146
+                
+                    @fields["team"] = o.value_boolean rescue ""
+               
+                when 147
+                
+                    @fields["op"] = o.value_boolean rescue ""
+               
+                when 148
+                
+                    @fields["hospno"] = o.value_text rescue ""
+               
+            end
+                 
+        }
+    end
+          
+    @server = "http://localhost:8080/jasperserver/flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/SurgicalSafetyList&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser"  
+%>
+
+<table width=100% bgcolor="#000000" cellspacing=1 cellpadding=0>
+    <tr>
+        <td bgcolor="#000000" width=100px align="center">
+            <table bgcolor="#FFFFFF" height="30px" cellpadding=5 cellspacing=1>
+                <tr>
+                    <td bgcolor="#FFFFFF">
+                        <a href="<%= @server %>&enc_id=<%= @encounter_id %>&output=pdf" target="_blank" ><img src="/images/pdf.gif" alt="Export the report to PDF" border=0 style="cursor: pointer; border-color:rgb(192,0,0)" /></a>
+                    </td>
+                    <td bgcolor="#FFFFFF">
+                        <a href="<%= @server %>&enc_id=<%= @encounter_id %>&output=csv" target="_blank" ><img src="/images/csv.gif" alt="Export the report to CSV" border=0 style="cursor: pointer; border-color:rgb(192,0,0)" /></a>
+                    </td>
+                    <td bgcolor="#FFFFFF">
+                        <a href="<%= @server %>&enc_id=<%= @encounter_id %>&output=rtf" target="_blank" ><img src="/images/rtf.gif" alt="Export the report to RTF" border=0 style="cursor: pointer; border-color:rgb(192,0,0)" /></a>
+                    </td>
+                    <td bgcolor="#FFFFFF">
+                        <a href="<%= @server %>&enc_id=<%= @encounter_id %>&output=xls" target="_blank" ><img src="/images/xls.gif" alt="Export the report to Excel" border=0 style="cursor: pointer; border-color:rgb(192,0,0)" /></a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td bgcolor="#FFFFFF">
+            &nbsp;
+        </td>
+    </tr>
+    <tr>
+        <td colspan=2>
+        
+            <div id="dvFrame" style="height:400px; z-index:10; position:relative; overflow: scroll;" width="100%">
+
+                <table cellpadding=0 cellspacing=0>
+                    <tr>
+                        <td colspan=3>
+                            <table cellpadding=0 cellspacing=0 bgcolor="#FFFFFF" width="100%">
+                                <tr> 
+                                    <td align="left">
+                                        <img src="/images/who.jpg" height="142px" width="150px" hspace=10>
+                                    </td>
+                                    <td style="color: #33CC33; font-size: 2.5em" align="center">
+                                        Surgical Safety Checklist
+                                    </td>
+                                    <td align="right">
+                                        <img src="/images/govlogo.jpg" hspace=10>
+                                    </td>
+                                    <td>
+                                        <table height="100%" bgcolor="#CCEECC" cellpadding=1 cellspacing=0>
+                                            <tr>
+                                                <td>
+                                                    <table bgcolor="#FFFFFF" height="100%" width="100%" cellpadding=3 cellspacing=0>
+                                                        <tr>
+                                                            <td colspan=2>
+                                                                <table bgcolor="#FFFFFF" height="100%" cellpadding=0>
+                                                                    <tr style="color: #33CC33;">
+                                                                        <td style="font-size: 0.9em" valign="top">
+                                                                            <b>Name:</b>
+                                                                        </td>
+                                                                        <td style="color: #000077">
+                                                                            <i><%= ((@name)?"#{@name}":"..................") %></i>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr style="color: #33CC33;">
+                                                            <td style="font-size: 0.9em">
+                                                                <b>Age:</b>
+                                                            </td>
+                                                            <td align="center" style="color: #000077">
+                                                                <i><%= ((@age)?"#{@age}":"..................") %></i>
+                                                            </td>
+                                                        </tr>
+                                                        <tr style="color: #33CC33;">
+                                                            <td style="font-size: 0.9em">
+                                                                <b>Hospital No:</b>
+                                                            </td>
+                                                            <td align="center" style="color: #000077">
+                                                                <input type="text" name="hospno" id="hospno" value="<%= ((@fields["hospno"])?"#{@fields['hospno']}":"") %>" style="width: 100px; text-align: center"  onblur="ajaxSurgicalsRequest();" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr> 
+                        <td align="center" style="color: #FFFFFF;" bgcolor="#000077" height="40px">
+                            Before Induction of Anaesthesia
+                        </td>
+                        <td align="center" style="color: #FFFFFF;" bgcolor="#33CC33">
+                            Before Skin Incision
+                        </td>
+                        <td align="center" style="color: #FFFFFF;" bgcolor="#000000">
+                            Before Patient Leaves Operating Room
+                        </td>
+                    </tr>
+                    <tr> 
+                        <td align="center" bgcolor="#000077">
+                            <table border=0 bgcolor="#FFFFFF" width="100%" cellspacing=0 cellpadding=3>
+                                <tr>
+                                    <td>
+                                        <table bgcolor="#CCCCEE" width="100%" cellpadding=5>
+                                            <tr>
+                                                <td style="color: #000077; font-size: 1.2em">
+                                                    OT In Time
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="tintime" id="tintime" value="<%= ((@fields["tintime"])?"#{@fields['tintime']}":"#{Time.now.strftime('%H:%M')}") %>" style="width: 100px; text-align: center" onblur="var m = this.value.match(/(^(\d{2}|\d{1}):(\d{2})$)|(^$)/); if(!m){alert('Please enter a valid time'); this.value='';} else {ajaxSurgicalsRequest();}" style="width: 100px;" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table bgcolor="#CCCCEE" width="100%" cellpadding=5>
+                                            <tr>
+                                                <td style="color: #000077; font-size: 1.2em">
+                                                    <%= ((@loc)?"#{@loc}":"") %>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan=2>
+                                        <table bgcolor="#EAEAFF" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em">
+                                            <tr>
+                                                <td>
+                                                    <b>Surgical:</b><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Blood Tests: 
+                                                </td>
+                                                <td>
+                                                    &nbsp;
+                                                </td>
+                                                <td>
+                                                    Date Taken:
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="datetaken" id="datetaken" value="<%= ((@fields["datetaken"])?"#{@fields['datetaken']}":"#{Time.now.strftime('%Y-%m-%d')}") %>" style="width: 100px; text-align: center"  onblur="var m = this.value.match(/(^(\d{4}-\d{2}-\d{2})$)|(^$)/); if(!m){alert('Please enter a valid date in the format \'yyyy-mm-dd\'.'); var d = new Date(); var m = d.getMonth()+1; var y = d.getFullYear(); var t = d.getDate(); this.value=(d.getFullYear() + '-' + ((String(m).match(/^\d$/))?('0'+m):m) + '-' + ((String(t).match(/^\d$/))?('0'+t):t));} else {ajaxSurgicalsRequest();};" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Hb/MCV: 
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="hb" id="hb" value="<%= ((@fields["hb"])?"#{@fields['hb']}":"") %>" style="width: 100px; text-align: center"  onblur="var m = this.value.match(/(^(\d+)$)|(^$)/); if(!m){alert('Please enter a valid date number.'); this.value='';} else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                                <td>
+                                                    WCC:
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="wcc" id="wcc" value="<%= ((@fields["wcc"])?"#{@fields['wcc']}":"") %>" style="width: 100px; text-align: center"  onblur="var m = this.value.match(/(^(\d+)$)|(^$)/); if(!m){alert('Please enter a valid date number.'); this.value='';} else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Platelets: 
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="plts" id="plts" value="<%= ((@fields["plts"])?"#{@fields['plts']}":"") %>" style="width: 100px; text-align: center"  onblur="var m = this.value.match(/(^(\d+)$)|(^$)/); if(!m){alert('Please enter a valid date number.'); this.value='';} else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                                <td>
+                                                    MPS:
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="mps" id="mps" value="<%= ((@fields["mps"])?"#{@fields['mps']}":"") %>" style="width: 100px; text-align: center"  onblur="var m = this.value.match(/(^(\d+)$)|(^$)/); if(!m){alert('Please enter a valid date number.'); this.value='';} else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=4>
+                                                    <table>
+                                                        <tr>
+                                                            <td colspan=6>
+                                                                Expected Blood Loss > 500mls (7mls/kg)
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                Child?
+                                                            </td>
+                                                            <td width="20px">
+                                                                Yes
+                                                            </td>
+                                                            <td width="20px">
+                                                                <input type="radio" name="child" id="child" value="yes" onchange="ajaxSurgicalsRequest();" <%= ((@fields["child"])?((@fields['child'].strip=="yes")?"checked":""):"") %> />
+                                                            </td>
+                                                            <td>
+                                                                &nbsp;
+                                                            </td>
+                                                            <td width="20px">
+                                                                No
+                                                            </td>
+                                                            <td width="20px">
+                                                                <input type="radio" name="child" id="child" value="no" onchange="ajaxSurgicalsRequest();" <%= ((@fields["child"])?((@fields['child'].strip=="no")?"checked":""):"") %> />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Other: 
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="other" id="other" value="<%= ((@fields["other"])?"#{@fields['other']}":"") %>" style="width: 100px; text-align: center"  onblur="ajaxSurgicalsRequest();" />
+                                                </td>
+                                                <td colspan=2>
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td>
+                                                                T&S:
+                                                            </td>
+                                                            <td>
+                                                                <input type="radio" name="ts" id="ts" value="ts" onchange="if(this.checked==true){$('units').disabled=true;}; ajaxSurgicalsRequest();" <%= ((@fields["ts"])?((@fields['ts'].strip=="ts")?"checked":""):"") %> />
+                                                            </td>
+                                                            <td>
+                                                                X-Match:
+                                                            </td>
+                                                            <td>
+                                                                <input type="radio" name="ts" id="ts" value="xmatch" onchange="if(this.checked==true){$('units').disabled=false;}; ajaxSurgicalsRequest();" <%= ((@fields["ts"])?((@fields['ts'].strip=="xmatch")?"checked":""):"") %> />
+                                                            </td>
+                                                        </tr>                                    
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    Number of Units Available: 
+                                                </td>
+                                                <td colspan=2>
+                                                    <input type="text" name="units" id="units" value="<%= ((@fields["units"])?"#{@fields['units']}":"") %>" style="width: 100px; text-align: center"  onblur="var m = this.value.match(/(^(\d+)$)|(^$)/); if(!m){alert('Please enter a valid date number.'); this.value='';} else {ajaxSurgicalsRequest();}" <%= ((@fields["ts"])?((@fields['ts'].strip=="ts" || @fields['ts'].strip=="")?"disabled":""):"disabled") %> />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    Consent form signed? Yes: 
+                                                </td>
+                                                <td colspan=2>
+                                                    <input type="checkbox" name="consent" id="consent" onchange="ajaxSurgicalsRequest();" <%= ((@fields["consent"])?((@fields['consent']==1)?"checked":""):"") %> />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    Surgical Site Marked? Yes: 
+                                                </td>
+                                                <td>
+                                                    <input type="radio" name="site" id="site" value="yes" onchange="ajaxSurgicalsRequest();" <%= ((@fields["site"])?((@fields['site'].strip=="yes")?"checked":""):"") %> />
+                                                </td>
+                                                <td>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                NA:
+                                                            </td>
+                                                            <td>
+                                                                <input type="radio" name="site" id="site" value="na" onchange="ajaxSurgicalsRequest();" <%= ((@fields["site"])?((@fields['site'].strip=="na")?"checked":""):"") %> />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    Current Medication: 
+                                                </td>
+                                                <td colspan=2>
+                                                    <input type="text" name="medic" id="medic"  onblur="ajaxSurgicalsRequest();" value="<%= ((@fields["medic"])?"#{@fields['medic']}":"") %>" />
+                                                </td>
+                                            </tr>
+                                            <tr>                                
+                                                <td colspan=4>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                Allergies:
+                                                            </td>
+                                                            <td>
+                                                                No:
+                                                            </td>
+                                                            <td>
+                                                                <input type="radio" name="allergno" id="allergno" value="no" onchange="if(this.checked==true){$('adrug').disabled=true;}; ajaxSurgicalsRequest();" <%= ((@fields["allergno"])?((@fields['allergno'].strip=="no")?"checked":""):"") %> />
+                                                            </td>
+                                                            <td>
+                                                                Yes:
+                                                            </td>
+                                                            <td>
+                                                                <input type="radio" name="allergno" id="allergno" value="yes" onchange="if(this.checked==true){$('adrug').disabled=false;}; ajaxSurgicalsRequest();" <%= ((@fields["allergno"])?((@fields['allergno'].strip=="yes")?"checked":""):"") %>/>
+                                                            </td>
+                                                            <td>
+                                                                Drug:
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="adrug" id="adrug" style="width: 155px" onblur="ajaxSurgicalsRequest();" value="<%= ((@fields["adrug"])?"#{@fields['adrug']}":"") %>" <%= ((@fields["allergno"])?((@fields['allergno'].strip=="no" || @fields['allergno'].strip=="")?"disabled":""):"disabled") %>/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    Confirmed by Intern (S-ID): 
+                                                </td>
+                                                <td colspan=2>
+                                                    <input type="text" name="intern" id="intern" value="<%= ((@fields["intern"])?"#{@fields['intern']}":"") %>" readonly style="text-align: center" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan=2>
+                                        <table bgcolor="#EAEAFF" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em">
+                                            <tr>
+                                                <td>
+                                                    <b>Nursing:</b><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Starvation: 
+                                                </td>
+                                                <td>
+                                                    &nbsp;
+                                                </td>
+                                                <td>
+                                                    Last Ate:
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="ate" id="ate" value="<%= ((@fields["ate"])?"#{@fields['ate']}":"#{Time.now.strftime('%H:%M')}") %>" style="width: 100px; text-align: center" onblur="var m = this.value.match(/(^(\d{2}|\d{1}):(\d{2})$)|(^$)/); if(!m){alert('Please enter a valid time'); this.value='';} else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Weight: 
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="weight" id="weight" value="<%= ((@fields["weight"])?"#{@fields['weight']}":"") %>" style="width: 100px" onblur="ajaxSurgicalsRequest();" />
+                                                </td>
+                                                <td>
+                                                    Last Drank:
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="drank" id="drank" value="<%= ((@fields["drank"])?"#{@fields['drank']}":"#{Time.now.strftime('%H:%M')}") %>" style="width: 100px; text-align: center" onblur="var m = this.value.match(/(^(\d{2}|\d{1}):(\d{2})$)|(^$)/); if(!m){alert('Please enter a valid time'); this.value='';} else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    HR: 
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="hr" id="hr" value="<%= ((@fields["hr"])?"#{@fields['hr']}":"") %>" style="width: 100px" onblur="ajaxSurgicalsRequest();" />
+                                                </td>
+                                                <td>
+                                                    BP:
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="bp" id="bp" value="<%= ((@fields["bp"])?"#{@fields['bp']}":"") %>" style="width: 100px" onblur="ajaxSurgicalsRequest();" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    RR: 
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="rr" id="rr" value="<%= ((@fields["rr"])?"#{@fields['rr']}":"") %>" style="width: 100px" onblur="ajaxSurgicalsRequest();" />
+                                                </td>
+                                                <td>
+                                                    SpO<sub>2</sub>:
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="spo2" id="spo2" value="<%= ((@fields["spo2"])?"#{@fields['spo2']}":"") %>" style="width: 100px" onblur="ajaxSurgicalsRequest();" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=4>
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td>
+                                                                IVI sited & running?
+                                                            </td>
+                                                            <td>
+                                                                Yes
+                                                            </td>
+                                                            <td>
+                                                                <input type="radio" name="ivi" id="ivi" value="yes" onchange="ajaxSurgicalsRequest();" <%= ((@fields["ivi"])?((@fields['ivi'].strip=="yes")?"checked":""):"") %>/>
+                                                            </td>
+                                                            <td>
+                                                                No
+                                                            </td>
+                                                            <td>
+                                                                <input type="radio" name="ivi" id="ivi" value="no" onchange="ajaxSurgicalsRequest();" <%= ((@fields["ivi"])?((@fields['ivi'].strip=="no")?"checked":""):"") %>/>
+                                                            </td>                                        
+                                                            <td>
+                                                                ID wristband
+                                                            </td>
+                                                            <td>
+                                                                <input type="checkbox" name="wrist" id="wrist" onchange="ajaxSurgicalsRequest();" <%= ((@fields["wrist"])?((@fields['wrist']==1)?"checked":""):"") %>/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    Confirmed by Nurse (S-ID): 
+                                                </td>
+                                                <td colspan=2>
+                                                    <input type="text" name="nurse" id="nurse" value="<%= ((@fields["nurse"])?"#{@fields['nurse']}":"") %>" readonly style="text-align: center" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan=2>
+                                        <table bgcolor="#EAEAFF" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em">
+                                            <tr>
+                                                <td>
+                                                    <b>Anaesthesia:</b><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    Difficult Airway / Aspiration Risk?: 
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20px" align="center">
+                                                    <input type="radio" name="risk" id="risk" value="no" onchange="ajaxSurgicalsRequest();" <%= ((@fields["risk"])?((@fields['risk'].strip=="no")?"checked":""):"") %> />
+                                                </td>
+                                                <td>
+                                                    No
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="center">
+                                                    <input type="radio" name="risk" id="risk" value="yes" onchange="ajaxSurgicalsRequest();" <%= ((@fields["risk"])?((@fields['risk'].strip=="yes")?"checked":""):"") %>/>
+                                                </td>
+                                                <td>
+                                                    Yes, equipment & assistance requested
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                Confirmed by TACO (S-ID): 
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" name="taco" id="taco" value="<%= ((@fields["taco"])?"#{@fields['taco']}":"") %>" readonly style="text-align: center" />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan=2>
+                                        <table bgcolor="#CCCCEE" width="100%" cellpadding=5>
+                                            <tr>
+                                                <td style="color: #000077; font-size: 1.2em">
+                                                    Induction Time
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="induction" id="induction" value="<%= ((@fields["induction"])?"#{@fields['induction'].strftime('%H:%M')}":"#{Time.now.strftime('%H:%M')}") %>" style="width: 150px; text-align: center" onblur="var m = this.value.match(/(^(\d{2}|\d{1}):(\d{2})$)|(^$)/); if(!m){alert('Please enter a valid time'); } else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #000077; font-size: 1.1em">
+                                                    Date:
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="inddate" id="inddate" value="<%= ((@fields["induction"])?"#{@fields['induction'].strftime('%Y-%m-%d')}":"#{Time.now.strftime('%Y-%m-%d')}") %>" style="width: 150px; text-align: center"  onblur="var m = this.value.match(/(^(\d{4}-\d{2}-\d{2})$)|(^$)/); if(!m){alert('Please enter a valid date in the format \'yyyy-mm-dd\'.'); var d = new Date(); var m = d.getMonth()+1; var y = d.getFullYear(); var t = d.getDate(); this.value=(d.getFullYear() + '-' + ((String(m).match(/^\d$/))?('0'+m):m) + '-' + ((String(t).match(/^\d$/))?('0'+t):t));} else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td align="center" bgcolor="#EAFFEA" valign="top">
+                            <table border=0 bgcolor="#FFFFFF" width="100%" cellspacing=0 cellpadding=3>
+                                <tr>
+                                    <td>
+                                        <table bgcolor="#EAFFEA" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em">
+                                            <tr>
+                                                <td valign="top">
+                                                    <input type="checkbox" name="intro" id="intro" onchange="ajaxSurgicalsRequest();" <%= ((@fields["intro"])?((@fields['intro']==1)?"checked":""):"") %>/>
+                                                </td>
+                                                <td>
+                                                    <b>Surgeon & Anaesthetist introduced to patient.</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top">
+                                                    <input type="checkbox" name="team" id="team" onchange="ajaxSurgicalsRequest();" <%= ((@fields["team"])?((@fields['team']==1)?"checked":""):"") %>/>
+                                                </td>
+                                                <td>
+                                                    <b>Team to review the planned list</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top">
+                                                    <input type="checkbox" name="surg" id="surg" onchange="ajaxSurgicalsRequest();" <%= ((@fields["surg"])?((@fields['surg']==1)?"checked":""):"") %>/>
+                                                </td>
+                                                <td>
+                                                    <b>Surgeon, Anaesthetist, Nurse, Verbally Confirm</b><br />
+                                                    <ul>
+                                                        <li>Patient</li>
+                                                        <li>Site</li>
+                                                        <li>Procedure</li>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                            <tr>                                
+                                                <td colspan=2>
+                                                    <b>Anticipated Critical Events</b>                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top">
+                                                    <input type="checkbox" name="surgrev" id="surgrev" onchange="ajaxSurgicalsRequest();" <%= ((@fields["surgrev"])?((@fields['surgrev']==1)?"checked":""):"") %> />
+                                                </td>
+                                                <td>
+                                                    <b>Surgeon Reviews:</b> What are the critical or unexpected steps, operative duration, anticipated blood loss?
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top">
+                                                    <input type="checkbox" name="anaesthrev" id="anaesthrev" onchange="ajaxSurgicalsRequest();" <%= ((@fields["anaesthrev"])?((@fields['anaesthrev']==1)?"checked":""):"") %> />
+                                                </td>
+                                                <td>
+                                                    <b>Anaesthetist Reviews:</b> Are there any patient specific concerns?
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top">
+                                                    <input type="checkbox" name="nurserev" id="nurserev" onchange="ajaxSurgicalsRequest();" <%= ((@fields["nurserev"])?((@fields['nurserev']==1)?"checked":""):"") %> />
+                                                </td>
+                                                <td>
+                                                    <b>Nursing Team Reviews:</b> Has sterility been confirmed? Are there equipment issues or concerns?
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table bgcolor="#CCEECC" width="100%" cellpadding=5>
+                                            <tr>
+                                                <td style="color: #33BB33; font-size: 1.2em">
+                                                    Prep Start Time
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="prepstart" id="prepstart" value="<%= ((@fields["prepstart"])?"#{@fields['prepstart']}":"#{Time.now.strftime('%H:%M')}") %>" style="width: 150px; text-align: center" onblur="var m = this.value.match(/(^(\d{2}|\d{1}):(\d{2})$)|(^$)/); if(!m){alert('Please enter a valid time'); this.value='';} else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table bgcolor="#EAFFEA" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em">
+                                            <tr>                                
+                                                <td colspan=2>
+                                                    <b>Has antibiotic prophylaxis been given in last 60 mins?</b>                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td valign="top" width="20px">
+                                                                <input type="radio" name="prophy" id="prophy" value="yes" onchange="ajaxSurgicalsRequest();" <%= ((@fields["prophy"])?((@fields['prophy'].strip=="yes")?"checked":""):"") %> />
+                                                            </td>
+                                                            <td>
+                                                                Yes
+                                                            </td>
+                                                            <td valign="top" width="20px">
+                                                                <input type="radio" name="prophy" id="prophy" value="na" onchange="ajaxSurgicalsRequest();"  <%= ((@fields["prophy"])?((@fields['prophy'].strip=="na")?"checked":""):"") %> />
+                                                            </td>
+                                                            <td>
+                                                                Not Applicable
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>                                
+                                                <td colspan=2>
+                                                    <b>Is Essential Imaging displayed?</b>                                    
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td valign="top" width="20px">
+                                                                <input type="radio" name="imaging" id="imaging" value="yes" onchange="ajaxSurgicalsRequest();" <%= ((@fields["imaging"])?((@fields['imaging'].strip=="yes")?"checked":""):"") %>  />
+                                                            </td>
+                                                            <td>
+                                                                Yes
+                                                            </td>
+                                                            <td valign="top" width="20px">
+                                                                <input type="radio" name="imaging" id="imaging" value="na" onchange="ajaxSurgicalsRequest();" <%= ((@fields["imaging"])?((@fields['imaging'].strip=="na")?"checked":""):"") %>  />
+                                                            </td>
+                                                            <td>
+                                                                Not Applicable
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table bgcolor="#CCEECC" width="100%" cellpadding=5>
+                                            <tr>
+                                                <td style="color: #33BB33; font-size: 1.2em">
+                                                    Knife to Skin
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="knife" id="knife" value="<%= ((@fields["knife"])?"#{@fields['knife']}":"#{Time.now.strftime('%H:%M')}") %>" style="width: 150px; text-align: center" onblur="var m = this.value.match(/(^(\d{2}|\d{1}):(\d{2})$)|(^$)/); if(!m){alert('Please enter a valid time'); this.value='';} else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td align="center" bgcolor="#EAEAEA" valign="top">
+                            <table border=0 bgcolor="#FFFFFF" width="100%" cellspacing=0 cellpadding=3>
+                                <tr>
+                                    <td>
+                                        <table bgcolor="#CCCCCC" width="100%" cellpadding=5>
+                                            <tr>
+                                                <td style="color: #333333; font-size: 1.2em">
+                                                    Closure
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="closure" id="closure" value="<%= ((@fields["closure"])?"#{@fields['closure']}":"#{Time.now.strftime('%H:%M')}") %>" style="width: 150px; text-align: center" onblur="var m = this.value.match(/(^(\d{2}|\d{1}):(\d{2})$)|(^$)/); if(!m){alert('Please enter a valid time'); this.value='';} else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table bgcolor="#EAEAEA" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em">
+                                            <tr>                                
+                                                <td colspan=2>
+                                                    <b>Nurse Verbally Confirms with the team:</b><br />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top">
+                                                    <input type="checkbox" name="proc" id="proc" onchange="ajaxSurgicalsRequest();" <%= ((@fields["proc"])?((@fields['proc']==1)?"checked":""):"") %>  />
+                                                </td>
+                                                <td>
+                                                    Name of the procedure recorded
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top">
+                                                    <input type="checkbox" name="instrument" id="instrument" onchange="ajaxSurgicalsRequest();" <%= ((@fields["instrument"])?((@fields['instrument']==1)?"checked":""):"") %>   />
+                                                </td>
+                                                <td>
+                                                    That the instrument, sponge and needle counts are correct
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top">
+                                                    <input type="checkbox" name="spec" id="spec" onchange="ajaxSurgicalsRequest();" <%= ((@fields["spec"])?((@fields['spec']==1)?"checked":""):"") %>   />
+                                                </td>
+                                                <td>
+                                                    How the specimen is labelled
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top">
+                                                    <input type="checkbox" name="equipment" id="equipment" onchange="ajaxSurgicalsRequest();" <%= ((@fields["equipment"])?((@fields['equipment']==1)?"checked":""):"") %>   />
+                                                </td>
+                                                <td>
+                                                    Whether there are any equipment problems to be addressed.
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    &nbsp;
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table bgcolor="#CCCCCC" width="100%" cellpadding=5>
+                                            <tr>
+                                                <td style="color: #333333; font-size: 1.2em">
+                                                    Time Out
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="tout" id="tout" value="<%= ((@fields["tout"])?"#{@fields['tout']}":"#{Time.now.strftime('%H:%M')}") %>" style="width: 150px; text-align: center" onblur="var m = this.value.match(/(^(\d{2}|\d{1}):(\d{2})$)|(^$)/); if(!m){alert('Please enter a valid time'); this.value='';} else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table bgcolor="#EAEAEA" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em; height: 100%">
+                                            <tr>
+                                                <td colspan=2>
+                                                    <table width="100%">
+                                                        <tr>
+                                                            <td valign="top">
+                                                                <input type="checkbox" name="surgrecov" id="surgrecov" onchange="ajaxSurgicalsRequest();" <%= ((@fields["surgrecov"])?((@fields['surgrecov']==1)?"checked":""):"") %>/>
+                                                            </td>
+                                                            <td>
+                                                                <b>Surgeon, Anaesthetist and Nurse convey key concerns to recovery Nurse</b><br />
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td valign="top">
+                                                                <input type="checkbox" name="obsrecov" id="obsrecov" onchange="ajaxSurgicalsRequest();" <%= ((@fields["obsrecov"])?((@fields['obsrecov']==1)?"checked":""):"") %>   />
+                                                            </td>
+                                                            <td>
+                                                                <b>Observations in recovery charted?</b><br />
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b>NBM until: </b><br />
+                                                </td>
+                                                <td valign="bottom">
+                                                    <input type="text" name="nbm" id="nbm" style="text-align: center" onblur="var m = this.value.match(/(^(\d{2}|\d{1}):(\d{2})$)|(^$)/); if(!m){alert('Please enter a valid time'); this.value='';} else {ajaxSurgicalsRequest();}" value="<%= ((@fields["nbm"])?"#{@fields['nbm']}":"#{Time.now.strftime('%H:%M')}") %>" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b>Next medication due at: </b><br />
+                                                </td>
+                                                <td valign="bottom">
+                                                    <input type="text" name="nextmed" id="nextmed" style="text-align: center" onblur="var m = this.value.match(/(^(\d{2}|\d{1}):(\d{2})$)|(^$)/); if(!m){alert('Please enter a valid time'); this.value='';} else {ajaxSurgicalsRequest();}" value="<%= ((@fields["nextmed"])?"#{@fields['nextmed']}":"#{Time.now.strftime('%H:%M')}") %>" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=2>
+                                                    <table width=100%>
+                                                        <tr>
+                                                            <td valign="top">
+                                                                <input type="checkbox" name="op" id="op" onchange="ajaxSurgicalsRequest();" <%= ((@fields["op"])?((@fields['op']==1)?"checked":""):"") %>/>
+                                                            </td>
+                                                            <td>
+                                                                <b>Post op medication Prescribed?</b>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b>Frequency of ward observations: </b><br />
+                                                </td>
+                                                <td valign="bottom">
+                                                    <input type="text" name="freqobs" id="freqobs" onblur="ajaxSurgicalsRequest();" value="<%= ((@fields["freqobs"])?"#{@fields['freqobs']}":"") %>" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b>Pain score on discharge: </b><br />
+                                                </td>
+                                                <td valign="bottom">
+                                                    <input type="text" name="score" id="score" onblur="ajaxSurgicalsRequest();"  value="<%= ((@fields["score"])?"#{@fields['score']}":"") %>" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <b>Destination: </b><br />
+                                                </td>
+                                                <td valign="bottom">
+                                                    <input type="text" name="dest" id="dest" onblur="ajaxSurgicalsRequest();" value="<%= ((@fields["dest"])?"#{@fields['dest']}":"") %>" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>                
+                                <tr>
+                                    <td>
+                                        <table bgcolor="#CCCCCC" width="100%" cellpadding=5>
+                                            <tr>
+                                                <td style="color: #333333; font-size: 1.2em">
+                                                    Recovery Out
+                                                </td>
+                                                <td>
+                                                    <input type="text" name="recovout" id="recovout" value="<%= ((@fields["recovout"])?"#{@fields['recovout']}":"#{Time.now.strftime('%H:%M')}") %>" style="width: 150px; text-align: center" onblur="var m = this.value.match(/(^(\d{2}|\d{1}):(\d{2})$)|(^$)/); if(!m){alert('Please enter a valid time'); this.value='';} else {ajaxSurgicalsRequest();}" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+
+                <input type="hidden" id="encounter_id" name="encounter_id" value="<%= ((@encounter_id)?"#{@encounter_id}":"")%>" />
+
+                <input type="hidden" id="app_encounter_id" name="app_encounter_id" value="<%= ((@app_encounter_id)?"#{@app_encounter_id}":"")%>" />
+
+                <div id="divSurgical" style="position: absolute; z-index: 1000; top: 193px; left: 3px; height: 468px; width: 408px; background-color: #EAEAFF; opacity: .95; <%= ((@fields["intern"])?((@fields["intern"].strip.length>0)?"display: none":""):"") %>">
+                    <table width="100%" height="100%" border=0 cellspacing=0>
+                        <tr>
+                            <td align="center">
+                                <input type="button" value="Activate Surgicals" style="background-color: #000077; color: #FFFFFF; height: 60px; width: 200px; font-size: 1.2em; cursor: pointer" onclick="var u = prompt('Username'); var p = prompt('Password'); ajaxSysIDRequest('/encounters/login?username=' + u + '&password=' + p, $('intern'), $('divSurgical'));"
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="divNursing" style="position: absolute; z-index: 1000; top: 665px; left: 3px; height: 230px; width: 408px; background-color: #EAEAFF; opacity: .95; <%= ((@fields["nurse"])?((@fields["nurse"].strip.length>0)?"display: none":""):"") %>">
+                    <table width="100%" height="100%" border=0 cellspacing=0>
+                        <tr>
+                            <td align="center">
+                                <input type="button" value="Activate Nursing" style="background-color: #000077; color: #FFFFFF; height: 60px; width: 200px; font-size: 1.2em; cursor: pointer" onclick="var u = prompt('Username'); var p = prompt('Password'); ajaxSysIDRequest('/encounters/login?username=' + u + '&password=' + p, $('nurse'), $('divNursing'));"
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="divAnaesth" style="position: absolute; z-index: 1000; top: 900px; left: 3px; height: 227px; width: 408px; background-color: #EAEAFF; opacity: .95; <%= ((@fields["taco"])?((@fields["taco"].strip.length>0)?"display: none":""):"") %>">
+                    <table width="100%" height="100%" border=0 cellspacing=0>
+                        <tr>
+                            <td align="center">
+                                <input type="button" value="Activate Anaesthets" style="background-color: #000077; color: #FFFFFF; height: 60px; width: 200px; font-size: 1.2em; cursor: pointer" onclick="var u = prompt('Username'); var p = prompt('Password'); ajaxSysIDRequest('/encounters/login?username=' + u + '&password=' + p, $('taco'), $('divAnaesth'));"
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+    
+            </div>
+
+        </td>
+    </tr>
+</table>
+
+</center>

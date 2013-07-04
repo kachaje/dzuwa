@@ -1,0 +1,11 @@
+require 'rubygems'
+require 'ruport'
+
+class SalesReport < Ruport::Controller
+    required_option :titles
+    options :report_title
+
+    stage :document_header, :document_body, :document_footer      
+    finalize :document
+  end
+

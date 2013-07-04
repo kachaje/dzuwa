@@ -1,0 +1,337 @@
+<script language="javascript" type="text/javascript">
+<!--
+	
+	function out(row, cols){
+	    for(var i=0; i<cols; i++){
+	        if(document.getElementById(row + '-' + i)){
+		        document.getElementById(row + '-' + i).style.color = "#000000";	
+			
+		        if(i==0){
+			        document.getElementById(row + '-' + 0).bgColor = "#999999";
+		        } else {
+			        if(i%2 == 0){
+				        document.getElementById(row + '-' + i).bgColor = "#EAEAEA";
+			        } else {
+				        document.getElementById(row + '-' + i).bgColor = "#FFFFFF";
+			        }
+		        }
+		    }
+		}		
+	}
+	
+	function over(row, cols){			
+		for(var i=0; i<cols; i++){
+	        if(document.getElementById(row + '-' + i)){
+	            document.getElementById(row + '-' + i).style.color = "#FFFFFF";	
+			    document.getElementById(row + '-' + i).bgColor = "#9999FF";			
+		    }
+		}
+	}
+	
+	function down(row, cols){			
+		for(var i=0; i<cols; i++){
+		    if(document.getElementById(row + '-' + i)){
+			    document.getElementById(row + '-' + i).style.color = "#FFFFFF";
+	
+			    document.getElementById(row + '-' + i).bgColor = "#0066CC";	
+			}		
+		}
+	}
+	
+	function setID(row){
+		var i = document.getElementById(row + "-0").innerHTML;
+		//var loc = window.location;
+		
+		document.getElementById("selectId").value = i;
+		
+		document.getElementById("frmNav").action = "/person/edit";
+		
+		document.getElementById("frmNav").target = "main";		
+		$('lyrPopUp').style.display = "block";
+		
+		document.getElementById("frmNav").submit();
+	}
+	
+	function change_pass(row){
+		var i = document.getElementById(row + "-0").innerHTML;
+		
+		document.getElementById("selectId").value = i;
+		document.getElementById("origin").value = "/person/index"
+		
+		document.getElementById("frmNav").method = "GET";
+		document.getElementById("frmNav").action = "/user/change_password/" + i;
+		
+		document.getElementById("frmNav").target = "main";		
+		$('lyrPopUp').style.display = "block";
+		
+		document.getElementById("frmNav").submit();
+	}
+	
+	function add_user(row){
+		var i = document.getElementById(row + "-0").innerHTML;
+		
+		document.getElementById("selectId").value = i;
+		
+		document.getElementById("frmNav").action = "/user/new";
+		
+		document.getElementById("frmNav").target = "main";		
+		$('lyrPopUp').style.display = "block";
+		
+		document.getElementById("frmNav").submit();
+	}
+	
+	function add_appointment(row){
+		var i = document.getElementById(row + "-0").innerHTML;
+		
+		document.getElementById("selectId").value = i;
+		
+		document.getElementById("frmNav").action = "/location/list";
+		
+		document.getElementById("frmNav").target = "main";		
+		$('lyrPopUp').style.display = "block";
+		
+		document.getElementById("frmNav").submit();
+	}
+	
+	function remove_user(row){
+		var i = document.getElementById(row + "-0").innerHTML;
+		
+		document.getElementById("selectId").value = i;
+		
+		document.getElementById("frmNav").method = "GET";
+		document.getElementById("frmNav").action = "/user/destroy/" + i;
+		
+		document.getElementById("frmNav").target = "main";		
+		$('lyrPopUp').style.display = "block";
+		
+		document.getElementById("frmNav").submit();
+	}
+	
+	function add_role(row){
+		var i = document.getElementById(row + "-0").innerHTML;
+		
+		document.getElementById("selectId").value = i;
+		
+		document.getElementById("frmNav").method = "GET";
+		document.getElementById("frmNav").action = "/user/add_role/" + i;
+		
+		document.getElementById("frmNav").target = "main";		
+		$('lyrPopUp').style.display = "block";
+		
+		document.getElementById("frmNav").submit();
+	}
+	
+	function delete_role(row){
+		var i = document.getElementById(row + "-0").innerHTML;
+		
+		document.getElementById("selectId").value = i;
+		
+		document.getElementById("frmNav").action = "/user/delete_role/" + i;
+		
+		document.getElementById("frmNav").target = "main";		
+		$('lyrPopUp').style.display = "block";
+		
+		document.getElementById("frmNav").submit();
+	}
+	
+	function search_user(row){
+		var i = document.getElementById(row + "-0").innerHTML;
+		
+		document.getElementById("selectId").value = i;
+		
+		document.getElementById("frmNav").action = "/user/search_user";
+		
+		document.getElementById("frmNav").target = "main";		
+		$('lyrPopUp').style.display = "block";
+		
+		document.getElementById("frmNav").submit();
+	}
+	
+	function show_encounters(row){
+		var i = document.getElementById(row + "-0").innerHTML;
+		
+		document.getElementById("selectId").value = i;
+		
+		document.getElementById("frmNav").action = "/encounters/show";
+		
+		document.getElementById("frmNav").target = "main";		
+		$('lyrPopUp').style.display = "block";
+		
+		document.getElementById("frmNav").submit();
+	}
+	
+//-->
+</script>
+
+<script language="javascript" type="text/javascript">
+<!--
+    var diff = 208;
+//-->
+</script>
+
+<center>
+
+<% form_tag( {:action => 'index'}, {:id => 'frmNav'} ) do %>
+    
+    <table width="100%" border=0>
+        <tr>
+            <td bgcolor="#000000" colspan=2 align="center">
+                <h1 style="color: #FFFFFF ">Select a <%= ((@title == "")?"person":(@title.to_s).to_s) %> to edit</h1>
+            </td>
+        </tr>
+        <tr>        
+            <td>
+                <table border=0>
+                    <tr>
+                        <td>
+                            <%= submit_tag '|<< First', :id => 'btnFirst', :onclick => "$('frmNav').target='_self'; $('frmNav').action = '/person'; $('start').value=0" %>
+                        </td>
+                        <td align="center">
+                            <%= submit_tag '< Previous', :id => 'btnPrevious', :onclick => "$('frmNav').target='_self'; $('frmNav').action = '/person'; $('start').value = parseInt($('start').value) - parseInt($('limit').value)", :disabled => (@start.to_i > 0)?false:true %>
+                        </td>
+                        <td align="center">
+                            <% if @count <= 0 %>
+                                No Records
+                            <% else %>
+                                Page <%= (@start.to_i / @limit.to_i) + 1 %> of <%= (@count.to_i%@limit.to_i == 0)?(@count.to_i / @limit.to_i):((@count.to_i / @limit.to_i) + 1) %>
+                            <% end %>   
+                        </td>
+                        <td align="center">
+                            <%= submit_tag 'Next >', :id => 'btnNext', :onclick => "$('frmNav').target='_self'; $('frmNav').action = '/person'; $('start').value = parseInt($('start').value) + parseInt($('limit').value)", :disabled => ((@start.to_i + @limit.to_i < @count.to_i) && (@start.to_i < @count.to_i))?false:true %>
+                        </td>
+                        <td align="center">
+                            <%= submit_tag 'Last >>|', :id => 'btnLast', :onclick => "$('frmNav').target='_self'; $('frmNav').action = '/person'; var count = parseInt($('count').value); var limit = parseInt($('limit').value); $('start').value=(count - (count % limit))" %>
+                        </td>
+                    </tr>
+                </table>
+            </td>                    
+            <td>               
+                <table border=0 align="right">                    
+                    <tr>                        
+                        <td align="center">
+                            <%= submit_tag 'Add ' + ((@title == "")?"Person":(@title.to_s).to_s), :id => 'btnAdd', :onclick => "$('frmNav').target='main'; $('frmNav').action = '/person/new'; $('frmNav').submit(); $('lyrPopUp').style.display='block'" %>
+                        </td>
+                        <td align="right">
+                            <label>Order by:</label>
+                            <select name="order" onChange="$('frmNav').target='_self'; $('frmNav').action = '/person'; $('frmNav').submit()">
+                                <option value="family_name" <%= (@order == "person_name.family_name")?"selected":"" %> >Family name</option>
+                                <option value="given_name" <%= (@order == "person_name.given_name")?"selected":"" %> >Given name</option>
+                                <option value="id" <%= (@order == "person_name.person_id")?"selected":"" %> >ID</option>
+                                <% if @record_type == "2" %>
+                                    <option value="username" <%= (@order == "users.username")?"selected":"" %> >Username</option>
+                                <% else %>
+                                    <option value="identifier" <%= (@order == "patient_identifier.identifier")?"selected":"" %> >Identifier</option>
+                                <% end %>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+          </tr>
+     </table>
+     
+    <input style="text-align:center " type="hidden" name="limit" id="limit" value="<%= @limit %>" />
+    <input type="hidden" name="start" id="start" value="<%= @start %>" />
+    <input type="hidden" name="count" id="count" value="<%= @count %>" />
+    <input type="hidden" name="letter" id="letter" value="<%= @letter %>" />
+    <input type="hidden" name="record_type" id="record_type" value="<%= @record_type %>" />
+    <input type="hidden" name="origin" id="origin" value="<%= @origin %>" />
+    <input type="hidden" name="title" id="title" value="<%= @title %>" />
+    <input type="hidden" name="selectId" id="selectId" value="" />
+    <input type="hidden" name="currentvalue" id="currentvalue" value="test" />
+    <input type="hidden" name="currentid" id="currentid" value="" />
+    <input type="hidden" name="username" id="username" value="" />
+    <input type="hidden" name="enc" id="enc" value="" />
+
+
+    <div id="dvFrame" style="height:400px; z-index:10; position:relative; overflow: scroll;" width="100%">     
+        <table cellpadding="2" width="100%">
+            <tr>
+                <th bgcolor="#666666" style="color: #FFFFFF"}>ID</th>
+                <% @j = 0 %>
+                <% for column in PersonName.content_columns %>
+                    <% @j += 1 %>
+                    <% next if column.name =~ /(Preferred|Prefix|date|void|Degree|creator|changed|middle_name|suffix|uuid)/i %>
+                    <th bgcolor="#666666" style="color: #FFFFFF"><%= column.human_name %></th>
+                <% end %>
+                <% if @record_type == "2" %>
+                    <th bgcolor="#666666" style="color: #FFFFFF">Username</th>
+                    <th bgcolor="#666666" style="color: #FFFFFF">System ID</th>
+                    <% @j += 2 %>
+                <% else %>
+                    <th bgcolor="#666666" style="color: #FFFFFF">Identifier</th>
+                    <th bgcolor="#666666" style="color: #FFFFFF">Encounters</th>
+                    <% @j += 1 %>
+                <% end %>
+            </tr>
+            
+            <% @row = 0 %>
+            <% for person in @names %>
+              <% @i = 0 %>
+              <tr style="cursor:pointer" onMouseOver="over(this.id, <%= @j.to_s %>); m_over=true" onMouseDown="$('currentid').value=this.id; $('currentvalue').value='<%= "#{person.first.given_name} #{person.first.family_name}" %>'; $('username').value='<%= @users[@row].username rescue "" %>'; down(this.id, <%= @j.to_s %>); <%= ((@record_type != "2")?("$('enc').value=$('#{"row" + @row.to_s + "-" + (@j - 4).to_s}').innerHTML"):"") %> " onMouseUp="over(this.id, <%= @j.to_s %>)" onMouseOut="out(this.id, <%= @j.to_s %>); m_over=false" onClick="setID(this.id)" id=<%= "row" + @row.to_s %> bgcolor="#FFFFFF">
+              
+              <td valign="top" height=20 bgcolor="#999999" align="center" id="<%= "row" + @row.to_s + "-" + @i.to_s %>"><%=h person.first.send("person_id") rescue nil %></td>
+              
+              <% for column in PersonName.content_columns %>
+                <% @i += 1 %>
+                <% next if column.name =~ /(Preferred|Prefix|date|void|Degree|creator|changed|middle_name|suffix|uuid)/i %>
+                <td valign="top" height=20 <%= ((@i%2 > 0) || (@i == 0))?"":"bgcolor='#EAEAEA'" %> id="<%= "row" + @row.to_s + "-" + @i.to_s %>" ><%=h person.first.send(column.name) rescue nil %></td>
+              <% end %>
+                <% if @record_type == "2" %>
+                    <!-- % @i += 1 % -->
+                    <td valign="top" height=20 id="<%= "row" + @row.to_s + "-" + (@j - 2).to_s %>" bgcolor='#EAEAEA'><%= @users[@row].username rescue "" %></td>            
+                    <td valign="top" height=20 id="<%= "row" + @row.to_s + "-" + (@j - 1).to_s %>" align="center"><%= @users[@row].system_id rescue "" %></td>
+                <% else %>
+                    <td valign="top" height=20 id="<%= "row" + @row.to_s + "-" + (@j - 1).to_s %>" bgcolor='#EAEAEA' align="center">
+                        <%= @identifiers[@row].patient_identifiers.first.identifier rescue "" %>
+                    </td>  
+                    <td valign="top" height=20 id="<%= "row" + @row.to_s + "-" + (@j - 4).to_s %>" align="center">
+                        <%= ((@enc[person.first.person_id])?(@enc[person.first.person_id]):"") %>
+                    </td>
+                <% end %></tr>
+              <% @row += 1 %>
+            <% end %>
+            
+        </table>
+    </div>
+<% end %>
+
+<table cellspacing=4 cellpadding=2 width="100%" bgcolor="#FFFFFF">
+    <tr>
+        <% @i = 0 %>
+        <% ("A".."Z").each {|link| %>
+            <% @i += 1 %>
+            <% if (@i%2 == 0) %>
+                <td bgcolor=<%= (link != @letter)?"#CCCCCC":"#9999FF" %> width=20 align="center" style="color:<%= (link != @letter)?'#000000':'#FFFFFF' %>" >
+                    <% if link != @letter %>
+                        <a href="#" onClick="$('frmNav').target='_self'; $('start').value=0; $('letter').value='<%= link %>'; $('frmNav').action = '/person'; $('frmNav').submit()"><%= link %></a>
+                    <% else %>
+                        <%= link %>
+                    <% end %>
+                </td>
+            <% else %>
+                <td bgcolor=<%=(link != @letter)?"#EAEAEA":"#9999FF" %> width=20 align="center" style="color:<%= (link != @letter)?'#000000':'#FFFFFF' %>" >
+                    <% if link != @letter %>
+                        <a href="#" onClick="$('frmNav').target='_self'; $('start').value=0; $('letter').value='<%= link %>'; $('frmNav').action = '/person'; $('frmNav').submit()" target="_self"><%= link %></a>
+                    <% else %>
+                        <%= link %>
+                    <% end %>
+                </td>
+            <% end %>
+        <% } %>
+    </tr>
+    <tr>
+        <td colspan=13 align='left'>
+            <% if @title != "" %>
+                <%= submit_tag ('Back' + ((!@title)?"":(" to " + @title.to_s + "'s Menu")).to_s), :name => 'btnBack', :onclick => "$('frmNav').target='_self'; $('frmNav').action = '" + ((!(session[:origin]))?"":(session[:origin])) + "'; $('frmNav').submit()", :style => "width: auto; height:30px" %>  
+            <% else %>
+                <%= submit_tag "Home", :onclick => "$('frmNav').target='_self'; $('frmNav').action='/task/index'; $('frmNav').submit()", :style => "width: auto; height:30px" %>  
+            <% end %>                                               
+        </td>
+        <td colspan=13 align='right'>
+            <%= submit_tag 'Show All', :name => 'btnShowAll', :onclick => "$('frmNav').target='_self'; $('letter').value='ALL'; $('frmNav').action = '/person'; $('frmNav').submit()", :style => "width: 100px; height:30px" %>         
+        </td>
+    </tr>
+</table>
+
+</center>

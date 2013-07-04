@@ -1,0 +1,27 @@
+<%= javascript_include_tag  "cancel_to_user_menu"%>
+
+<center>
+<% form_tag ({:action => 'update', :id => @user}, {:id => "frmMain"}) do %>
+    <h4>Edit Username for</h4><h1> <%= "#{@user.first_name} #{@user.last_name}" %></h1>
+    <%= render :partial => 'form' %>
+    <div align="center" style="width:430px; background-color:#FFFFFF ">
+        <table cellspacing=5>
+            <tr>
+                <td align="center">
+                    <%= submit_tag 'Show', :onclick => "/*document.getElementById('selectId').value='';*/ document.getElementById('frmMain').action='/user/show'; document.getElementById('frmMain').submit()" %>
+        <%= submit_tag 'Save Username' %>
+        <%= submit_tag 'Back',  :onclick => "/*document.getElementById('selectId').value='';*/ document.getElementById('frmMain').action='/user/list'; document.getElementById('frmMain').submit()" %>
+                </td>
+            </tr>
+            <tr>
+                <td align="center">                
+                    <%= submit_tag 'Advanced User Edit', :onclick => "/*document.getElementById('selectId').value='';*/ document.getElementById('frmMain').action='/person/edit'; document.getElementById('frmMain').submit()", :style => "width: 250px; height: 30px" %>
+                </td>
+            </tr>
+        </table>                                                
+    </div>
+    <p><input type="hidden" name="record_type" id="record_type" value="2" /></p>
+    <p><input type="hidden" name="origin" id="origin" value="/user/edit/<%= @user.user_id %>" /></p> 
+    <input type="hidden" name="selectId" id="selectId" value="<%= @user.user_id %>" />   
+<% end %>
+</center>

@@ -1,0 +1,213 @@
+<center>
+<script type="text/javascript" language="javascript">
+<!--
+//-->
+</script>
+<h1>Edit Appointment</h1>
+
+<% form_tag ({:controller => "encounters", :action => "update_appointment"}, {:id => "frmMain"}) do %>
+    <% @fld = {} %>
+    <% @id = {} %>           
+    
+    <table cellpadding=5 cellspacing=0 >
+    
+        <tr>
+            <td>
+                Patient
+            </td>
+            <td>
+                :
+            </td>
+            <td style="font-size: 1.5em">
+                <b><%= "#{@encounter.patient.person.names.first.given_name} #{@encounter.patient.person.names.first.family_name}" %></b>
+        </tr>       
+        <tr valign="top">
+            <td>
+                Theatre
+            </td>
+            <td valign="top">
+                :
+            </td>
+            <td valign="top">
+                <%= @theatres = @locations.map{|p| [p.name, p.location_id]} 
+                select(:location, :location_id, @theatres, {}, :class => "app") %>
+                
+                <% @fld["theatre"] = "$('location_location_id').value=#{@encounter.location_id}" %>
+                
+                <% @id["theatre"] = @encounter.location_id %>
+            </td>
+        </tr>            
+                
+            <% @i = 1 %>
+                  
+            <% @encounter.observations.each{|o| 
+                @i += 1
+                @value = ""
+                @field = ""
+                case o.concept_id
+                    when 5081
+                        @field = "SURGEON".capitalize()
+                                                
+                        @surgeon = @surgeons.map{|p| ["#{p.family_name}, #{p.given_name} (#{p.prefix})", p.person_id]}
+                        
+                        @value = select(:surg, :surgeon_id, @surgeon, {}, :class => "app")
+                        @fld["surgeon"] = "$('surg_surgeon_id').value=#{o.value_numeric.to_i}"
+                        
+                        @id["surgeon"] = o.obs_id
+                        
+                    when 5057
+                        @field = "ANAESTHETIST".capitalize()
+                        # @value = "#{PersonName.find(:all, :conditions => ['person_id = ?', o.value_numeric.to_i]).first.prefix} #{PersonName.find(:all, :conditions => ['person_id = ?', o.value_numeric.to_i]).first.given_name} #{PersonName.find(:all, :conditions => ['person_id = ?', o.value_numeric.to_i]).first.family_name}"
+                        
+                        @anaesthetist = @anaesthetists.map{|p| ["#{p.family_name}, #{p.given_name} (#{p.prefix})", p.person_id]}
+                
+                        @value = select(:anaesthet, :anaesthetist_id, @anaesthetist, {}, :class => "app")
+                        @fld["anaesthet"] = "$('anaesthet_anaesthetist_id').value=#{o.value_numeric.to_i}"
+                
+                        @id["anaesthet"] = o.obs_id
+                        
+                    when 5942
+                        @field = "Date of Appointment"
+                        # @value = o.value_datetime.strftime('%d %b %Y @ %I:%M%p')
+                        
+                        @id["app_date"] = o.obs_id
+                        
+                        @value = "<table cellpadding=2 cellspacing=0 bgcolor='#EAEAEA' width='280px'>
+                    <tr>
+                        <td style='font-size: 0.8em' align='center'>
+                            <i>Day</i>
+                        </td>
+                        <td style='font-size: 0.8em' align='center'>
+                            <i>Month</i>
+                        </td>
+                        <td style='font-size: 0.8em' align='center'>
+                            <i>Year</i>
+                        </td>
+                        <td style='font-size: 0.8em' align='center'>
+                            &nbsp;
+                        </td>
+                        <td style='font-size: 0.8em' align='center' colspan=3>
+                            <i>Time</i>
+                        </td>                            
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type='text' name='app[day]' id='app_day' style='width:40px; text-align: center' value='#{o.value_datetime.day}' />
+                        </td>
+                        <td>
+                            <input type='text' name='app[month]' id='app_month' style='width:40px; text-align: center' value='#{o.value_datetime.month}' />
+                        </td>
+                        <td>
+                            <input type='text' name='app[year]' id='app_year' style='width:70px; text-align: center' value='#{o.value_datetime.year}' />
+                        </td>
+                        <td>
+                            :
+                        </td>
+                        <td>
+                            <input type='text' name='app[hour]' id='app_hour' style='width:30px; text-align: center' value='#{o.value_datetime.hour}' />
+                        </td>
+                        <td>
+                            :
+                        </td>
+                        <td>
+                            <input type='text' name='app[min]' id='app_min' style='width:30px; text-align: center' value='#{o.value_datetime.min}' />
+                        </td>
+                    </tr>
+                </table>"
+                
+                    when 5256
+                        @field = "Reason for Appointment"
+                        @value = text_area("appointment", "reason", :class => "app textarea", :value => o.value_text)
+                        
+                        @id["reason"] = o.obs_id
+                        
+                    else
+                        @field = "undefined" 
+                        @value = ""
+                end  %>     
+                         
+                <tr>
+                    <td valign="top">
+                        <%= @field %>
+                    </td> 
+                    <td valign="top">
+                        :
+                    </td>                                       
+                    <td valign="top">
+                        <%= @value %>
+                    </td>
+                </tr>                               
+                
+            <% } %>
+                       
+        <tr>
+            <td colspan=3 align="center">
+                <%= submit_tag "Save Changes", :class => "smallsmallbutton" %>                
+                <%= submit_tag "Back", :class => "smallsmallbutton", :type => "button", :onclick => "back()" %>            
+                <%= submit_tag "Cancel Booking", :onclick => "if(confirm('Are you sure you want to cancel this booking?')){$('frmMain').action='/encounters/cancel_appointment'; $('lyrBg').style.left='0px'; $('lyrBg').style.top='0px'; $('lyrBg').style.height=innerHeight + 'px'; $('lyrBg').style.right='0px'; $('divReason').style.display='block'; $('lyrBg').style.display='block'}", :class => "smallsmallbutton", :type => "button"  %>
+            </td>
+        </tr>    
+         
+    </table>                
+    
+    <input type="hidden" value="<%= @id['surgeon'] %>" name="obs[surgeon]" id="obs_surgeon" />
+    
+    <input type="hidden" value="<%= @id['anaesthet'] %>" name="obs[anaesthet]" id="obs_anaesthet" />
+    
+    <input type="hidden" value="<%= @id['app_date'] %>" name="obs[app_date]" id="obs_app_date" />
+    
+    <input type="hidden" value="<%= @id['reason'] %>" name="obs[reason]" id="obs_reason" />
+    
+    <script type="text/javascript" language="javascript">
+    <!--
+    
+        eval(<%= @fld['theatre'] %>);
+        eval(<%= @fld['surgeon'] %>);
+        eval(<%= @fld['anaesthet'] %>);
+    
+    //-->
+    </script>
+    
+    <div id="divReason"style="position:absolute; z-index:999; bottom: 40%; right: 40%; top:30%; left:40%; text-align: center; display: none ">
+	    <table height="100%" width="100%" bgcolor="#EAEAEA" cellpadding="5" border="0" bordercolor="#EAEAEA" >
+			    <tr>
+				    <th height="30" align="left" bgcolor="#0000FF" style="color:#FFFFFF " colspan=2>
+					    Why?
+				    </th>
+			    </tr>
+		        <tr>			   
+			        <td align="center" valign="middle" colspan=2>
+				        Why are you cancelling the booking?
+				        <%= text_area "app", "reason", :class => "app", :style => "height: 100px" %>
+				    </td>
+				</tr>
+				<tr>
+				    <td>
+				        <input name="btnConfirm" type="button" id="btnConfirm" style="cursor:pointer; width: 100px; height:30px " onClick="if($('app_reason').value.match(/\w+/)){$('encounter_void_reason').value=$('app_reason').value; $('frmCancel').action='/encounters/cancel_appointment'; $('divReason').style.display='none'; $('lyrBg').style.display='none'; $('frmCancel').submit()} else {alert('Please give a reason for the cancellation')}" value="Submit" />
+				    </td>
+				    <td>
+				        <input name="btnCancel" type="button" id="btnCancel" style="cursor:pointer; width: 100px; height:30px " onClick="document.getElementById('divReason').style.display='none'; document.getElementById('lyrBg').style.display='none'" value="Cancel" />
+			        </td>
+		        </tr>
+	    </table>
+    </div>
+    
+    <div id="lyrBg" style="position:absolute; z-index:998; bottom: 0px; right: 0px; top:0px; left:0px; text-align: center; background-color:#FFFFFF; opacity:.95; display: none "></div>
+    
+<% end %>
+
+<% form_tag ({:action => "cancel_appointment"}, {:id => "frmCancel"}) do %>
+    
+    <input type="hidden" value="<%= @encounter.encounter_id %>" name="selectId" id="selectId" />
+    
+    <input type="hidden" value="1" name="encounter[voided]" id="encounter_voided" />
+    
+    <input type="hidden" value="<%= session[:user_id] %>" name="encounter[voided_by]" id="encounter_voided_by" />
+    
+    <input type="hidden" value="<%= Time.now %>" name="encounter[date_voided]" id="encounter_date_voided" />
+    
+    <input type="hidden" value="" name="encounter[void_reason]" id="encounter_void_reason" />
+    
+<% end %>
+
+</center>

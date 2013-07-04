@@ -1,0 +1,139 @@
+<%= error_messages_for 'user' %>
+
+    <%case  controller.action_name when "search_user"%>  
+        <%= @username = User.find(:all, :include => [{:person => :names}], :conditions =>["users.voided = ? AND person_name.preferred = ?",false, 1], :order =>'username').map{|u|[u.username, u.user_id]}
+           select(:user, :username, @username,{},{:include_blank => true ,:textCase => "lower" ,:validationRule =>"\\w{6}\\w*" ,:validationMessage => "Username must be at least SIX characters long", :style => "width: 300px; height: 24px; background-color: #FFFFCC; font-size: 14px; font-family: Arial; font-weight:bold"})%>
+           
+    <%when "change_password"%>
+        <table>
+            <tr>
+                <td>
+                    <p><label for="user_password">Password</label>
+                </td>
+                <td>
+                    :
+                </td>                    
+                <td>                    
+                    <%= password_field 'user', 'password', :xhelpText => 'Password' ,:textCase =>"lower", :validationRule => "\\w{4}\\w*", :validationMessage => "Password less than Four characters", :value =>"", :size => 15 %>
+                </td>
+            </tr>
+            <tr>
+                <td>                                    
+                    <p><label for="user_confirm_password">Re-enter Password</label>
+                </td>
+                <td>
+                    :
+                </td>   
+                <td>                                    
+                    <%= password_field 'user_confirm', 'password', :xhelpText => 'Password',:textCase =>"lower",:validationRule =>"\\w{4}\\w*", :validationMessage =>"Password less than FOUR characters.", :size => 15 %>
+                </td>
+            </tr>                                    
+        </table>
+        
+    <%when "edit"%>
+        <table cellpadding=5 bgcolor="#FFFFFF">            
+            <tr>
+                <td>
+                    <b>username</b>
+                </td>
+                <td>
+                    :
+                </td>  
+                <td>                    
+                    <%= text_field 'user', 'username', :xhelpText => 'Username',:textCase => "lower",:value => @user_name,:tt_onload =>"$('touchscreenInput5').value = ($('user_first_name').value.substring(0,3)+$('user_last_name').value.substring(0,3)).toLowerCase()" ,:validationRule =>"\\w{6}\\w*" ,:validationMessage => "Username must have at least SIX letters", :textCase => "lower", :style => "width: 150px" %>
+                </td>                    
+            </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td>
+                    &nbsp;
+                </td>
+            </tr>                                    
+        </table>            
+
+    <%when "destroy"%>
+        <h2><label for="user_void_reason">Reason For Removing <%= ((@destro)?("#{@destro.given_name} #{@destro.family_name}"):"User") %></label></h2>
+        <%= select(:user, :void_reason, %w{- Dead Work-Transfer Retired Position-Change}, {},{:include_blank => true, :style => "width: 300px; height: 30px"})%>
+
+    <%when "add_role"%>
+        <h2><label for="user_role_role">Add User Role for <%= "#{@user.person.names.first.given_name} #{@user.person.names.first.family_name}" %></label></h2>
+        <%= select(:user_role ,:role, @roles,:include_blank => true, :value =>   @user_role)%>
+        
+    <%when "delete_role"%>
+        <h2><label for="user_role_role">Delete User Role for <%= "#{@user.person.names.first.given_name} #{@user.person.names.first.family_name}" %></label></h2>
+        <%= select(:user_role ,:role, @roles,:include_blank => "", :value => @user_role)%>
+  
+    <%else%>
+        <table cellpadding=5>
+            <tr>
+                <td>
+                    Select an existing User
+                </td>
+                <td>
+                    :
+                </td>                    
+                <td>                                                    
+                    <%=  @personname = Person.find(:all, :include => [:names], :conditions =>["person.voided = ? AND COALESCE(person_name.family_name,'') <> ? AND person_name.preferred = ?",false, "", 1], :order => "person_name.family_name").map{|p|[p.name, p.person_id]}
+                    select(:user, :user_id, @personname,{},{:include_blank => false, :onchange => "var i = document.getElementById('user_user_id').selectedIndex; var v = document.getElementById('user_user_id')[i].innerHTML; var s = v.split(', '); var u = s[1].substring(0,3) + s[0].substring(0,3); document.getElementById('user_username').value = u.toLowerCase(); u = s[0].substring(0,1) + s[1].substring(0,1); document.getElementById('user_system_id').value = u.toUpperCase() + '-' + document.getElementById('user_user_id').value;", :style => "width: 265px; height: 30px"})%>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">
+                    or
+                </td>
+                <td>
+                    :
+                </td>  
+                <td>                                    
+                    <%= submit_tag 'Add User', :id => 'btnAdd', :onclick => "document.getElementById('frmMain').action='/person/new_prof?record_type=6'; document.getElementById('frmMain').submit()", :style => "width: 265px; height: 30px" %>
+                </td>
+            </tr>
+            <tr>
+                <td> 
+                    <label for="user_role_role">User Role</label>
+                </td>
+                <td>
+                    :
+                </td>  
+                <td>                    
+                    <%= select(:user_role ,:role,  Role.find(:all).collect{|r|r.role},{}, {:include_blank => false, :value => @user_role, :style => "width: 265px; height: 30px"})%>       
+                </td>
+            </tr>
+            <tr>
+                <td>                                    
+                    <label for="user_username">Username</label>
+                </td>
+                <td>
+                    :
+                </td>  
+                <td>
+                    <%= text_field 'user', 'username', :xhelpText => 'Username',:textCase => "lower",:value => @user_name,:tt_onload =>"$('touchscreenInput5').value = ($('user_first_name').value.substring(0,3)+$('user_last_name').value.substring(0,3)).toLowerCase()" ,:validationRule =>"\\w{6}\\w*" ,:validationMessage => "Username must have at least SIX letters" ,:textCase => "lower"%>
+                </td>                    
+            </tr>
+            <tr>
+                <td>
+                    <label for="user_password">Password</label>
+                </td>
+                <td>
+                    :
+                </td>  
+                <td>
+                    <%= password_field 'user', 'password', :xhelpText => 'Password' ,:textCase =>"lower", :validationRule => "\\w{4}\\w*", :validationMessage => "Password less than Four characters" %>
+                </td>                    
+            </tr>
+            <tr>
+                <td>
+                    <label for="user_confirm_password">Re-enter Password</label>
+                </td>
+                <td>
+                    :
+                </td>  
+                <td>
+                    <%= password_field 'user_confirm', 'password', :xhelpText => 'Password',:textCase =>"lower",:validationRule =>"\\w{4}\\w*", :validationMessage =>"Password less than FOUR characters." %>
+                </td>
+            </tr>
+        <!-- /table -->            
+                
+    <%end%>

@@ -1,0 +1,38 @@
+      <table cellspacing=1 cellpadding=5 border=0>
+        <tr>
+            <th bgcolor="#999999" style="color: #FFFFFF">
+                &nbsp;
+            </th>
+            <th bgcolor="#999999" style="color: #FFFFFF">
+                Date
+            </th>
+            <th bgcolor="#999999" style="color: #FFFFFF">
+                Type
+            </th>
+            <th bgcolor="#999999" style="color: #FFFFFF">
+                Location
+            </th>                                                
+        </tr>
+        <% @i = 0 %>
+        <% @patient.encounters.each{|p| %>
+            <tr>
+                <td bgcolor="#EAEAEA">
+                    <%= @i += 1 %>
+                </td>
+                <td>
+                    <%= p.date_created.strftime("%d %b %Y %I:%M%p") %>
+                </td>
+                <td bgcolor="#EAEAEA">
+                    <%= p.type.name %>
+                </td>
+                <td>
+                    <%= p.location.name %>
+                </td>
+            </tr>
+        <% } %>  
+        <tr bgcolor="#999999">
+            <td colspan=4>
+            </td>
+        </tr>                                                  
+    </table>
+

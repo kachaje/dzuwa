@@ -1,0 +1,39 @@
+<!-- %=stylesheet_link_tag "usermanagement"% -->
+
+<center>
+<h1>User Management Menu</h1>
+
+<% form_tag( {:action => 'index'}, {:id => 'frmNav'} ) do %>
+    <p><input type="hidden" name="record_type" id="record_type" value="2" /></p>
+    <p><input type="hidden" name="origin" id="origin" value="/user/user_menu" /></p>
+    <p><input type="hidden" name="title" id="title" value="User" /></p>
+    <table cellpadding=5>
+        <tr>
+            <td align="center">
+                <%= submit_tag 'Search for Users', :id => 'btnSearch', :onclick => "document.getElementById('frmNav').action = '/person/index'; document.getElementById('frmNav').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">                                
+                <%= submit_tag 'Create New User', :id => 'btnCreate', :onclick => "document.getElementById('frmNav').action = '/person/new_prof?record_type=6'; document.getElementById('frmNav').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">                                
+                <%= submit_tag 'Edit Users', :id => 'btnEdit', :onclick => "document.getElementById('frmNav').action = '/user/search_user'; document.getElementById('frmNav').method = 'GET'; document.getElementById('frmNav').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">                                
+                <%= submit_tag 'View User Roles', :id => 'btnView', :onclick => "document.getElementById('frmNav').action = '/user/index'; document.getElementById('frmNav').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">                                
+                <%= submit_tag 'Home', :id => 'btnHome', :onclick => "document.getElementById('frmNav').action = '/task/index'; document.getElementById('frmNav').submit()", :class => "button" %>
+            </td>
+        </tr>
+    </table>                                            
+    
+<% end %>    
+</center>

@@ -1,0 +1,801 @@
+<center>
+<h1>View Reports</h1>
+
+<% @server = "http://" + request.host.to_s + ":8080/jasperserver/" %>
+
+<table>
+    <tr>
+        <td align="center">
+            <table>
+                <tr>
+                    <td>
+                        Start Date :
+                    </td>
+                    <td>
+                        <input type="text" name="start" id="start" style="text-align: center" onblur="var m = this.value.match(/(^(\d{4}-\d{2}-\d{2})$)|(^$)/); if(!m){alert('Please enter a valid date in the format \'yyyy-mm-dd\'.'); var d = new Date(); var m = d.getMonth()+1; var y = d.getFullYear(); var t = d.getDate(); this.value=(d.getFullYear() + '-' + ((String(m).match(/^\d$/))?('0'+m):m) + '-' + ((String(t).match(/^\d$/))?('0'+t):t));}" value="<%= "#{Time.now.strftime('%Y-%m-%d')}" %>" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        End Date :
+                    </td>
+                    <td>
+                        <input type="text" name="end" id="end" style="text-align: center" onblur="var m = this.value.match(/(^(\d{4}-\d{2}-\d{2})$)|(^$)/); if(!m){alert('Please enter a valid date in the format \'yyyy-mm-dd\'.'); var d = new Date(); var m = d.getMonth()+1; var y = d.getFullYear(); var t = d.getDate(); this.value=(d.getFullYear() + '-' + ((String(m).match(/^\d$/))?('0'+m):m) + '-' + ((String(t).match(/^\d$/))?('0'+t):t));}" value="<%= "#{Time.now.strftime('%Y-%m-%d')}" %>" />
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td bgcolor="#99CC00">
+        </td>
+    </tr>
+    <tr>
+        <td> 
+            <form method="post" action="" name="frm" id="frm" target="_blank">
+    <table> 
+        <tr>
+            <td>
+                Early Finish By Surgeon Per Day
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlyfinishsurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlyfinishsurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlyfinishsurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>
+        </tr>
+  
+        <tr>            
+            <td>
+                Early Finish By Surgeon Per Month
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlyfinishsurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlyfinishsurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlyfinishsurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+                Early Finish Surgeon Per Week
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlyfinishsurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlyfinishsurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlyfinishsurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>
+        </tr>
+  
+        <tr>
+            <td>
+                Early Starts Per Day
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>
+        </tr>
+  
+        <tr>
+            <td>
+                Early Starts Per Month
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>
+        </tr>
+  
+        <tr>
+            <td>
+                Early Starts Per Week
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>
+        </tr>
+  
+        <tr>
+            <td>
+                Early Starts By Surgeon Per Day
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartssurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartssurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartssurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>
+        </tr>
+  
+        <tr>
+            <td>
+                Early Starts By Surgeon Per Month
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartssurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartssurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartssurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>
+        </tr>
+  
+        <tr>
+            <td>
+                Early Starts By Surgeon Per Week
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartssurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartssurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/earlystartssurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>
+        </tr>
+  
+        <tr>
+            <td>
+                Late Finish By Surgeon Per Day
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latefinishsurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latefinishsurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latefinishsurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+  
+        <tr>
+            <td>
+                Late Finish By Surgeon Per Month
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latefinishsurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latefinishsurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latefinishsurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+  
+        <tr>
+            <td>
+                Late Finish By Surgeon Per Week
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latefinishsurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latefinishsurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latefinishsurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+  
+        <tr>
+            <td>
+                Late Procedure Finish By Surgeon Per Day
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/lateprocfinishsurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/lateprocfinishsurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/lateprocfinishsurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+  
+        <tr>
+            <td>
+                Late Procedure Finish By Surgeon Per Month
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/lateprocfinishsurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/lateprocfinishsurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/lateprocfinishsurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+        
+        <tr>
+            <td>
+                Late Procedure Finish By Surgeon Per Week
+            </td>  
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/lateprocfinishsurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/lateprocfinishsurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/lateprocfinishsurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+  
+        <tr>
+            <td>
+                Late Starts Per Day
+            </td> 
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+  
+        <tr>
+            <td>
+                Late Starts Per Month
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+  
+        <tr>
+            <td>
+                Late Starts Per Week
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+  
+        <tr>
+            <td>
+                Late Starts By Surgeon Per Day
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartssurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartssurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartssurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+  
+        <tr>
+            <td>
+                Late Starts By Surgeon Per Month
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartssurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartssurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartssurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+        
+        <tr>
+            <td>
+                Late Starts By Surgeon Per Week
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartssurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartssurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/latestartssurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+  
+        <tr>
+            <td>
+                Pie Surgeon Cancellations Per Day
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/piesurgcancellationsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/piesurgcancellationsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/piesurgcancellationsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td>   
+        </tr>
+  
+        <tr>
+            <td>
+                Pie Surgeon Cancellations Per Month
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/piesurgcancellationspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/piesurgcancellationspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/piesurgcancellationspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+        
+        <tr >
+            <td>
+                Pie Surgeon Cancellations Per Week
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/piesurgcancellationsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/piesurgcancellationsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/piesurgcancellationsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+  
+        <tr>
+            <td >
+                Surgeon Cancellations Per Day
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/surgcancellationsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/surgcancellationsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/surgcancellationsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+  
+        <tr>
+            <td>
+                Surgeon Cancellations Per Month
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/surgcancellationspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/surgcancellationspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/surgcancellationspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+  
+        <tr>
+            <td>
+                Surgeon Cancellations Per Week
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/surgcancellationsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/surgcancellationsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/surgcancellationsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+  
+        <tr>
+            <td>
+                Theatre Cancellations Per Day
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/theatrecancellationsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/theatrecancellationsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/theatrecancellationsperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+  
+        <tr>
+            <td>
+                Theatre Cancellations Per Month
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/theatrecancellationspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/theatrecancellationspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/theatrecancellationspermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+  
+        <tr>
+            <td>
+                Theatre Cancellations Per Week
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/theatrecancellationsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/theatrecancellationsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/theatrecancellationsperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+  
+        <tr>
+            <td>
+                Utilisation Per Day
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+  
+        <tr>
+            <td>
+                Utilisation Per Month
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+  
+        <tr>
+            <td>
+                Utilisation Per Week
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+  
+        <tr>
+            <td>
+                Utilisation By Surgeon Per Day
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilsurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilsurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilsurgperday&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+ 
+        <tr>
+            <td>
+                Utilisation By Surgeon Per Month
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilsurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilsurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilsurgpermonth&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+  
+        <tr>
+            <td>
+                Utilisation By Surgeon Per Week
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilsurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=pdf'; $('frm').submit();">
+                    <img border=0  src="/images/pdf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilsurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=rtf'; $('frm').submit();">
+                    <img border=0  src="/images/rtf.gif" />
+                </a>
+            </td>
+            <td>
+                <a style="cursor: pointer" target="_blank" onclick="$('frm').action='<%= @server %>flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/utilsurgperweek&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&mainstartdate=' + $('start').value + '&mainenddate=' + $('end').value + '&output=xls'; $('frm').submit();">
+                    <img border=0  src="/images/xls.gif" />
+                </a>
+            </td> 
+        </tr>
+ 
+</table> 
+
+
+ </form>       
+        </td>
+    </tr>
+</table>
+
+</center>

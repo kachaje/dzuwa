@@ -1,0 +1,8 @@
+
+<input type="button" value="Show" onclick="MakeDate(); document.getElementById('d1').style.top = (this.offsetTop + this.offsetHeight) + 'px'; $('d1').style.left = (this.offsetLeft + this.offsetWidth + 5) + 'px'; $('d1').style.display='block'" />
+
+<input type="text" id="Date" value="" onmouseover="SelectDate(this); $('d1').style.top = (this.offsetTop + this.offsetHeight) + 'px'; $('d1').style.left = (this.offsetLeft) + 'px'; $('d1').style.width = (this.offsetWidth) + 'px'; $('d1').style.display='block'" onmouseout="checkCtrl(event,$('d1'))" style="text-align: center" />
+
+<div id="d1" style="display: none; position: absolute; top: 100px; right: 100px; width: 200px; background-color: #999999">
+    <div id='cal'> </div>
+</div>

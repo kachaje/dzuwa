@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Search</title>
+<script type="text/javascript" language="javascript">
+<!-- 
+    var parentTop = 15;
+    var parentLeft = 15;
+    
+	function $(id){
+		return document.getElementById(id);
+	}
+	
+	function ajaxRequest(aElement, aUrl, target, destResult) {
+		var httpRequest = new XMLHttpRequest(); 
+		httpRequest.onreadystatechange = function() { 
+			handleResult(aElement, httpRequest, target, destResult); 
+		};
+		try {
+			httpRequest.open('GET', aUrl, true);
+			httpRequest.send(null);    
+		} catch(e){
+		}
+	}
+
+	function handleResult(optionsList, aXMLHttpRequest, target, destResult) {
+		if (!aXMLHttpRequest) return;
+		
+		if (!optionsList) return;
+	
+		if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
+			tstInputTarget = $(target);
+			
+			optionsList.innerHTML = aXMLHttpRequest.responseText;
+			
+			if($('options').innerHTML == "<li></li>"){
+			    $('options').style.display = "none";
+			} else {
+			    $('options').style.display = "block";
+			}
+			
+			if(optionsList.getElementsByTagName("li")[0] != null){
+				var optionNodes = optionsList.getElementsByTagName("li");
+				var optionNodeCount = optionNodes.length;
+				for(var i=0;i<optionNodeCount;i++){
+				    optionNodes[i].setAttribute("onmousedown","updateInput(this, '" + target + "'); ");
+				    optionNodes[i].setAttribute("onclick", "$('options').style.display='none'; getValue('/person/search_dob?search=', '" + destResult + "', '" + target + "');");
+					if (optionNodes[i].innerHTML == tstInputTarget.value) {
+						optionNodes[i].style.backgroundColor = "lightblue";
+					}
+				}
+			}
+			optionsList.innerHTML = "<ul>"+optionsList.innerHTML+"</ul>";
+		}
+	}
+
+	function listSuggestions(dest_ctrl_id, src_ctrl_id, destResult) {		
+		var inputElement = $(src_ctrl_id); 
+	
+		if(inputElement.getAttribute("ajaxURL") != null){
+			ajaxRequest($(dest_ctrl_id),inputElement.getAttribute("ajaxURL")+inputElement.value, inputElement.id, destResult);
+		}
+	}
+	
+	function updateInput(obj, target){
+		$(target).value = obj.innerHTML;
+		obj.style.backgroundColor = "lightblue";
+	}
+	
+	function getValue(ajaxURL, dest_ctrl_id, src_ctrl_id) {		
+		var inputElement = $(src_ctrl_id); 
+	    
+		ajaxValue($(dest_ctrl_id), ajaxURL + inputElement.value);		
+	}
+	
+	function ajaxValue(aElement, aUrl) {
+		var httpRequest = new XMLHttpRequest(); 
+		httpRequest.onreadystatechange = function() { 
+			echoResult(aElement, httpRequest); 
+		};
+		try {
+			httpRequest.open('GET', aUrl, true);
+			httpRequest.send(null);    
+		} catch(e){
+		}
+	}
+
+    function echoResult(ctrl, aXMLHttpRequest) {
+        if (!aXMLHttpRequest) return;
+		
+		if (!ctrl) return;
+	
+		if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
+		    ctrl.innerHTML = aXMLHttpRequest.responseText;
+		}
+    }
+    
+    function keyup(obj){
+        var c = obj.id.match(/(\d+)/)[1];
+        
+        if($('options').style.display=='none'){
+            var n = obj.parentNode.id.match(/(\d+)/)[1]; 
+            var r = obj.parentNode.height.match(/(\d+)/)[1] || 0; 
+            
+            $('options').style.top=(parentTop + (r * n)) + 'px';
+            $('options').style.left=parentLeft + "px";
+            
+            $('options').style.display='block';
+         } else {
+            var n = obj.parentNode.id.match(/(\d+)/)[1]; 
+            var r = obj.parentNode.height.match(/(\d+)/)[1] || 0; 
+            
+            $('txtList' + c).innerHTML = "";
+            
+            $('options').style.top=(parentTop + (r * n)) + 'px';
+            $('options').style.left=parentLeft + "px";         
+         }
+         listSuggestions('options','txt' + c, 'txtList' + c);
+    }
+//-->
+</script>
+</head>
+
+<body>
+<form name="form1" id="form1" method="get" action="">
+    <table id="tblCells" border=1>
+        <tr>
+            <td id="cell1-2" height="30px">
+                    <input name="txt1" type="text" id="txt1" style="width: 200px " ajaxURL="/person/search?search=" onkeyup="keyup(this)" />
+            </td>
+            <td id="txtList1">
+                <!--input type="text" name="txtList1" id="txtList1" style="width: 200px "/-->
+            </td>
+        </tr>
+        <tr>
+            <td id="cell2-2" height="30px">
+                    <input name="txt2" type="text" id="txt2" style="width: 200px " ajaxURL="/person/search?search=" onkeyup="keyup(this)" />
+            </td>
+            <td id="txtList2">
+                <!--input type="text" name="txtList2" id="txtList2" style="width: 200px "/-->
+            </td>
+        </tr>
+        <tr>
+            <td id="cell3-2" height="30px">
+                    <input name="txt3" type="text" id="txt3" style="width: 200px " ajaxURL="/person/search?search=" onkeyup="keyup(this)" />
+            </td>
+            <td id="txtList3">
+                <!--input type="text" name="txtList3" id="txtList3" style="width: 200px "/-->
+            </td>
+        </tr>
+        <tr>
+            <td id="cell4-2" height="30px">
+                    <select name="txt4" type="text" id="txt4" style="width: 200px " ajaxURL="/person/search?search=" onkeyup="keyup(this)" />
+            </td>
+            <td id="txtList3">
+                <!--input type="text" name="txtList3" id="txtList3" style="width: 200px "/-->
+            </td>
+        </tr>
+        <tr>
+            <td colspan=2>                        
+                <input type="submit">
+            </td>
+        </tr>                            
+  </table>
+</form>
+
+<div name="options" id="options" style="width: 250px; height: 200px; background-color: #EAEAEA; position: absolute; display: none; overflow: scroll "></div>
+</body>
+</html>
+

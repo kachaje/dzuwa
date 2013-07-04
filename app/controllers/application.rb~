@@ -1,0 +1,37 @@
+# Filters added to this controller apply to all controllers in the application.
+# Likewise, all the methods added will be available for all controllers.
+
+class ApplicationController < ActionController::Base
+  helper :all # include all helpers, all the time
+
+  # See ActionController::RequestForgeryProtection for details
+  # Uncomment the :secret if you're not using the cookie session store
+  protect_from_forgery # :secret => 'db61d0a4b12108a96c41877999b460ef'
+  
+  # See ActionController::Base for details 
+  # Uncomment this to filter the contents of submitted sensitive data parameters
+  # from your application log (in this case, all fields with names like "password"). 
+  filter_parameter_logging :password
+  
+  #before_filter :authorize, :except => ["login", "logout"]
+
+  def next_task(patient)
+    current_location_name = Location.current_location.name    
+    todays_encounters = patient.encounters.find(:all, :include => [:type], :conditions => ['DATE(encounter_datetime) = ?', Date.today]).map{|e| e.type.name}
+#    return "/encounters/new/registration?patient_id=#{patient.id}" if current_location_name.match(/ART/) && !todays_encounters.include?("REGISTRATION")
+#    return "/encounters/new/vitals?patient_id=#{patient.id}" if current_location_name.match(/ART/) && !todays_encounters.include?("VITALS")
+#    return "/encounters/new/appointment?patient_id=#{patient.id}" if current_location_name.match(/ART/) && !todays_encounters.include?("APPOINTMENT")
+    # return "/encounters/new/registration?patient_id=#{patient.id}" if current_location_name.match(/Registration/) && !todays_encounters.include?("REGISTRATION")
+    return "/encounters/new/vitals?patient_id=#{patient.id}" if current_location_name.match(/Vitals/) && !todays_encounters.include?("VITALS")
+    return "/encounters/new/outpatient_diagnosis?patient_id=#{patient.id}" if current_location_name.match(/Outpatient/) && !todays_encounters.include?("OUTPATIENT DIAGNOSIS")
+    return "/encounters/new/treatment?patient_id=#{patient.id}" if current_location_name.match(/Treatment/) && !todays_encounters.include?("TREATMENT")
+    return "/encounters/new/registration?patient_id=#{patient.id}" if !todays_encounters.include?("REGISTRATION")
+    return "/patients/show/#{patient.id}" 
+  end
+
+  def authorize
+    User.current_user = User.find(session[:user_id]) unless session[:user_id].nil?
+    redirect_to(:controller => "user", :action => "login") if session[:user_id].nil?
+  end
+  
+end

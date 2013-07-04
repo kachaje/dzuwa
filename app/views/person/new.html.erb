@@ -1,0 +1,33 @@
+<center>
+<% form_tag( {:action => :create}, {:id => 'frmMain'} ) do %>
+    <h1 style="color: #9999FF ">Add <%= ((@title == "")?"Person":(@title.to_s).to_s) %></h1>
+    <%= render :partial => 'form' %>
+    <table width="400" -->
+        <tr>
+            <td bgcolor="#EAEAEA">
+                <% if @viewer == "block" %>
+                    <input type="submit" name="btnBack" value="Back" onClick="document.getElementById('frmMain').action = '<%= session[:origin] rescue '/person/index' %>' " />
+                <% end %>
+            </td>
+            <td align="center" bgcolor="#EAEAEA">
+                <input type="submit" name="btnSave" value="Save" onClick="<%= ((@viewer == "none")?" window.top.$('lyrPopUp').style.display='none'; ":"alert('not set'); ") %> document.getElementById('frmMain').action = '/person/create'" style=" width: 185px; height: 50px; font-size: 1.5em; background-color: #E6A501; color: #FFFFFF" />
+            </td>
+        </tr>
+    </table>
+<% end %>
+
+<% if @viewer == "none" %>
+    <script type="text/javascript" language="javascript">
+    <!--
+        if(window.top.$('propagate')){
+            //alert(window.top.$('propagate').value);
+            var r = window.top.$('propagate').value;
+            
+            $('person_name_given_name').value = r.substr(0,1).toUpperCase() + r.substr(1).toLowerCase();
+        }
+        
+    //-->
+    </script>
+<% end %>
+
+</center>

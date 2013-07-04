@@ -1,0 +1,29 @@
+<center>
+<h1>Available Hospitals</h1>
+
+    <table>
+        <tr>
+            <td bgcolor="#999999" style="color: #FFFFFF">
+                Hospital Name
+            </td>
+            <td bgcolor="#999999" style="color: #FFFFFF">
+                Description
+            </td>
+        </tr>
+        
+        <% @locations.each{|loc| %>
+            
+            <tr>
+                <td>
+                    <%= loc.name %>
+                </td>
+                <td>
+                    <%= loc.description %>
+                </td>
+            </tr>
+            
+        <% } %>                                                
+            
+    </table>
+
+</center>

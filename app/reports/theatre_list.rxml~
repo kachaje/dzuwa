@@ -1,0 +1,7 @@
+xml.instruct!
+xml.theatre_list_result do
+		@obs.each do |obs|
+			xml << obs.to_xml(:dasherize=>false,:skip_instruct=>true)
+		end
+end
+

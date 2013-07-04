@@ -1,0 +1,13 @@
+class TaskController < ApplicationController
+
+      def index
+      end
+
+    def datepicker
+    end
+    
+    def test
+    end
+    
+end
+

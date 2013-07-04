@@ -1,0 +1,94 @@
+<center>
+<h1><%= ((@appointments.length > 0)?(@appointments.first.location.name):(@location.name)) %> Appointments</h1>
+        
+    <% if @appointments.length > 0 %>
+        
+        <% form_tag ({:controller => "encounters", :action => "edit_appointment"}, {:id => "frmMain"}) do %>
+            <input type="hidden" value="" name="selectId" id="selectId" />
+        <% end %>
+                    
+        <table cellspacing=1 cellpadding=5 border=0>
+            <tr bgcolor="#666666" style="color: #FFFFFF">
+                <th>
+                    Patient Name
+                </th>
+                <th>
+                    Date Booked
+                </th>
+                <th>
+                    Surgeon
+                </th>
+                <th>
+                    Date of Appointment
+                </th>
+                <th>
+                    Anaesthetist
+                </th>
+                <th>
+                    Reason
+                </th>
+            </tr>
+            
+        <% @j = 0 %>
+        <% @appointments.each{|a| %>
+            
+            <% @j += 1 %>
+                
+            <tr id="row<%= @j %>" onmouseover="this.bgColor='#9999FF'; for(var i=0; i<6; i++){ if(i%2==0){ $(this.id + '-' + i).bgColor = '#9999FF'; } }; this.style.color='#FFFFFF'" onmouseout="this.bgColor='#FFFFFF'; for(var i=0; i<6; i++){ if(i%2==0){ $(this.id + '-' + i).bgColor = '#EAEAEA'; } }; this.style.color='#000000'" onmousedown="this.bgColor='#9999FF'; if(event.button==2){showMenu(event); $('selectId').value=<%= a.patient_id %>;}" onmouseup="this.bgColor='#9999FF'" style="cursor:pointer" onclick="$('selectId').value=<%= a.encounter_id %>; $('frmMain').action='/encounters/edit_appointment'; $('frmMain').submit()">
+                
+                <td bgcolor="#EAEAEA" id="row<%= @j %>-0">
+                    <%= "#{a.patient.person.names.first.given_name} #{a.patient.person.names.first.family_name}" %>
+                </td>
+                <td id="row<%= @j %>-1">
+                    <!--%= "#{a.date_created}" %-->
+                    <%= "#{a.date_created.strftime('%d %b %Y')}" %>
+                </td>
+
+            <% @i = 1 %>
+                  
+            <% a.observations.each{|o| 
+                @i += 1
+                @value = ""
+                @field = ""
+                case o.concept_id
+                    when 5081
+                        @field = "SURGEON".capitalize()
+                        @value = "#{PersonName.find(:all, :conditions => ['person_id = ?', o.value_numeric.to_i]).first.prefix} #{PersonName.find(:all, :conditions => ['person_id = ?', o.value_numeric.to_i]).first.given_name} #{PersonName.find(:all, :conditions => ['person_id = ?', o.value_numeric.to_i]).first.family_name}"
+                    when 5057
+                        @field = "ANAESTHETIST".capitalize()
+                        @value = "#{PersonName.find(:all, :conditions => ['person_id = ?', o.value_numeric.to_i]).first.prefix} #{PersonName.find(:all, :conditions => ['person_id = ?', o.value_numeric.to_i]).first.given_name} #{PersonName.find(:all, :conditions => ['person_id = ?', o.value_numeric.to_i]).first.family_name}"
+                    when 5942
+                        @field = "Date of Appointment"
+                        @value = o.value_datetime.strftime('%d %b %Y @ %I:%M%p')
+                    when 5256
+                        @field = "Reason for Appointment"
+                        @value = o.value_text
+                    else
+                        @field = "undefined" 
+                        @value = ""
+                end  %>     
+                                        
+                    <td <%= ((@i%2==0)?"bgcolor='#EAEAEA'":"") %> id="row<%= "#{@j}-#{@i}" %>">
+                        <%= @value %>
+                    </td>           
+                
+            <% } %>
+            
+             </tr>                
+                
+        <% } %>
+        
+            <tr>
+                <td colspan=6 bgcolor="#666666">
+                </td>
+            </tr>                
+    
+        </table>
+        
+    <% else %>
+        <h3>No Appointments Booked</h3>
+    <% end %>
+    
+<%= submit_tag "Back", :onclick => "back()", :class => "smallbutton", :type => "button" %>    
+    
+</center>

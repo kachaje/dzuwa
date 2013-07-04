@@ -1,0 +1,38 @@
+
+    <table cellpadding=5>
+        <tr>
+            <td>
+                <label for="location_location_id">Select Hospital/Clinic</label>
+            </td>
+            <td>
+                :
+            </td>
+            <td>
+                <%= @locations = Location.find(:all, :conditions => ["UPPER(name) NOT LIKE ? AND COALESCE(parent_location,'') = ?","UNKNOWN LOCATION", ""]).map{|loc|[loc.name, loc.location_id]}
+                     select(:location, :location_id, @locations,{},{:include_blank => false, :style => "width: 205px; height: 30px"}) %>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <label for="location_name">Unit Name</label>
+            </td>
+            <td valign="top">
+                :
+            </td>
+            <td valign="top">
+                <%= text_field "location", "name", :class => "text" %>
+            </td>
+        </tr>    
+        <tr>
+            <td valign="top">
+                <label for="location_description">Description</label>
+            </td>
+            <td valign="top">
+                :
+            </td>
+            <td valign="top">
+                <%= text_area "location", "description", :class => "text textarea" %>
+            </td>
+        </tr>                                        
+    </table>                                        
+

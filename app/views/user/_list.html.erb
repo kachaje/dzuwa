@@ -1,0 +1,44 @@
+<%= stylesheet_link_tag 'user_list' %>
+<div id="viewport" class="options">
+<div id="scrollUp" onmousedown="scrollUp(this.parentNode)"></div>
+<div id="scrollDown" onmousedown="scrollDown(this.parentNode)"></div>
+<div class="scroll_user">
+<table border=0 cellpadding=10 width="100%" cellspacing=1>
+   <tr>
+    <th bgcolor='#999999' style="color:#EAEAEA">Name of User</th>
+  <% for column in User.content_columns %>
+    <% next if column.name =~ /(Password|Salt|date|void|secret|creator|changed|middle_name)/i %>
+    <th bgcolor='#999999' style="color:#EAEAEA"><%= column.human_name %></th>
+  <% end %>
+    <th bgcolor='#999999' style="color:#EAEAEA">Roles</th>
+    <th bgcolor='#999999' style="color:#EAEAEA">Privileges</th>
+  </tr>
+  
+<% @i = 0 %>
+<% for user in @users %>
+    <!--% if !user.empty? %-->
+  <tr height="40px">
+    <td valign="top"><%= user.name %></td>
+  <% for column in User.content_columns %>
+    <% next if column.name =~ /(Password|Salt|date|void|secret|creator|changed)/i %>
+    <td valign="top" <%= (((@i%2==0)?"bgcolor='#EAEAEA'":"")) %> ><%=h user.send(column.name) %></td>
+    <% @i += 1 %>
+  <% end %>
+    <td valign="top" <%= (((@i%2==0)?"bgcolor='#EAEAEA'":"")) %> >
+        <ol>
+            <%=user.roles.collect{|r| "<li>" + r.role + "</li>"}%>
+        </ol>            
+    </td>
+    <% @i += 1 %>
+    <td valign="top" <%= (((@i%2==0)?"bgcolor='#EAEAEA'":"")) %> >        
+        <ol>
+            <%=user.privileges.collect{|p| "<li>" + p.privilege + "</li>"}%>
+        </ol>           
+    </td>
+  </tr>
+<% end %>
+</table>
+ </div>
+</div>
+
+<br/>

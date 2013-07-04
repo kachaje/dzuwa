@@ -1,0 +1,95 @@
+<center>
+<h1>Added User Details</h1>
+
+<table cellpadding=5 cellspacing=1>
+    <tr>
+        <td>
+            <b>Title</b>
+        </td>
+        <td>
+            :
+        </td>
+        <td>
+            <i><%= @user.names.first.prefix.capitalize %></i>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>First Name</b>
+        </td>
+        <td>
+            :
+        </td>
+        <td>
+            <i><%= @user.names.first.given_name.capitalize %></i>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Last Name</b>
+        </td>
+        <td>
+            :
+        </td>
+        <td>
+            <i><%= @user.names.first.family_name.capitalize %></i>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Gender</b>
+        </td>
+        <td>
+            :
+        </td>
+        <td>
+            <i><%= ((@user.gender=="M")?"Male":"Female") %></i>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Username</b>
+        </td>
+        <td>
+            :
+        </td>
+        <td>
+            <i><%= ((@user.user)?(@user.user.username):"") %></i>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Password</b>
+        </td>
+        <td>
+            :
+        </td>
+        <td>
+            <i><%= ((@user.user)?(@user.user.username):"") %></i>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>Contact Number</b>
+        </td>
+        <td>
+            :
+        </td>
+        <td>
+            <i><%= ((@user.personattributes.length > 0)?(@user.personattributes.first.value):"") %></i>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <b>System ID</b>
+        </td>
+        <td>
+            :
+        </td>
+        <td>
+            <i><%= @user.user.system_id %></i>
+        </td>
+    </tr>
+</table>
+                                                
+<center>

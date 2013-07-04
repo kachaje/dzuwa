@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<queryString>
+		<![CDATA[SELECT CONCAT(given_name, ' ', family_name) name, 
+                d.identifier, 
+                FLOOR(DATEDIFF(NOW(), CONVERT(s.birthdate,DATE))/365) dob, 
+                (SELECT CASE WHEN o.concept_id = 60 THEN (CASE WHEN CONVERT(COALESCE(o.value_numeric,0),UNSIGNED) > 0 THEN (SELECT name FROM location l WHERE l.location_id = CONVERT(o.value_numeric, UNSIGNED)) ELSE '' END) ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 60) ward,
+                CAPITALIZE((SELECT (SELECT name FROM concept_name n WHERE n.concept_id = o.value_coded) proc FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 61)) proc,
+                (SELECT value_text FROM obs o WHERE o.concept_id = 62 AND o.encounter_id = e.encounter_id) gaorla,
+                (SELECT (SELECT name FROM concept_name n WHERE n.concept_id = (SELECT answer_concept FROM concept_answer WHERE concept_id = o.value_coded)) FROM obs o where o.concept_id = 61 AND o.encounter_id = e.encounter_id) period,
+                (SELECT value_numeric FROM obs o where o.concept_id = 63 AND o.encounter_id = e.encounter_id) blood,
+                (SELECT CASE WHEN value_boolean = 1 THEN 'Yes' ELSE 'No' END FROM obs o where o.concept_id = 64 AND o.encounter_id = e.encounter_id) itu,
+                (SELECT value_text FROM obs o WHERE o.concept_id = 65 AND o.encounter_id = e.encounter_id) comments,
+                (SELECT CASE WHEN value_boolean = 1 THEN 'Yes' ELSE 'No' END FROM obs o where o.concept_id = 66 AND o.encounter_id = e.encounter_id) chklist,
+                (SELECT CASE COALESCE(value_text,'') WHEN 'O' THEN 'Operated' WHEN 'C' THEN 'Cancelled' WHEN 'D' THEN 'Delayed' ELSE '' END FROM obs o WHERE o.concept_id = 67 AND o.encounter_id = e.encounter_id) ocd,
+                (SELECT CASE COALESCE(value_numeric,'') WHEN 1 THEN 'Non-Medical' WHEN 2 THEN 'Anaesth Delay/Absence' WHEN 3 THEN 'Surg Delay/Absence' WHEN 4 THEN 'Lack of Blood' WHEN 5 THEN 'Not Fit' WHEN 6 THEN 'Inadequate Pre-op Preparation' WHEN 7 THEN 'Equipment Deficiencies' WHEN 8 THEN 'Time Overrun' WHEN 9 THEN 'Nursing Delay/Absence' WHEN 10 THEN 'Ward Delay' WHEN 11 THEN 'Not Needed' WHEN 12 THEN 'Emergency' ELSE '' END FROM obs o WHERE o.concept_id = 68 AND o.encounter_id = e.encounter_id) ocd2,
+                (SELECT DISTINCT(name) FROM location l WHERE l.location_id = e.location_id) theatre,
+                (SELECT DATE_FORMAT(value_datetime, '%b %e, %Y') FROM obs o WHERE concept_id = 69 AND o.encounter_id = e.encounter_id) appdate,
+                (SELECT (SELECT CONCAT(prefix, ' ', given_name, ' ', family_name, ' (', system_id, ')') FROM person_name m LEFT OUTER JOIN users u ON u.user_id = m.person_id WHERE m.person_id = o.value_numeric) FROM obs o where concept_id = 71 AND o.encounter_id = e.encounter_id) surg,
+                (SELECT (SELECT CONCAT(prefix, ' ', given_name, ' ', family_name, ' (', system_id, ')') FROM person_name m LEFT OUTER JOIN users u ON u.user_id = m.person_id WHERE m.person_id = o.value_numeric) FROM obs o where concept_id = 72 AND o.encounter_id = e.encounter_id) intern,
+                (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o where concept_id = 70 AND o.encounter_id = e.encounter_id) start,
+                CASE (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND concept_id = 62) WHEN 'GA' THEN (SELECT (SELECT name FROM concept_name n WHERE n.concept_id = (SELECT answer_concept FROM concept_answer WHERE concept_id = o.value_coded)) FROM obs o where o.concept_id = 61 AND o.encounter_id = e.encounter_id) * 1.3 ELSE (SELECT (SELECT name FROM concept_name n WHERE n.concept_id = (SELECT answer_concept FROM concept_answer WHERE concept_id = o.value_coded)) FROM obs o where o.concept_id = 61 AND o.encounter_id = e.encounter_id) END duration
+FROM encounter e
+LEFT OUTER JOIN person_name p ON p.person_id = e.patient_id
+LEFT OUTER JOIN patient_identifier d ON d.patient_id = e.patient_id
+LEFT OUTER JOIN person s on s.person_id = e.patient_id
+LEFT OUTER JOIN location t ON t.location_id = e.location_id]]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="identifier" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dob" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ward" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="proc" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gaorla" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="period" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="blood" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="itu" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="comments" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="chklist" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ocd" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ocd2" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="theatre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="appdate" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="surg" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="intern" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="start" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="duration" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="Theatre">
+		<groupExpression><![CDATA[$F{theatre}]]></groupExpression>
+		<groupHeader>
+			<band height="114"/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="91">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="102" height="88"/>
+				<imageExpression class="java.lang.String"><![CDATA["/root/rails/dzuwa/app/reports/govlogo.jpg"]]></imageExpression>
+			</image>
+			<rectangle radius="10">
+				<reportElement x="219" y="11" width="364" height="68" backcolor="#CCCCFF"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="246" y="16" width="311" height="59"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="40"/>
+				</textElement>
+				<text><![CDATA[Theatre List]]></text>
+			</staticText>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="700" y="0" width="102" height="88"/>
+				<imageExpression class="java.lang.String"><![CDATA["/root/rails/dzuwa/app/reports/medlogo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="98"/>
+	</columnHeader>
+	<detail>
+		<band height="125"/>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

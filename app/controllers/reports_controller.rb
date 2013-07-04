@@ -1,0 +1,247 @@
+class ReportsController < ApplicationController
+    helper :send_doc
+    include SendDocHelper
+
+    def index
+        #flash[:notice] = "View Reports for Users and Patients"
+    end
+    
+    def users
+        @users = User.find(:all, :conditions => ["COALESCE(username,'') <> ''"])
+        
+        @userlist = Array.new
+        
+        @users.each{|u|
+            @userlist.push( {"name" => u.person.surgeon_name, "username" => u.username })
+        }
+        
+        render :layout => "menu"
+    end
+    
+    def users_report
+        @users = User.find(:all, :conditions => ["COALESCE(username,'') <> ''"])
+        
+        @userlist = Array.new
+        
+        @users.each{|u|
+            @userlist.push( {"name" => u.person.surgeon_name, "username" => u.username })
+        }
+        
+        if params[:type]
+            case params[:type]
+                when "rtf"
+                   send_doc(
+                    render_to_string(:template => 'reports/users', :layout => false),
+                     '/user_list_result/invoice_customers/customer', 
+                    'users',
+                    'Users Report', 
+                    'rtf')
+                when "xls"
+                   send_doc(
+                    render_to_string(:template => 'reports/users', :layout => false),
+                     '/user_list_result/invoice_customers/customer', 
+                    'users',
+                    'Users Report',  
+                    'xls')
+                when "csv"
+                   send_doc(
+                    render_to_string(:template => 'reports/users', :layout => false),
+                     '/user_list_result/invoice_customers/customer', 
+                    'users',
+                    'Users Report', 
+                    'csv')
+                else
+                    send_doc(
+                    render_to_string(:template => 'reports/users', :layout => false),
+                     '/user_list_result/invoice_customers/customer', 
+                    'users',
+                    'Users Report', 
+                    'pdf')
+            end
+        else
+            send_doc(
+            render_to_string(:template => 'reports/users', :layout => false),
+            '/user_list_result/invoice_customers/customer', 
+            'users',
+            'Users Report', 
+            'pdf')
+        end
+        
+    end
+    
+    def theatre_report
+        
+        @encs = Encounter.find(:all, :include => [:location], :conditions => ["DATE_FORMAT(encounter_datetime, '%Y-%m-%d') = ? AND UCASE(location.name) = ? AND location.parent_location = ?", "2009-09-02", "BURNS THEATRE", 2])
+        
+        @obs = Array.new
+        
+        @encs.each{|e|
+            @ward = Location.find(Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 60", e.encounter_id]).value_numeric.to_i).name.strip rescue ""
+            
+            @proc = Concept.find(Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 61", e.encounter_id]).value_coded.to_i).concept_names.first.name.titleize rescue ""
+            
+            @gaorla = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 62", e.encounter_id]).value_text.strip rescue "" 
+            
+            @period = Concept.find(Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 61", e.encounter_id]).value_coded.to_i).concept_answers.first.answer.concept_names.first.name rescue ""
+            
+            @blood = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 63", e.encounter_id]).value_numeric.to_i rescue 0 
+            
+            @itu = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 64", e.encounter_id]).value_boolean.to_i rescue 0
+            
+            @comments = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 65", e.encounter_id]).value_text.strip rescue ""
+            
+            @chklist = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 66", e.encounter_id]).value_boolean.to_i rescue 0
+            
+            @ocd = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 67", e.encounter_id]).value_text.strip rescue "" 
+            
+            @ocd2 = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 68", e.encounter_id]).value_numeric.to_i rescue "" 
+            
+            @theatre = Location.find(e.location_id).name.titleize rescue ""
+            
+            @appdate = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 69", e.encounter_id]).value_datetime.strftime("%Y-%m-%d") rescue ""
+            
+            @start = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 70", e.encounter_id]).value_datetime.strftime("%H:%M") rescue ""
+            
+            @surg = Person.find(Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 71", e.encounter_id]).value_numeric.to_i).surgeon_name rescue nil
+            
+            @intern = Person.find(Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 72", e.encounter_id]).value_numeric.to_i).intern_name rescue nil
+            
+            @duration = ((@gaorla=="LA")? (@period) : (@period.to_i * 1.3))
+            
+            @obs.push(
+                        {
+                            "name" => "#{e.patient.person.names.first.given_name} #{e.patient.person.names.first.family_name}", 
+                            "identifier" => "#{e.patient.patient_identifiers.first.identifier}",
+                            "age" => "#{((!e.patient.person.birthdate.nil?)?((Date.today - e.patient.person.birthdate).to_i/365):"-")}", 
+                            "ward" => "#{@ward}",
+                            "procedure" => "#{@proc}",
+                            "gaorla" => "#{@gaorla}",
+                            "period" => "#{@period}",
+                            "blood" => "#{@blood}",
+                            "itu" => "#{((@itu==1)?"Yes":"No")}",
+                            "comments" => "#{@comments}",
+                            "chklist" => "#{((@chklist==1)?"Yes":"No")}",
+                            "ocd" => "#{@ocd}",
+                            "ocd2" => "#{@ocd2}",
+                            "theatre" => "#{@theatre}",
+                            "appdate" => "#{@appdate}",
+                            "start" => "#{@start}",
+                            "duration" => "#{@duration}",
+                            "surg" => "#{@surg}",
+                            "intern" => "#{@intern}",
+                            "created" => "#{e.date_created.strftime("%Y-%m-%d : %H:%M")}"
+                        }
+                     )
+        }
+        
+        if params[:type]
+            case params[:type]
+                when "rtf"
+                   send_doc(
+                    render_to_string(:template => 'reports/theatre_list', :layout => false),
+                     '/theatre_list_result/observation', 
+                    'theatre_list',
+                    'TheatreList', 
+                    'rtf')
+                when "xls"
+                   send_doc(
+                    render_to_string(:template => 'reports/theatre_list', :layout => false),
+                     '/theatre_list_result/observation', 
+                    'theatre_list',
+                    'TheatreList', 
+                    'xls')
+                when "csv"
+                   send_doc(
+                    render_to_string(:template => 'reports/theatre_list', :layout => false),
+                     '/theatre_list_result/observation', 
+                    'theatre_list',
+                    'TheatreList', 
+                    'csv')
+                else
+                    send_doc(
+                    render_to_string(:template => 'reports/theatre_list', :layout => false),
+                    '/theatre_list_result/observation', 
+                    'theatre_list',
+                    'TheatreList', 
+                    'pdf')
+            end
+        else
+            send_doc(
+            render_to_string(:template => 'reports/theatre_list', :layout => false),
+            '/theatre_list_result/observation', 
+            'theatre_list',
+            'TheatreList', 
+            'pdf')
+        end
+    
+    end
+    
+    def theatre_list
+        
+        @encs = Encounter.find(:all, :include => [:location], :conditions => ["DATE_FORMAT(encounter_datetime, '%Y-%m-%d') = ? AND UCASE(location.name) = ? AND location.parent_location = ?", "2009-09-25", "BURNS THEATRE", 2])
+        
+        @obs = Array.new
+        
+        @encs.each{|e|
+            @ward = Location.find(Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 60", e.encounter_id]).value_numeric.to_i).name.strip rescue ""
+            
+            @proc = Concept.find(Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 61", e.encounter_id]).value_coded.to_i).concept_names.first.name.titleize rescue ""
+            
+            @gaorla = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 62", e.encounter_id]).value_text.strip rescue "" 
+            
+            @period = Concept.find(Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 61", e.encounter_id]).value_coded.to_i).concept_answers.first.answer.concept_names.first.name rescue ""
+            
+            @blood = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 63", e.encounter_id]).value_numeric.to_i rescue 0 
+            
+            @itu = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 64", e.encounter_id]).value_boolean.to_i rescue 0
+            
+            @comments = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 65", e.encounter_id]).value_text.strip rescue ""
+            
+            @chklist = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 66", e.encounter_id]).value_boolean.to_i rescue 0
+            
+            @ocd = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 67", e.encounter_id]).value_text.strip rescue "" 
+            
+            @ocd2 = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 68", e.encounter_id]).value_numeric.to_i rescue "" 
+            
+            @theatre = Location.find(e.location_id).name.titleize rescue ""
+            
+            @appdate = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 69", e.encounter_id]).value_datetime.strftime("%Y-%m-%d") rescue ""
+            
+            @start = Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 70", e.encounter_id]).value_datetime.strftime("%H:%M") rescue ""
+            
+            @surg = Person.find(Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 71", e.encounter_id]).value_numeric.to_i).surgeon_name rescue nil
+            
+            @intern = Person.find(Observation.find(:first, :conditions => ["encounter_id = ? AND concept_id = 72", e.encounter_id]).value_numeric.to_i).intern_name rescue nil
+            
+            @duration = ((@gaorla=="LA")? (@period) : (@period.to_i * 1.3))
+            
+            @obs.push(
+                        {
+                            "name" => "#{e.patient.person.names.first.given_name} #{e.patient.person.names.first.family_name}", 
+                            "identifier" => "#{e.patient.patient_identifiers.first.identifier}",
+                            "age" => "#{((!e.patient.person.birthdate.nil?)?((Date.today - e.patient.person.birthdate).to_i/365):"-")}", 
+                            "ward" => "#{@ward}",
+                            "procedure" => "#{@proc}",
+                            "gaorla" => "#{@gaorla}",
+                            "period" => "#{@period}",
+                            "blood" => "#{@blood}",
+                            "itu" => "#{((@itu==1)?"Yes":"No")}",
+                            "comments" => "#{@comments}",
+                            "chklist" => "#{((@chklist==1)?"Yes":"No")}",
+                            "ocd" => "#{@ocd}",
+                            "ocd2" => "#{@ocd2}",
+                            "theatre" => "#{@theatre}",
+                            "appdate" => "#{@appdate}",
+                            "start" => "#{@start}",
+                            "duration" => "#{@duration}",
+                            "surg" => "#{@surg}",
+                            "intern" => "#{@intern}",
+                            "created" => "#{e.date_created.strftime("%Y-%m-%d : %H:%M")}"
+                        }
+                     )
+        }
+        
+        render :layout => "menu"
+    end
+    
+end

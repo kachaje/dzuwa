@@ -1,0 +1,47 @@
+<%= javascript_include_tag  "cancel_to_user_menu"%>
+<center>
+<h1>New User</h1>
+<% form_tag ({:action => 'create'}, {:id => "frmMain"}) do %>
+    <p><input type="hidden" name="record_type" id="record_type" value="<%= ((@record_type)?(@record_type):2) %>" /></p>
+    <p><input type="hidden" name="origin" id="origin" value="/user/new" /></p>
+    <p><input type="hidden" name="title" id="title" value="User" /></p>
+    <p><input type="hidden" name="j" id="j" value="<%= @j %>" /></p>   
+    <p><input type="hidden" name="user[system_id]" id="user_system_id" value="" /></p>     
+    <%= render :partial => 'form' %>
+    
+        <tr>
+            <td colspan=3>
+                &nbsp;
+            </td>
+        </tr>                            
+        <tr>
+            <td align="right">
+                <%= submit_tag "Back", :onclick => "document.getElementById('frmMain').action='/user/user_menu'; document.getElementById('frmMain').submit()", :style => "width: 150px; height: 30px" %>
+            </td>
+                <td>
+                    &nbsp;
+                </td>  
+            <td>
+                <%= submit_tag "Create", :onclick => "document.getElementById('frmMain').action='create'; document.getElementById('frmMain').submit()", :style => "width: 150px; height: 30px" %>
+            </td>
+        </tr>
+    </table>
+                    
+<% end %>
+<script language="javascript" type="text/javascript">
+<!-- 
+	function init(){
+		$('user_user_id').selectedIndex = $('j').value;
+		var i = document.getElementById('user_user_id').selectedIndex; 
+		var v = document.getElementById('user_user_id')[i].innerHTML; 
+		var s = v.split(', '); 
+		var u = s[1].substring(0,3) + s[0].substring(0,3); 
+		
+		document.getElementById('user_username').value = u.toLowerCase();
+		u = s[0].substring(0,1) + s[1].substring(0,1); 
+		document.getElementById('user_system_id').value = u.toUpperCase() + "-" + document.getElementById('user_user_id').value;
+	}	
+	document.onLoad = init();
+//-->
+</script>
+</center>

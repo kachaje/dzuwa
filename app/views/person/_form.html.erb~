@@ -1,0 +1,189 @@
+<script type="text/javascript" language="javascript">
+<!--
+    function roundNumber(rnum, rlength) {
+        
+        var newnumber = Math.round( rnum * Math.pow( 10 , rlength ) ) / Math.pow( 10, rlength );        
+        return newnumber;
+        
+    }
+
+    function calcAge(){
+        var m = $("estimate_mnth").value.match(/^(\d+|\s)?(\/(\d+))?(\s+)?$/);
+        if(!m){
+            alert("Please enter a valid month count \n\t(e.g. \n\t\t'2' for two months or \n\t\t'5/12' for five months\n\t).");
+            $("estimate_mnth").value = 0;
+            return;
+        } else if(!m[1] && (m[2] || m[3])){
+            alert("Please enter a valid month count \n\t(e.g. \n\t\t'2' for two months or \n\t\t'5/12' for five months\n\t).");
+            $("estimate_mnth").value = 0;
+            return;
+        }
+        
+        var y = $("estimate_yr").value.match(/^(\d+|\s)?(\s+)?$/);
+        if(!y){
+            alert("Please enter a valid year age count \n\t(e.g. \n\t\t'2' for two years\n\t).");
+            $("estimate_yr").value = 0;
+            return;
+        }
+        
+        var month = 0;
+        var yr = 0;
+        
+        if(m[3]){
+            month = eval(m[1]) / eval(m[3]);
+        } else {
+            if(eval(m[1])){
+                month = eval(m[1]) / 12;
+            }
+        }
+        
+        if(eval(y[1])){
+            yr = eval(y[1]);
+        }
+        
+        $("estimate").value = yr + roundNumber(month, 2);
+        
+    }
+    
+//-->
+</script>    
+    
+    <table cellpadding=1 width="450">
+        <tr>
+            <td>
+                <input type="hidden" name="record_type" id="record_type" value="<%= @record_type %>" />
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#999999" colspan=2 >
+                <strong>Personal Details</strong>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EAEAEA">
+                Title:
+            </td>
+            <td bgcolor="#EAEAEA">
+                <input name="person_name[prefix]" type="text" value="<%= (@item)?(@item.prefix):"" %>" style=" width: 262px" />
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EAEAEA">
+                First name:
+            </td>
+            <td bgcolor="#EAEAEA">
+                <input id="person_name_given_name" name="person_name[given_name]" type="text" value="<%= (@item)?(@item.given_name):'' %>" style=" width: 262px" />
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EAEAEA">
+                Middle name:
+            </td>
+            <td bgcolor="#EAEAEA">
+                <input name="person_name[middle_name]" type="text" value="<%= (@item)?(@item.middle_name):'' %>" style=" width: 262px" />
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EAEAEA">
+                Last name:
+            </td>
+            <td bgcolor="#EAEAEA">
+                <input name="person_name[family_name]" type="text" value="<%= (@item)?(@item.family_name):'' %>" style=" width: 262px" />
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EAEAEA">
+                Birthdate <i>(yyyy-mm-dd)</i>:
+            </td>
+            <td bgcolor="#EAEAEA">
+                <input id="person_birthdate" name="person[birthdate]" type="text" value="<%= ((@item)?(@result.names.first.person.birthdate):"") %>" style="text-align: center; width: 262px" onclick="posCtrl(this)" onblur="checkCtrl(event,$('d1'))"  />
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EAEAEA">
+                Or Estimate Age <i>(Years)</i>:
+            </td>
+            <td bgcolor="#EAEAEA">
+                <table>
+                    <tr>
+                        <td>
+                            Age:
+                        </td>
+                        <td colspan=4 align="center">
+                            <input id="estimate" name="estimate" type="text" value="" style="text-align: center; width: 200px" readonly />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Years:
+                        </td>
+                        <td>
+                            <input id="estimate_yr" name="estimate_yr" type="text" value="" style="text-align: center; width: 50px" onblur="calcAge()" />
+                        </td>
+                        <td>
+                            Months:
+                        </td>
+                        <td>
+                            <input id="estimate_mnth" name="estimate_mnth" type="text" value="" style="text-align: center; width: 70px" onblur="calcAge()" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EAEAEA">
+                Gender:
+            </td>
+            <td bgcolor="#EAEAEA" align="center">
+                <select name="person[gender]">
+                    <option value="M" <%= (@result)?((@result.names.first.person.gender == 'M')?"selected":""):"" %> >Male</option>
+                    <option value="F" <%= (@result)?((@result.names.first.person.gender == 'F')?"selected":""):"" %> >Female</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td valign="center" colspan=2 bgcolor="#999999">
+                <strong>Contact Details</strong>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EAEAEA">
+                Mobile Number:
+            </td>
+            <td align="center" bgcolor="#EAEAEA">
+                <input name="person_attribute[value]" type="text" value="<%= (@itemAttributes)?(@itemAttributes.value):'' %>" />
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EAEAEA">
+                Address:
+            </td>
+            <td align="center" bgcolor="#EAEAEA">
+                <input name="person_address[address1]" type="text" value="<%= (@itemAddress)?(@itemAddress.address1):'' %>" />
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EAEAEA">
+                &nbsp;
+            </td>
+            <td align="center" bgcolor="#EAEAEA">
+                <input name="person_address[address2]" type="text" value="<%= (@itemAddress)?(@itemAddress.address2):'' %>" />
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EAEAEA">
+                City/Village:
+            </td>
+            <td align="center" bgcolor="#EAEAEA">
+                <input name="person_address[city_village]" type="text" value="<%= (@itemAddress)?(@itemAddress.city_village):'' %>" />
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#EAEAEA">
+                District:
+            </td>
+            <td align="center" bgcolor="#EAEAEA">
+                <input name="person_address[county_district]" type="text" value="<%= (@itemAddress)?(@itemAddress.county_district):'' %>" />
+            </td>
+        </tr>
+    <!-- /table>

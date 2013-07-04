@@ -1,0 +1,9 @@
+xml.instruct!
+xml.customer_list_result do
+	xml.invoice_customers do
+		@customers.each do |customer|
+			xml << customer.to_xml(:dasherize=>false,:skip_instruct=>true,:only=>[:id,:name,:city],:root=>"customer")
+		end
+	end
+end
+

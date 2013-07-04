@@ -1,0 +1,8 @@
+xml.instruct!
+xml.theatre_list_result do
+	@obs.each do |patient|
+		xml << patient.to_xml(:dasherize=>true,:skip_instruct=>true,:root=>"observation")
+	end
+end
+
+

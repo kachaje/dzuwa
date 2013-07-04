@@ -1,0 +1,733 @@
+<script type="text/javascript" language="javascript">
+<!-- 
+    function ajaxRequest(aUrl, ctrl, target) {
+        var httpRequest = new XMLHttpRequest(); 
+        httpRequest.onreadystatechange = function() { 
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+	            ctrl.value = httpRequest.responseText;
+	            if(httpRequest.responseText.match(/\w+/)){
+	                target.style.display="none";
+	            } else {
+	                alert("Wrong password or username. Please try again.");
+	            }
+            } 
+        };
+        try {
+            httpRequest.open('GET', aUrl, true);
+	    httpRequest.send(null);    
+        } catch(e){
+        }
+    }	
+
+//-->
+</script>
+
+<center>
+
+<table cellpadding=1 cellspacing=0>
+    <tr>
+        <td colspan=3>
+            <table cellpadding=0 cellspacing=0 bgcolor="#FFFFFF" width="100%">
+                <tr> 
+                    <td align="left">
+                        <img src="/images/who.jpg" height="142px" width="150px" hspace=10>
+                    </td>
+                    <td style="color: #33CC33; font-size: 2.5em" align="center">
+                        Surgical Safety Checklist
+                    </td>
+                    <td align="right">
+                        <img src="/images/govlogo.jpg" hspace=10>
+                    </td>
+                    <td valign="bottom">
+                        <table height="100%">
+                            <tr>
+                                <td bgcolor="#CCEECC">
+                                    <table bgcolor="#FFFFFF" height="100%">
+                                        <tr style="color: #33CC33;">
+                                            <td>
+                                                Name:
+                                            </td>
+                                            <td>
+                                                <%= ((@name)?"#{@name}":"..................") %>
+                                            </td>
+                                        </tr>
+                                        <tr style="color: #33CC33;">
+                                            <td>
+                                                DOB:
+                                            </td>
+                                            <td>
+                                                <%= ((@age)?"#{@age}":"..................") %>
+                                            </td>
+                                        </tr>
+                                        <tr style="color: #33CC33;">
+                                            <td>
+                                                Hospital No:
+                                            </td>
+                                            <td>
+                                                <%= ((@id)?"#{@id}":"..................") %>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr> 
+        <td align="center" style="color: #FFFFFF;" bgcolor="#000077" height="40px">
+            Before Induction of Anaesthesia
+        </td>
+        <td align="center" style="color: #FFFFFF;" bgcolor="#33CC33">
+            Before Skin Incision
+        </td>
+        <td align="center" style="color: #FFFFFF;" bgcolor="#000000">
+            Before Patient Leaves Operating Room
+        </td>
+    </tr>
+    <tr> 
+        <td align="center" bgcolor="#000077">
+            <table border=0 bgcolor="#FFFFFF" width="100%" cellspacing=0 cellpadding=3>
+                <tr>
+                    <td>
+                        <table bgcolor="#CCCCEE" width="100%" cellpadding=5>
+                            <tr>
+                                <td style="color: #000077; font-size: 1.2em">
+                                    Theatre In Time
+                                </td>
+                                <td>
+                                    <input type="text" name="tintime" id="tintime" value="" style="width: 150px" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table bgcolor="#EAEAFF" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em">
+                            <tr>
+                                <td>
+                                    <b>Surgical:</b><br />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Blood Tests: 
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    Date Taken:
+                                </td>
+                                <td>
+                                    <input type="text" name="tintime" id="tintime" value="" style="width: 100px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Hb/MCV: 
+                                </td>
+                                <td>
+                                    <input type="text" name="hb" id="hb" value="" style="width: 100px" />
+                                </td>
+                                <td>
+                                    WCC:
+                                </td>
+                                <td>
+                                    <input type="text" name="wcc" id="wcc" value="" style="width: 100px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Platelets: 
+                                </td>
+                                <td>
+                                    <input type="text" name="plts" id="plts" value="" style="width: 100px" />
+                                </td>
+                                <td>
+                                    MPS:
+                                </td>
+                                <td>
+                                    <input type="text" name="mps" id="mps" value="" style="width: 100px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Other: 
+                                </td>
+                                <td>
+                                    <input type="text" name="other" id="other" value="" style="width: 100px" />
+                                </td>
+                                <td>
+                                    T&S:
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="mps" id="mps" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    &nbsp; 
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    X-Match:
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="xmatch" id="xmatch" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
+                                    No Units Available: 
+                                </td>
+                                <td colspan=2>
+                                    <input type="text" name="other" id="other" value="" style="width: 100px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
+                                    Consent form signed? Yes: 
+                                </td>
+                                <td colspan=2>
+                                    <input type="checkbox" name="consent" id="consent" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
+                                    Surgical Site Marked? Yes: 
+                                </td>
+                                <td>
+                                    <input type="checkbox" name="site" id="site" />
+                                </td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                NA:
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" name="sitena" id="sitena" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
+                                    Current Medication: 
+                                </td>
+                                <td colspan=2>
+                                    <input type="text" name="medic" id="medic" />
+                                </td>
+                            </tr>
+                            <tr>                                
+                                <td colspan=4>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                Allergies:
+                                            </td>
+                                            <td>
+                                                No:
+                                            </td>
+                                            <td>
+                                                <input type="radio" name="allergno" id="allergno" />
+                                            </td>
+                                            <td>
+                                                Yes:
+                                            </td>
+                                            <td>
+                                                <input type="radio" name="allergno" id="allergno" />
+                                            </td>
+                                            <td>
+                                                Drug:
+                                            </td>
+                                            <td>
+                                                <input type="text" name="adrug" id="adrug" style="width: 155px" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
+                                    Confirmed by Intern (S-ID): 
+                                </td>
+                                <td colspan=2>
+                                    <input type="text" name="intern" id="intern" value="BC-511" readonly style="text-align: center" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table bgcolor="#EAEAFF" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em">
+                            <tr>
+                                <td>
+                                    <b>Nursing:</b><br />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Starvation: 
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    Last Ate:
+                                </td>
+                                <td>
+                                    <input type="text" name="ate" id="ate" value="" style="width: 100px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Weight: 
+                                </td>
+                                <td>
+                                    <input type="text" name="weight" id="weight" value="" style="width: 100px" />
+                                </td>
+                                <td>
+                                    Last Drank:
+                                </td>
+                                <td>
+                                    <input type="text" name="drank" id="drank" value="" style="width: 100px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    HR: 
+                                </td>
+                                <td>
+                                    <input type="text" name="hr" id="hr" value="" style="width: 100px" />
+                                </td>
+                                <td>
+                                    BP:
+                                </td>
+                                <td>
+                                    <input type="text" name="bp" id="bp" value="" style="width: 100px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    RR: 
+                                </td>
+                                <td>
+                                    <input type="text" name="rr" id="rr" value="" style="width: 100px" />
+                                </td>
+                                <td>
+                                    SpO<sub>2</sub>:
+                                </td>
+                                <td>
+                                    <input type="text" name="spo2" id="spo2" value="" style="width: 100px" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
+                                    Confirmed by Nurse (S-ID): 
+                                </td>
+                                <td colspan=2>
+                                    <input type="text" name="nurse" id="nurse" value="BC-511" readonly style="text-align: center" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table bgcolor="#EAEAFF" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em">
+                            <tr>
+                                <td>
+                                    <b>Anaesthesia:</b><br />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
+                                    Difficult Airway / Aspiration Risk?: 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="20px" align="center">
+                                    <input type="radio" name="risk" id="risk" value="" />
+                                </td>
+                                <td>
+                                    No
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <input type="radio" name="risk" id="risk" value="" />
+                                </td>
+                                <td>
+                                    Yes, equipment & assistance requested
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
+                                    <table>
+                                        <tr>
+                                            <td style="font-size: 0.8em">
+                                                Confirmed by TACO (ID): 
+                                            </td>
+                                            <td>
+                                                <input type="text" name="taco" id="taco" value="BC-511" readonly style="text-align: center" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table bgcolor="#CCCCEE" width="100%" cellpadding=5>
+                            <tr>
+                                <td style="color: #000077; font-size: 1.2em">
+                                    Induction Time
+                                </td>
+                                <td>
+                                    <input type="text" name="induction" id="induction" value="" style="width: 150px" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td align="center" bgcolor="#EAFFEA" valign="top">
+            <table border=0 bgcolor="#FFFFFF" width="100%" cellspacing=0 cellpadding=3>
+                <tr>
+                    <td>
+                        <table bgcolor="#CCEECC" width="100%" cellpadding=5>
+                            <tr>
+                                <td style="color: #33BB33; font-size: 1.2em">
+                                    Prep Start Time
+                                </td>
+                                <td>
+                                    <input type="text" name="prepstart" id="prepstart" value="" style="width: 150px" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table bgcolor="#EAFFEA" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em">
+                            <tr>
+                                <td valign="top">
+                                    <input type="checkbox" name="surg" id="surg" />
+                                </td>
+                                <td>
+                                    <b>Surgeon, Anaesthetist, Nurse, Verbally Confirm</b><br />
+                                    <ul>
+                                        <li>Patient</li>
+                                        <li>Site</li>
+                                        <li>Procedure</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>                                
+                                <td colspan=2>
+                                    <b>Anticipated Critical Events</b>                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    <input type="checkbox" name="surgrev" id="surgrev" />
+                                </td>
+                                <td>
+                                    <b>Surgeon Reviews:</b> What are the critical or unexpected steps, operative duration, anticipated blood loss?
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    <input type="checkbox" name="anaesthrev" id="anaesthrev" />
+                                </td>
+                                <td>
+                                    <b>Anaesthetist Reviews:</b> Are there any patient specific concerns?
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    <input type="checkbox" name="nurserev" id="nurserev" />
+                                </td>
+                                <td>
+                                    <b>Nursing Team Reviews:</b> Has sterility been confirmed? Are there equipment issues or concerns?
+                                </td>
+                            </tr>
+                            <tr>                                
+                                <td colspan=2>
+                                    <b>Has antibiotic prophylaxis been given in last 60 mins?</b>                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
+                                    <table width="100%">
+                                        <tr>
+                                            <td valign="top" width="20px">
+                                                <input type="checkbox" name="prophyyes" id="prophyyes" />
+                                            </td>
+                                            <td>
+                                                Yes
+                                            </td>
+                                            <td valign="top" width="20px">
+                                                <input type="checkbox" name="prophyna" id="prophyna" />
+                                            </td>
+                                            <td>
+                                                Not Applicable
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>                                
+                                <td colspan=2>
+                                    <b>Is Essential Imaging displayed?</b>                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan=2>
+                                    <table width="100%">
+                                        <tr>
+                                            <td valign="top" width="20px">
+                                                <input type="checkbox" name="imagingyes" id="imagingyes" />
+                                            </td>
+                                            <td>
+                                                Yes
+                                            </td>
+                                            <td valign="top" width="20px">
+                                                <input type="checkbox" name="imagingna" id="imagingna" />
+                                            </td>
+                                            <td>
+                                                Not Applicable
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table bgcolor="#CCEECC" width="100%" cellpadding=5>
+                            <tr>
+                                <td style="color: #33BB33; font-size: 1.2em">
+                                    Knife to Skin
+                                </td>
+                                <td>
+                                    <input type="text" name="knife" id="knife" value="" style="width: 150px" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td align="center" bgcolor="#EAEAEA" valign="top">
+            <table border=0 bgcolor="#FFFFFF" width="100%" cellspacing=0 cellpadding=3>
+                <tr>
+                    <td>
+                        <table bgcolor="#CCCCCC" width="100%" cellpadding=5>
+                            <tr>
+                                <td style="color: #333333; font-size: 1.2em">
+                                    Closure
+                                </td>
+                                <td>
+                                    <input type="text" name="tintime" id="tintime" value="" style="width: 150px" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table bgcolor="#EAEAEA" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em">
+                            <tr>
+                                <td valign="top">
+                                    <input type="checkbox" name="surg" id="surg" />
+                                </td>
+                                <td>
+                                    <b>Nurse Verbally Confirms with the team:</b><br />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    <input type="checkbox" name="proc" id="proc" />
+                                </td>
+                                <td>
+                                    Name of the procedure recorded
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    <input type="checkbox" name="instrument" id="instrument" />
+                                </td>
+                                <td>
+                                    That the instrument, sponge and needle counts are correct
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    <input type="checkbox" name="spec" id="spec" />
+                                </td>
+                                <td>
+                                    How the specimen is labelled
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    <input type="checkbox" name="equipment" id="equipment" />
+                                </td>
+                                <td>
+                                    Whether there are any equipment problems to be addressed.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    &nbsp;
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table bgcolor="#CCCCCC" width="100%" cellpadding=5>
+                            <tr>
+                                <td style="color: #333333; font-size: 1.2em">
+                                    Time Out
+                                </td>
+                                <td>
+                                    <input type="text" name="tout" id="tout" value="" style="width: 150px" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table bgcolor="#EAEAEA" width="100%" cellpadding=3 style="color: #000077; font-size: 0.9em; height: 100%">
+                            <tr>
+                                <td colspan=2>
+                                    <table width="100%">
+                                        <tr>
+                                            <td valign="top">
+                                                <input type="checkbox" name="surgrecov" id="surgrecov" />
+                                            </td>
+                                            <td>
+                                                <b>Surgeon, Anaesthetist and Nurse convey key concerns to recovery Nurse</b><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="top">
+                                                <input type="checkbox" name="obsrecov" id="obsrecov" />
+                                            </td>
+                                            <td>
+                                                <b>Observations in recovery charted?</b><br />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>NBM until: </b><br />
+                                </td>
+                                <td valign="bottom">
+                                    <input type="text" name="nbm" id="nbm" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Next medication due at: </b><br />
+                                </td>
+                                <td valign="bottom">
+                                    <input type="text" name="nextmed" id="nextmed" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Frequency of ward observations: </b><br />
+                                </td>
+                                <td valign="bottom">
+                                    <input type="text" name="freqobs" id="freqobs" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Pain score on discharge: </b><br />
+                                </td>
+                                <td valign="bottom">
+                                    <input type="text" name="score" id="score" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <b>Destination: </b><br />
+                                </td>
+                                <td valign="bottom">
+                                    <input type="text" name="dest" id="dest" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>                
+                <tr>
+                    <td>
+                        <table bgcolor="#CCCCCC" width="100%" cellpadding=5>
+                            <tr>
+                                <td style="color: #333333; font-size: 1.2em">
+                                    Recovery Out
+                                </td>
+                                <td>
+                                    <input type="text" name="recovout" id="recovout" value="" style="width: 150px" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<div id="divSurgical" style="position: absolute; z-index: 1000; top: 250px; left: 12px; height: 398px; width: 408px; background-color: #EAEAFF; opacity: .95">
+    <table width="100%" height="100%" border=0 cellspacing=0>
+        <tr>
+            <td align="center">
+                <input type="button" value="Activate Surgicals" style="background-color: #000077; color: #FFFFFF; height: 60px; width: 200px; font-size: 1.2em; cursor: pointer" onclick="var u = prompt('Username'); var p = prompt('Password'); ajaxRequest('/encounters/login?username=' + u + '&password=' + p, $('intern'), $('divSurgical'));"
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="divNursing" style="position: absolute; z-index: 1000; top: 654px; left: 12px; height: 193px; width: 408px; background-color: #EAEAFF; opacity: .95">
+    <table width="100%" height="100%" border=0 cellspacing=0>
+        <tr>
+            <td align="center">
+                <input type="button" value="Activate Nursing" style="background-color: #000077; color: #FFFFFF; height: 60px; width: 200px; font-size: 1.2em; cursor: pointer" onclick="var u = prompt('Username'); var p = prompt('Password'); ajaxRequest('/encounters/login?username=' + u + '&password=' + p, $('nurse'), $('divNursing'));"
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="divAnaesth" style="position: absolute; z-index: 1000; top: 854px; left: 12px; height: 190px; width: 408px; background-color: #EAEAFF; opacity: .95">
+    <table width="100%" height="100%" border=0 cellspacing=0>
+        <tr>
+            <td align="center">
+                <input type="button" value="Activate Anaesthets" style="background-color: #000077; color: #FFFFFF; height: 60px; width: 200px; font-size: 1.2em; cursor: pointer" onclick="var u = prompt('Username'); var p = prompt('Password'); ajaxRequest('/encounters/login?username=' + u + '&password=' + p, $('taco'), $('divAnaesth'));"
+            </td>
+        </tr>
+    </table>
+</div>
+</center>

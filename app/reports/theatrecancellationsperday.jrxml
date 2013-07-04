@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<subDataset name="ds">
+		<parameter name="startdate" class="java.lang.String">
+			<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+		</parameter>
+		<parameter name="enddate" class="java.lang.String">
+			<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT
+    (SELECT DATE_FORMAT(value_datetime,'%b %d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) d, 
+    (SELECT name FROM location l WHERE l.location_id = e.location_id) theatre, 
+     (SELECT TRIM(CONCAT(COALESCE(prefix,''), ' ', COALESCE(given_name,''), ' ', COALESCE(family_name,'Undefined'))) FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN person_name p ON p.person_id = b.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 71) surgeon,
+    (SELECT CASE COALESCE(b.value_numeric,'') WHEN 1 THEN 'Non-Medical' WHEN 2 THEN 'Anaesth Delay/Absence' WHEN 3 THEN 'Surg Delay/Absence' WHEN 4 THEN 'Lack of Blood' WHEN 5 THEN 'Not Fit' WHEN 6 THEN 'Inadequate Pre-op Preparation' WHEN 7 THEN 'Equipment Deficiencies' WHEN 8 THEN 'Time Overrun' WHEN 9 THEN 'Nursing Delay/Absence' WHEN 10 THEN 'Ward Delay' WHEN 11 THEN 'Not Needed' WHEN 12 THEN 'Emergency' ELSE '' END FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 68) reason,
+    COUNT(*) num
+FROM encounter e
+LEFT OUTER JOIN encounter_type y ON y.encounter_type_id = e.encounter_type
+WHERE y.name = "SURGICAL OPERATION" AND TRIM((SELECT b.value_text FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 67)) = 'C' AND (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) >= $P{startdate} AND (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) <= $P{enddate}
+GROUP BY theatre, reason]]>
+		</queryString>
+		<field name="d" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="theatre" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="surgeon" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="reason" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="num" class="java.lang.Long">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="mainstartdate" class="java.lang.String">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="mainenddate" class="java.lang.String">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+    (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) d, 
+    (SELECT name FROM location l WHERE l.location_id = e.location_id) theatre, 
+     (SELECT TRIM(CONCAT(COALESCE(prefix,''), ' ', COALESCE(given_name,''), ' ', COALESCE(family_name,'Undefined'))) FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN person_name p ON p.person_id = b.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 71) surgeon,
+    (SELECT CASE COALESCE(b.value_numeric,'') WHEN 1 THEN 'Non-Medical' WHEN 2 THEN 'Anaesth Delay/Absence' WHEN 3 THEN 'Surg Delay/Absence' WHEN 4 THEN 'Lack of Blood' WHEN 5 THEN 'Not Fit' WHEN 6 THEN 'Inadequate Pre-op Preparation' WHEN 7 THEN 'Equipment Deficiencies' WHEN 8 THEN 'Time Overrun' WHEN 9 THEN 'Nursing Delay/Absence' WHEN 10 THEN 'Ward Delay' WHEN 11 THEN 'Not Needed' WHEN 12 THEN 'Emergency' ELSE '' END FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 68) reason,
+    COUNT(*) num
+FROM encounter e
+LEFT OUTER JOIN encounter_type y ON y.encounter_type_id = e.encounter_type
+WHERE y.name = "SURGICAL OPERATION" AND TRIM((SELECT b.value_text FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 67)) = 'C' AND (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) >= $P{mainstartdate} AND (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) <= $P{mainenddate}
+GROUP BY theatre, reason]]>
+	</queryString>
+	<field name="d" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="theatre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="surgeon" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="reason" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="num" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="547">
+			<bar3DChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="0" width="802" height="547"/>
+					<chartTitle>
+						<font size="14" isBold="true"/>
+						<titleExpression><![CDATA["Surgical Operation Cancellations 3D Bar Chart"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<font isItalic="true"/>
+						<subtitleExpression><![CDATA["Chart Displaying Cancellations Per Day Per Surgeon \nfrom: " + $P{mainstartdate} + " \nto: " + $P{mainenddate}]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+					<hyperlinkTooltipExpression><![CDATA["Bar 3D Chart"]]></hyperlinkTooltipExpression>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="ds">
+							<datasetParameter name="startdate">
+								<datasetParameterExpression><![CDATA[$P{mainstartdate}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="enddate">
+								<datasetParameterExpression><![CDATA[$P{mainenddate}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{d}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{theatre}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{num}]]></valueExpression>
+						<labelExpression><![CDATA[$F{d}]]></labelExpression>
+						<itemHyperlink/>
+					</categorySeries>
+				</categoryDataset>
+				<bar3DPlot>
+					<plot labelRotation="30.0"/>
+					<categoryAxisLabelExpression><![CDATA["Theatre Name"]]></categoryAxisLabelExpression>
+					<categoryAxisFormat>
+						<axisFormat>
+							<labelFont>
+								<font isBold="true"/>
+							</labelFont>
+							<tickLabelFont/>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Number of Cancellations per Day"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat>
+							<labelFont>
+								<font isBold="true"/>
+							</labelFont>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</bar3DPlot>
+			</bar3DChart>
+		</band>
+	</summary>
+</jasperReport>

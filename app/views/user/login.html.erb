@@ -1,0 +1,104 @@
+  <% if !request.env["HTTP_USER_AGENT"].match(/Firefox\/([0-9\.]+)/) %>
+  
+        <center>
+        
+            <table>
+                <tr>
+                    <td>
+                        <h1 style="color: #FF0000">Sorry, your browser is not supported. Use a Mozilla Firefox Browser or ask your system administrator for clarification!</h1>
+                    </td>
+                </tr>
+            </table>
+        
+        </center>
+        
+  <% else %>
+  
+  <script language="javascript">
+  	
+    doListSuggestions = false; //speeds up keyboard response
+
+    var setFocusTimeout = 1000;
+    var checkForBarcodeTimeout = 1500;
+   
+    function loadBarcodePage() {
+       focusForBarcodeInput();
+       moveNext();
+    }
+
+    function focusForBarcodeInput(){
+      var barcode = document.getElementById("touchscreenInput0");
+      if (barcode) {
+         barcode.focus();
+         //window.setTimeout("focusForBarcodeInput()", setFocusTimeout);
+      }
+      window.setTimeout("focusForBarcodeInput()", setFocusTimeout);
+    }
+    
+   
+    function moveNext(){
+      usertext=document.getElementById("touchscreenInput0");
+      if (usertext && usertext.value.match(/.+\$$/i) != null){
+        usertext.value=usertext.value.substring(0,usertext.value.length -1);
+        gotoNextPage();
+      }
+       window.setTimeout("moveNext()", checkForBarcodeTimeout);
+    }    
+    window.addEventListener("load", loadBarcodePage, false);
+
+  
+  </script>
+  
+  <center>
+  <%= error_messages_for 'user' %>
+  <% form_tag do %>
+    <table cellspacing=5>
+        <tr style="height: 200px">
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td>                                                            
+                <label for="user_username">Username</label>
+            </td>
+            <td>                
+                <%=text_field(:user, :username, :helpText=> "Enter Username", :textCase => "lower", :style => "width: 170px", :tt_pageonload=>"loadBarcodePage") %>
+            </td>
+        </tr>
+        <tr>
+            <td>                            
+                <label for="user_password">Password</label>
+            </td>
+            <td>                
+                <%=password_field(:user, :password, :helpText => "Enter Password", :style => "width: 170px", :textCase => "lower") %>
+            </td>
+        </tr>
+        <tr>
+            <td>                            
+                <label for="location_location">Location</label>
+            </td>
+            <td>                
+                <%= @location = Location.find(:all, :conditions => ["COALESCE(parent_location,0) = ?", 0]).map{|p| [p.name, p.location_id]}
+                    select(:loc, :location_id, @location,{},{:style => "width: 175px"})
+                 %>
+            </td>
+        </tr>
+        <tr>
+            <td colspan=2 align="right">                            
+                <%= submit_tag value="Login", :style => "width: 176px; height: 30px"%>
+            </td>
+        </tr>
+    </table>                                            
+  <% end %>
+  </center>
+
+  <div id="popupBox"  align="center" style="display:none">
+  <p>Verifying your username and password</p>
+  <p><blink>Please wait......</blink></p>
+  </div>
+  
+  <% end %>

@@ -1,0 +1,77 @@
+
+<%= javascript_include_tag  "cancel_to_user_menu"%>
+
+<script language="javascript" type="text/javascript">
+<!--
+    var diff = 150;
+//-->
+</script>
+
+    <div id="dv1" style="position:absolute; display:<%= ((@start.to_i > 0)?"block":"none") %>; top: 35px; left:15px; opacity:0.75; cursor:pointer " onmouseover="this.style.opacity = 1" onmousedown="this.style.opacity = 0.75" onmouseup="this.style.opacity = 1" onmouseout="this.style.opacity = 0.75" onclick="document.getElementById('start').value = parseInt(document.getElementById('start').value) - parseInt(document.getElementById('limit').value); document.getElementById('frmNav').submit() " >
+        <image src="/images/arow_small_left.gif" alt="<" style="color:#FFFFFF" border=0 />
+    </div>
+    <div id="dv2" style="position:absolute; display:<%= (((@start.to_i + @limit.to_i < @count.to_i) && (@start.to_i < @count.to_i))?"block":"none") %>; top: 35px; left:65px; opacity:0.75; cursor:pointer " onmouseover="this.style.opacity = 1" onmousedown="this.style.opacity = 0.75" onmouseup="this.style.opacity = 1" onmouseout="this.style.opacity = 0.75" onclick="document.getElementById('start').value = parseInt(document.getElementById('start').value) + parseInt(document.getElementById('limit').value); document.getElementById('frmNav').submit()" >
+        <image src="/images/arow_small_right.gif" alt=">" style="color:#FFFFFF" border=0 />
+    </div>
+    <div id="dv3" style="position:absolute; color: #FFFFFF; font-size: 11px; font-weight: bold; top: 80px; left:25px;">
+        <% if @count <= 0 %>
+            No Records
+        <% else %>
+            Page <%= (@start.to_i / @limit.to_i) + 1 %> of <%= (@count.to_i%@limit.to_i == 0)?(@count.to_i / @limit.to_i):((@count.to_i / @limit.to_i) + 1) %>
+        <% end %> 
+    </div>
+
+    <% form_tag ({:action => "index"}, {:id => "frmNav"}) do %>
+        <input type="hidden" name="start" id="start" value="<%= @start %>" />
+        <input type="hidden" name="count" id="count" value="<%= @count %>" />
+        <input type="hidden" name="limit" id="limit" value="<%= @limit %>" />
+    <% end %>
+    
+    <table width="100%" cellspacing=1 cellpadding=5>
+        <tr>
+            <td colspan=2 bgcolor="#000000" height="60px" align="center">
+                <h1 style="color: #FFFFFF">Active Users & Privileges Register</h1>
+            </td>
+        </tr>                            
+        <tr>
+            <td width="20%" valign="top" bgcolor="#CCCCFF">                
+                <table width="100%" cellspacing=5 cellpadding=5>
+                    <tr>
+                        <td align="right">
+                            <%= link_to 'User Menu', :action => 'user_menu', :id => @user %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            <%= link_to 'Voided Users', :action => 'voided_list', :id => @user %>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td width="80%">                                
+                <div id="dvFrame" style="height:400px; z-index:10; position:relative; overflow: scroll;" width="100%">
+                
+                    <%= render :partial => 'list' %>
+                    
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan=2 bgcolor="#000000" height="20px" align="center">
+                &nbsp;
+            </td>
+        </tr>
+    </table>                                    
+
+<!--script type="text/javascript" language="javascript"-->
+<!--
+    function adjust(){
+        document.getElementById('dvFrame').style.height=(innerHeight-150) + "px";
+    }
+    
+    window.addEventListener("resize", adjust, false);
+    document.onLoad = adjust();
+
+//-->
+<!--/script-->
+

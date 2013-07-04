@@ -1,0 +1,14 @@
+<center>
+<h1>Edit Hospital</h1>
+<% form_tag ({:action => "update_hospital"}, {:id => "frmMain"}) do %>
+    
+    <input type="hidden" value="<%= @location.location_id %>" name="location[location_id]" id="location_location_id" />
+    
+    <%= render :partial => "form" %>
+    
+    <%= submit_tag "Save", :class => "smallbutton" %>
+    <%= submit_tag "Cancel", :class => "smallbutton", :onclick => "$('frmMain').action='/location/list';" %>
+
+<% end %>
+
+</center>

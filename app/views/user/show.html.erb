@@ -1,0 +1,115 @@
+<%=stylesheet_link_tag("user_list")%>
+<%= javascript_include_tag  "cancel_to_user_menu"%>
+
+<script language="javascript" type="text/javascript">
+<!--
+    var diff = 202;
+//-->
+</script>
+
+<div id="viewport" class="show_options">
+    <table cellspacing=5 cellpadding=5 width="100%" align="center" bgcolor="#EFEFFF">
+        <tr>
+            <td colspan=3 bgcolor="#999999" align="center" style="color:#EAEAEA">
+                <h2><%= "#{@user.person.names.first.given_name} #{@user.person.names.first.family_name}" %></h2>
+            </td>
+        </tr>                  
+        <tr>
+            <td bgcolor="#CCCCCC" colspan=3 align="center">
+                <div id="navigationLinks" class="buttonsDiv">
+                  <%= link_to_onmousedown 'Edit', :action => 'edit', :id => @user  %> |
+                  <%= link_to_onmousedown 'Change Password', :action => 'change_password',  :id => @user %> |
+                  <%= link_to_onmousedown 'Add Role', :action => 'add_role',  :id => @user %> |
+                  <%= link_to_onmousedown 'Delete Role', :action => 'delete_role',  :id => @user %> |
+                  <!--%= link_to 'Destroy', { :action => 'destroy', :id => @user }, :confirm => 'Are you sure?', :post => true %-->
+                  <%= link_to_onmousedown 'Remove User',  :action => 'destroy', :id => @user %> |
+                  <%= link_to_onmousedown 'User Menu', :action => 'user_menu' %> |
+                  <%= link_to_onmousedown 'Print user  label', :controller=>'label_printing', :action => 'print_user_label' %> |
+                  <%= link_to_onmousedown 'Back', :action => 'search_user' %>
+                </div>
+            </td>
+        </tr>                     
+        <tr>
+            <td>
+                
+                <div id="dvFrame" style="height:400px; z-index:10; position:relative; overflow: scroll;" width="100%">
+                    <table width="100%" cellpadding=10 cellspacing=1>                       
+                        <% @i = 0 %>       
+                        <tr>
+                            <th align="left" valign="top" bgcolor="#CCCCFF" width="20%">
+                                System ID
+                            </th>
+                            <td valign="top" bgcolor="#CCCCFF">                
+                                :
+                            </td>
+                            <td width="78%" valign="top" <%= ((@i%2 == 0)?"bgcolor='#EAEAEA'":"") %> >
+                                <%= @user.system_id %>
+                            </td>
+                        </tr>                                           
+                        <% for column in User.content_columns %>
+                            <% unless column.name =~ /voided|void|changed|creator|salt|password|secret/ %>
+                                <% @i += 1 %>
+                                <tr>
+                                    <th align="left" valign="top" bgcolor="#CCCCFF" width="20%">
+                                        <%= column.human_name %>
+                                    </th>
+                                    <td valign="top" bgcolor="#CCCCFF">
+                                       :
+                                    </td>
+                                    <td width="78%" valign="top" <%= ((@i%2 == 0)?"bgcolor='#EAEAEA'":"") %> >
+                                        <%=h @user.send(column.name) %>
+                                    </td>
+                                </tr>                              
+                            <% end %>
+                        <% end %>
+                        <tr>
+                            <th align="left" valign="top" bgcolor="#CCCCFF" width="20%">
+                                Role
+                            </th>
+                            <td valign="top" bgcolor="#CCCCFF">
+                                :
+                            </td>
+                            <% @i += 1 %>
+                            <td width="78%" valign="top" <%= ((@i%2 == 0)?"bgcolor='#EAEAEA'":"") %> >
+                                <ul>
+                                    <%=@user.roles.collect{|r| "<li>" + r.role + "</li>"}%>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th align="left" valign="top" bgcolor="#CCCCFF" width="20%">
+                                Privileges
+                            </th>
+                            <td valign="top" bgcolor="#CCCCFF">
+                                :
+                            </td>
+                            <% @i += 1 %>
+                            <td width="78%" valign="top" <%= ((@i%2 == 0)?"bgcolor='#EAEAEA'":"") %> >
+                                <ul>
+                                    <%=@user.privileges.collect{|p| "<li>" + p.privilege + "</li>"} %>
+                                </ul>
+                            </td>
+                        </tr> 
+                    </table>
+
+                </div>
+                
+            </td>
+        </tr>
+        <tr>
+            <td colspan=3 bgcolor="#CCCCCC" align="center">
+                <div id="navigationLinks" class="buttonsDiv">
+                  <%= link_to_onmousedown 'Edit', :action => 'edit', :id => @user  %> |
+                  <%= link_to_onmousedown 'Change Password', :action => 'change_password',  :id => @user %> |
+                  <%= link_to_onmousedown 'Add Role', :action => 'add_role',  :id => @user %> |
+                  <%= link_to_onmousedown 'Delete Role', :action => 'delete_role',  :id => @user %> |
+                  <!--%= link_to 'Destroy', { :action => 'destroy', :id => @user }, :confirm => 'Are you sure?', :post => true %-->
+                  <%= link_to_onmousedown 'Remove User',  :action => 'destroy', :id => @user %> |
+                  <%= link_to_onmousedown 'User Menu', :action => 'user_menu' %> |
+                  <%= link_to_onmousedown 'Print user  label', :controller=>'label_printing', :action => 'print_user_label' %> |
+                  <%= link_to_onmousedown 'Back', :action => 'search_user' %>
+                </div>
+            </td>
+        </tr>                            
+    </table>                 
+</div>    

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<subDataset name="pieDataset" whenResourceMissingType="Key">
+		<queryString>
+			<![CDATA[select location_id, COUNT(*) AS enc_count from encounter group by location_id]]>
+		</queryString>
+		<field name="location_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="enc_count" class="java.lang.Long">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString>
+		<![CDATA[select location_id, COUNT(*) AS enc_count from encounter group by location_id]]>
+	</queryString>
+	<field name="location_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="enc_count" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="79">
+			<staticText>
+				<reportElement x="80" y="14" width="395" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="36"/>
+				</textElement>
+				<text><![CDATA[SubDataset Sample]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="66">
+			<textField>
+				<reportElement x="0" y="29" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{location_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="137" y="29" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{enc_count}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="343">
+			<pie3DChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="0" width="555" height="300"/>
+					<chartTitle>
+						<titleExpression><![CDATA["Pie 3D Chart"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<subtitleExpression><![CDATA["Chart Displaying 3D Pie"]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+					<hyperlinkTooltipExpression><![CDATA["Pie 3D Chart"]]></hyperlinkTooltipExpression>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="pieDataset">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<pieSeries>
+						<keyExpression><![CDATA[$F{location_id}]]></keyExpression>
+						<valueExpression><![CDATA[$F{enc_count}]]></valueExpression>
+						<sectionHyperlink/>
+					</pieSeries>
+					<otherSectionHyperlink/>
+				</pieDataset>
+				<pie3DPlot depthFactor="0.2" isCircular="false">
+					<plot backgroundAlpha="0.5" foregroundAlpha="0.5"/>
+				</pie3DPlot>
+			</pie3DChart>
+		</band>
+	</summary>
+</jasperReport>

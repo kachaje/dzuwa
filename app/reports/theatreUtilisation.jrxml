@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<subDataset name="pieDataset">
+		<queryString>
+			<![CDATA[SELECT e.encounter_id, e.encounter_type,
+    (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) opdate,
+    (SELECT CONCAT(given_name, ' ', family_name) FROM person_name p WHERE p.person_id = e.patient_id) name,
+    (SELECT CONCAT(prefix, ' ', given_name, ' ', family_name) FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN person_name p ON p.person_id = b.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 71) surgeon,
+    (SELECT name FROM location l WHERE l.location_id = e.location_id) theatre,
+    (SELECT b.value_text FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 67) outcome,
+    (SELECT b.value_numeric FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 68) ocd,
+    (SELECT name FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN concept_answer a ON a.concept_id = b.value_coded LEFT OUTER JOIN concept_name n ON n.concept_id = a.answer_concept WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 61) proctime,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 85) otin,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) itime,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 112) prep,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 119) knife,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 120) closure,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 125) tout,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 133) rout,
+    (SELECT TIME_TO_SEC(TIMEDIFF(TIME(o.value_datetime), TIME(s.value_datetime)))/60 FROM obs o LEFT OUTER JOIN obs s ON s.encounter_id = o.encounter_id WHERE o.encounter_id = e.encounter_id AND o.concept_id = 125 AND s.concept_id = 111) duration,
+    (SELECT DATE_FORMAT(MIN(TIME(value_datetime)), '%H:%i') FROM obs o WHERE o.location_id = e.location_id AND o.concept_id = 111 AND DATE_FORMAT(o.obs_datetime, '%Y-%m-%d') = DATE_FORMAT(e.encounter_datetime, '%Y-%m-%d') GROUP BY o.location_id) start,
+    (SELECT DATE_FORMAT(MAX(TIME(value_datetime)), '%H:%i') FROM obs o WHERE o.location_id = e.location_id AND o.concept_id = 125 AND DATE_FORMAT(o.obs_datetime, '%Y-%m-%d') = DATE_FORMAT(e.encounter_datetime, '%Y-%m-%d') GROUP BY o.location_id) finish,
+    (SELECT DATE_FORMAT(MIN(TIME(b.value_datetime)), '%H:%i') FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN encounter n ON n.encounter_id = o.value_numeric WHERE b.location_id = e.location_id AND b.concept_id = 70 AND DATE_FORMAT(b.obs_datetime, '%Y-%m-%d') = DATE_FORMAT(n.encounter_datetime, '%Y-%m-%d') GROUP BY b.location_id) plannedstart
+FROM encounter e
+LEFT OUTER JOIN encounter_type y ON y.encounter_type_id = e.encounter_type
+WHERE y.name = "SURGICAL OPERATION"]]>
+		</queryString>
+		<field name="encounter_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="encounter_type" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="opdate" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="surgeon" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="theatre" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="outcome" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="ocd" class="java.lang.Double">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="proctime" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="otin" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="itime" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="prep" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="knife" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="closure" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="tout" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="rout" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="duration" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="start" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="finish" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="plannedstart" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString>
+		<![CDATA[SELECT e.encounter_id, e.encounter_type,
+    (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) opdate,
+    (SELECT CONCAT(given_name, ' ', family_name) FROM person_name p WHERE p.person_id = e.patient_id) name,
+    (SELECT CONCAT(prefix, ' ', given_name, ' ', family_name) FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN person_name p ON p.person_id = b.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 71) surgeon,
+    (SELECT name FROM location l WHERE l.location_id = e.location_id) theatre,
+    (SELECT b.value_text FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 67) outcome,
+    (SELECT b.value_numeric FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 68) ocd,
+    (SELECT name FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN concept_answer a ON a.concept_id = b.value_coded LEFT OUTER JOIN concept_name n ON n.concept_id = a.answer_concept WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 61) proctime,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 85) otin,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) itime,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 112) prep,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 119) knife,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 120) closure,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 125) tout,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 133) rout,
+    (SELECT TIME_TO_SEC(TIMEDIFF(TIME(o.value_datetime), TIME(s.value_datetime)))/60 FROM obs o LEFT OUTER JOIN obs s ON s.encounter_id = o.encounter_id WHERE o.encounter_id = e.encounter_id AND o.concept_id = 125 AND s.concept_id = 111) duration,
+    (SELECT DATE_FORMAT(MIN(TIME(value_datetime)), '%H:%i') FROM obs o WHERE o.location_id = e.location_id AND o.concept_id = 111 AND DATE_FORMAT(o.obs_datetime, '%Y-%m-%d') = DATE_FORMAT(e.encounter_datetime, '%Y-%m-%d') GROUP BY o.location_id) start,
+    (SELECT DATE_FORMAT(MAX(TIME(value_datetime)), '%H:%i') FROM obs o WHERE o.location_id = e.location_id AND o.concept_id = 125 AND DATE_FORMAT(o.obs_datetime, '%Y-%m-%d') = DATE_FORMAT(e.encounter_datetime, '%Y-%m-%d') GROUP BY o.location_id) finish,
+    (SELECT DATE_FORMAT(MIN(TIME(b.value_datetime)), '%H:%i') FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN encounter n ON n.encounter_id = o.value_numeric WHERE b.location_id = e.location_id AND b.concept_id = 70 AND DATE_FORMAT(b.obs_datetime, '%Y-%m-%d') = DATE_FORMAT(n.encounter_datetime, '%Y-%m-%d') GROUP BY b.location_id) plannedstart
+FROM encounter e
+LEFT OUTER JOIN encounter_type y ON y.encounter_type_id = e.encounter_type
+WHERE y.name = "SURGICAL OPERATION"]]>
+	</queryString>
+	<field name="encounter_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="encounter_type" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="opdate" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="surgeon" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="theatre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="outcome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ocd" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="proctime" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="otin" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="itime" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="prep" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="knife" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="closure" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tout" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="rout" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="duration" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="start" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="finish" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="plannedstart" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="441">
+			<pie3DChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="0" width="802" height="441"/>
+					<chartTitle>
+						<titleExpression><![CDATA["Pie 3D Chart"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<subtitleExpression><![CDATA["Chart Displaying 3D Pie"]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+					<hyperlinkTooltipExpression><![CDATA["Pie 3D Chart"]]></hyperlinkTooltipExpression>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="pieDataset">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<pieSeries>
+						<keyExpression><![CDATA[$F{theatre}]]></keyExpression>
+						<valueExpression><![CDATA[$F{encounter_id}]]></valueExpression>
+						<labelExpression><![CDATA[$F{outcome}]]></labelExpression>
+						<sectionHyperlink/>
+					</pieSeries>
+					<otherSectionHyperlink/>
+				</pieDataset>
+				<pie3DPlot depthFactor="0.2" isCircular="false">
+					<plot backgroundAlpha="0.5" foregroundAlpha="0.5"/>
+				</pie3DPlot>
+			</pie3DChart>
+		</band>
+	</summary>
+</jasperReport>

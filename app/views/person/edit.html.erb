@@ -1,0 +1,24 @@
+<% @item = @result.names.first %>
+<% @itemAddress = @result.addresses.first %>
+<% @itemAttributes = @result.personattributes.first %>
+<center>
+<% form_tag( {:action => :edit}, {:id => 'frmMain'} ) do %>
+    <input type="hidden" name="person[person_id]" value="<%= @result.names.first.person_id rescue '' %>" />
+    <input type="hidden" name="person_name[person_name_id]" value="<%= @item.person_name_id rescue '' %>" />
+    <input type="hidden" name="person_address[person_address_id]" value="<%= @itemAddress.person_address_id rescue '' %>" />
+    <input type="hidden" name="person_attribute[person_attribute_id]" value="<%= @itemAttributes.person_attribute_id rescue '' %>" />
+    <h1 style="color: #9999FF "><%= @item.given_name + ' ' + @item.family_name %></h1>
+    <!--%= @result.names.first.person.person_id %-->
+    <%= render :partial => 'form' %>
+    <table width="400" -->
+        <tr>
+            <td bgcolor="#EAEAEA">
+                <input type="submit" name="btnBack" value="Back" onClick="document.getElementById('frmMain').action = '<%= session[:origin] rescue '/person/index' %>'" />
+            </td>
+            <td align="right" bgcolor="#EAEAEA">
+                <input type="submit" name="btnUpdate" value="Update" onClick="document.getElementById('frmMain').action = '/person/update'" />
+            </td>
+        </tr>
+    </table>
+<% end %>
+</center>

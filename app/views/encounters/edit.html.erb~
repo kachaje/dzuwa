@@ -1,0 +1,10 @@
+<center>
+<h1>Edit Apointment</h1>
+
+<% form_tag ({:action => "create_appointment"}, {:id => "frmMain"}) do %>
+    
+    <%= render :partial => "form" %> 
+    
+<% end %>
+
+</center>

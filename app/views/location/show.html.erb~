@@ -1,0 +1,91 @@
+<center>
+
+<% @parent = Location.find(@venues.first.parent_location).name rescue "No Defined " %>
+
+<script type="text/javascript" language="javascript"></script>
+
+<h1><%= "#{@parent} Units" %></h1>
+
+    <% form_tag ({:action => "index"}, {:id => "frmMain"}) do %>
+    
+        <input type="hidden" value="" name="selectId" id="selectId" />
+        
+        <table cellpadding=5 cellspacing=1>
+            <tr>
+                <th bgcolor="#999999" style="color: #FFFFFF">
+                    Unit Name
+                </th>
+                <th bgcolor="#999999" style="color: #FFFFFF">
+                    Description
+                </th>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                </td>
+            </tr>
+            
+            <% @i = 0 %>
+            
+            <% @venues.each{|loc| %>
+                
+                <tr id="row<%= @i %>" onmouseover="this.bgColor='#9999FF'; this.style.color='#FFFFFF'" onmouseout="this.bgColor='#FFFFFF'; this.style.color='#000000'" onmousedown="this.bgColor='#0066CC'; if(event.button==2){$('mnurow0').innerHTML='Edit <b><%= loc.name %></b>'; $('mnurow1').innerHTML='<b><%= loc.name %></b> Usage Report'; showMenu(event); $('selectId').value=<%= loc.location_id %>;}" onmouseup="this.bgColor='#EAEAEA'" style="cursor:pointer" onclick="$('selectId').value=<%= loc.location_id %>; $('frmMain').action='/encounters/appointment'; $('frmMain').submit()">
+                    <td>
+                        <%= loc.name %>
+                    </td>
+                    <td>
+                        <%= loc.description %>
+                    </td>
+                </tr>
+                
+                <% @i += 1 %>
+                
+            <% } %>                                                
+              
+              
+            <tr>
+                <td>
+                </td>
+                <td>
+                </td>
+            </tr>  
+            <tr>
+                <td colspan=2>
+                    <hr>
+                </td>
+            </tr>                                        
+        </table>
+    
+        <%= submit_tag "Back", :onclick => "$('frmMain').action='/location/list'", :class => "smallbutton" %>
+    <% end %>
+    
+    <div id="divMnu" style="background-color:#CCCCFF; width: 200px auto; position:absolute; display:none; z-index:997; " onclick="">
+        
+        <table cellpadding=5 id="tblMnu">
+            
+            <% s = [
+                        ["Edit Unit", "$('frmMain').action='/location/edit_venue'; $('frmMain').submit()"], 
+                        ["Unit Usage Report", "$('frmMain').action='/location/unit_usage'; $('frmMain').submit()"], 
+                        ["View Appointments", "$('frmMain').action='/location/appointments'; $('frmMain').submit()"], 
+                        ["View Current Status", "$('frmMain').action='/location/unit_status'; $('frmMain').submit()"], 
+                        ["Add Unit", "$('frmMain').action='/location/new_venue'; $('frmMain').submit()"], 
+                        ["Add Appointment", "$('frmMain').action='/encounters/appointment'; $('frmMain').submit()"]
+                   ] 
+            %>
+            
+            <% @k = 0 %>
+            <% s.each{|p| %>
+                <tr onmouseover="this.bgColor='#9999FF'; this.style.color='#FFFFFF'" onmouseout="this.bgColor='#CCCCFF'; this.style.color='#000000'" onmousedown="this.bgColor='#0066CC'" style="cursor:pointer">
+                    <td id="mnurow<%= @k %>" onclick="$('divMnu').style.display='none'; <%= p[1] %>;">
+                        <%= p[0] %>
+                    </td>
+                </tr>
+                <% @k += 1 %>
+            <% } %>
+            
+        </table>            
+                                                        
+    </div>
+    
+</center>

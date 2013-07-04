@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<subDataset name="pieDataset">
+		<queryString>
+			<![CDATA[select LOCATION_ID, COUNT(*) AS ENC_COUNT from encounter group by location_id]]>
+		</queryString>
+		<field name="LOCATION_ID" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="ENC_COUNT" class="java.lang.Long">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString>
+		<![CDATA[select LOCATION_ID, COUNT(*) AS ENC_COUNT from encounter group by location_id]]>
+	</queryString>
+	<field name="LOCATION_ID" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ENC_COUNT" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="25">
+			<textField>
+				<reportElement x="79" y="3" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{LOCATION_ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="302" y="3" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{ENC_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="633">
+			<pie3DChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="0" width="555" height="300"/>
+					<chartTitle>
+						<titleExpression><![CDATA["Pie 3D Chart"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<subtitleExpression><![CDATA["Chart Displaying 3D Pie"]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+					<hyperlinkTooltipExpression><![CDATA["Pie 3D Chart"]]></hyperlinkTooltipExpression>
+				</chart>
+				<pieDataset>
+					<dataset>
+						<datasetRun subDataset="pieDataset">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<pieSeries>
+						<keyExpression><![CDATA[$F{LOCATION_ID}]]></keyExpression>
+						<valueExpression><![CDATA[$F{ENC_COUNT}]]></valueExpression>
+						<sectionHyperlink/>
+					</pieSeries>
+					<otherSectionHyperlink/>
+				</pieDataset>
+				<pie3DPlot depthFactor="0.2" isCircular="false">
+					<plot backgroundAlpha="0.5" foregroundAlpha="0.5"/>
+				</pie3DPlot>
+			</pie3DChart>
+			<bar3DChart>
+				<chart evaluationTime="Report">
+					<reportElement x="0" y="316" width="555" height="300"/>
+					<chartTitle>
+						<titleExpression><![CDATA["Bar 3D Chart"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<subtitleExpression><![CDATA["Chart Displaying 3D Bars"]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+					<hyperlinkTooltipExpression><![CDATA["Bar 3D Chart"]]></hyperlinkTooltipExpression>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="pieDataset">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{LOCATION_ID}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{LOCATION_ID}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{ENC_COUNT}]]></valueExpression>
+						<itemHyperlink/>
+					</categorySeries>
+				</categoryDataset>
+				<bar3DPlot>
+					<plot/>
+					<categoryAxisLabelExpression><![CDATA["Name"]]></categoryAxisLabelExpression>
+					<categoryAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Amount"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</bar3DPlot>
+			</bar3DChart>
+		</band>
+	</summary>
+</jasperReport>

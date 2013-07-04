@@ -1,0 +1,18 @@
+<center>
+
+<% if @patient %>
+    <h1>Encounters for <%= "#{@patient.person.names.first.given_name} #{@patient.person.names.first.family_name}" %></h1>
+
+    <%= render :partial => "form" %>
+       
+    <% form_tag :controller => "location", :action => "list" do %>
+        <%= submit_tag "Back", :class => "smallbutton" %>
+    <% end %>
+
+<% else %>
+
+    <h1>No Records Found</h1>
+           
+<% end %>
+
+</center>    

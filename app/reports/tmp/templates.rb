@@ -1,0 +1,63 @@
+Ruport::Formatter::Template.create(:default) do |format|
+    format.text = {
+      :font_size => 16,
+      :justification => :center
+    }
+    format.table = {
+      :font_size      => 11,
+      :show_headings  => true,
+      :bold_headings => true,
+      :heading_font_size => 7,
+      :heading_color => Color::RGB::Black,
+      :shade_headings => true,
+      :shade_heading_color => Color::RGB::Gainsboro,
+      :line_color => Color::RGB::LightSlateGray,
+      :shade_color => Color::RGB::Lavender,
+      :maximum_width          => 780,
+      :width          => 780
+    }
+    format.grouping = {
+      :style => :separated
+    }
+    format.page = {
+      :size   => "A4",
+      :layout => :potrait
+    }
+end
+
+Ruport::Formatter::Template.create(:theatre_list) do |format|
+  format.text = {
+    :font_size => 36,
+    :justification => :center
+  }
+  format.page = {
+    :size   => "A4",
+    :layout => :landscape
+  }
+end
+
+Ruport::Formatter::Template.create(:small_centered, :base => :default) do |format|
+  format.text.merge!(:font_size => 10)
+end
+
+Ruport::Formatter::Template.create(:simple) do |format|  
+    format.page = {
+      :size   => "A4",
+      :layout => :landscape
+    }
+    format.text = {
+      :font_size => 16
+    }
+    format.table = {
+      :font_size      => 16,
+      :show_headings  => false
+    }
+    format.column = {
+      :alignment => :center,
+      :heading => { :justification => :right }
+    }
+    format.grouping = {
+      :style => :separated
+    }
+  end
+

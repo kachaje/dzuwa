@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Search</title>
+<script type="text/javascript" language="javascript">
+<!-- 
+	function $(id){
+		return document.getElementById(id);
+	}
+	
+	function showAjaxResponse(aHttpRequest) {
+		$('options').innerHTML = aHttpRequest.responseText;
+	}
+
+	function ajaxRequest(aElement, aUrl) {
+		var httpRequest = new XMLHttpRequest(); 
+		httpRequest.onreadystatechange = function() { 
+			handleResult(aElement, httpRequest); 
+		};
+		try {
+			httpRequest.open('GET', aUrl, true);
+			httpRequest.send(null);    
+		} catch(e){
+		}
+	}
+
+	function handleResult(optionsList, aXMLHttpRequest) {
+		if (!aXMLHttpRequest) return;
+		
+		if (!optionsList) return;
+	
+		if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
+			tstInputTarget = $('txt');
+			var a = aXMLHttpRequest.responseText;
+			//alert(a);
+			optionsList.innerHTML = a;
+			//$('txtList').value = a;
+			//optionsList.innerHTML = "<option>First</option><option>Second</option><option>Third</option>"
+			//alert(optionsList.innerHTML);
+			if(optionsList.getElementsByTagName("li")[0] != null){
+				var optionNodes = optionsList.getElementsByTagName("li");
+				var optionNodeCount = optionNodes.length;
+				for(var i=0;i<optionNodeCount;i++){
+				optionNodes[i].setAttribute("onmousedown","updateInput(this)");
+					if (optionNodes[i].innerHTML == tstInputTarget.value) {
+						optionNodes[i].style.backgroundColor = "lightblue";
+					}
+				}
+			}
+			optionsList.innerHTML = "<ul>"+optionsList.innerHTML+"</ul>";
+		}
+	}
+
+	function listSuggestions() {		
+		var inputElement = $('txt'); 
+	
+		if(inputElement.getAttribute("ajaxURL") != null){
+			ajaxRequest($('options'),inputElement.getAttribute("ajaxURL")+inputElement.value);
+		}
+	}
+	
+	function updateInput(obj){
+		$('txt').value = obj.innerHTML;
+		obj.style.backgroundColor = "lightblue";
+	}
+	
+//-->
+</script>
+</head>
+
+<body>
+<form name="form1" id="form1" method="post" action="">
+  <p>
+    <input name="txt" type="text" id="txt" style="width: 200px " ajaxURL="/person/names?search=" onkeyup="listSuggestions()"  />
+</p>
+  <p>
+    <div name="options" id="options" style="width: 200px ">      
+    </div>
+</p>
+  <p>
+    <textarea name="txtList" cols="50" rows="10" id="txtList"></textarea>
+  </p>
+</form>
+</body>
+</html>
+

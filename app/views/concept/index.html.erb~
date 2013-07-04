@@ -1,0 +1,82 @@
+<center>
+<h1>Surgical Procedures</h1>
+
+<script language="javascript" type="text/javascript">
+<!--
+    var diff = 140;
+//-->
+</script>
+
+<% form_tag({:action => "new_procedure"}, {:id => "frmIndex"}) do %>
+
+    <div id="dvFrame" style="height:400px; z-index:10; position:relative; overflow: scroll;" width="100%">
+    
+        <table cellspacing=1 cellpadding=5 bgcolor="#EAEAEA" width="100%">
+            <tr bgcolor="#666666" style="color: #FFFFFF">
+                <th>
+                    Procedure
+                </th>         
+                <th>
+                    Description
+                </th>          
+                <th>
+                    Time<i>(mins)</i>
+                    <input type="hidden" name="proc_id" id="proc_id" value="" />
+                </th>
+            </tr>
+            
+            <% @concept.each{|c| %>
+            
+                <tr>
+                    <td bgcolor="#CCCCCC" align="left" colspan=4>
+                        <b><%= @cat = Concept.find(c).name.name %></b>
+                    </td>
+                </tr>
+            
+                <% 
+                    @procedure = Concept.find(:all, :include => [[:sets], [:name]], :conditions => ["concept_set.concept_id = concept.concept_id AND concept_set.concept_set = ?", c], :order => "concept_name.name")
+                    
+                    @procedure.each{|p|
+                %>
+                
+                        <tr bgcolor="#FFFFFF" onmouseover="this.bgColor='#E6A501'; this.style.color='#FFFFFF';" onmouseout="this.bgColor='#FFFFFF'; this.style.color='#000000';" onclick="$('proc<%= p.concept_id %>').checked=true; $('frmIndex').action='/concept/edit_procedure'; $('frmIndex').submit();" style="cursor: pointer">
+                            <td width="10px" align="center">
+                                <input type="radio" name="proc" id="proc<%= p.concept_id %>" value="<%= p.concept_id %>" onclick="$('proc_id').value='<%= p.concept_id %>'" />
+                            </td>
+                            <td>
+                                <%= p.name.name.titleize %>
+                            </td>
+                            <td>
+                                <%= p.descript.description %>
+                            </td>
+                            <td align="right">
+                                <%= "#{p.concept_answers.first.answer.name.name} mins" %>
+                            </td>
+                        </tr>
+                        
+                <% } %>
+                
+            <% } %>    
+           
+        </table>
+    
+    </div>
+    
+
+    <table cellpadding=5 width="100%"> 
+        <tr>
+            <td>
+                <%= submit_tag "Home", :onclick => "$('frmIndex').action='/task/index'", :class => "smallsmallbutton" %>
+            </td>
+            <td align="center">
+                <%= submit_tag "New Procedure", :onclick => "$('frmIndex').action='/concept/new_procedure'", :class => "smallsmallbutton" %>
+            </td>
+            <td align="right">
+                <%= submit_tag "Edit Procedure", :onclick => "$('frmIndex').action='/concept/edit_procedure'", :class => "smallsmallbutton" %>
+            </td>
+        </tr>
+        
+    </table>      
+    
+    
+<% end %>                              

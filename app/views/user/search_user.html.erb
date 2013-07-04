@@ -1,0 +1,22 @@
+<%= javascript_include_tag  "cancel_to_user_menu"%>
+
+<center>
+<h1>Search By Username</h1>
+<% form_tag ({:action => 'search_user', :id => @user}, {:id => "frmNav"}) do %>
+    <table cellpadding=5 border=0>
+        <tr>
+            <td colspan=2 height=30>
+                <%= render :partial => 'form' %>
+            </td>
+        </tr>                                        
+        <tr>
+            <td align="left">
+                <%= submit_tag 'Search', :style => "width: 140px" %>
+            </td>
+            <td align="right"> 
+                <%= submit_tag 'Back', :onclick => "document.getElementById('frmNav').action = '/user/user_menu'; document.getElementById('frmNav').submit(); ", :style => "width: 140px" %>
+            </td>
+        </tr>
+    </table>                                      
+<% end %>
+</center>

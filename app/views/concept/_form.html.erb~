@@ -1,0 +1,223 @@
+
+<script type="text/javascript" language="javascript">
+<!--
+
+	function ajaxRequest(aElement, aUrl, target) {
+		var httpRequest = new XMLHttpRequest(); 
+		httpRequest.onreadystatechange = function() { 
+			handleResult(aElement, httpRequest, target); 
+		};
+		try {
+			httpRequest.open('GET', aUrl, true);
+			httpRequest.send(null);    
+		} catch(e){
+		}
+	}
+
+	function handleResult(optionsList, aXMLHttpRequest, target) {
+		if (!aXMLHttpRequest) return;
+		
+		if (!optionsList) return;
+	
+		if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
+			tstInputTarget = $(target);
+
+			optionsList.innerHTML = aXMLHttpRequest.responseText;
+			
+			if(optionsList.innerHTML == "<option></option>"){
+			    $('options').style.display = "none";
+			} else {
+			    $('options').style.display = "block";
+			}
+			
+			if(optionsList.getElementsByTagName("option")[0] != null){
+				var optionNodes = optionsList.getElementsByTagName("option");
+				var optionNodeCount = optionNodes.length;
+				for(var i=0;i<optionNodeCount;i++){
+				    optionNodes[i].setAttribute("onmousedown","updateInput(this, '" + target + "'); $('options').style.display='none';");
+				    optionNodes[i].setAttribute("onmouseover","this.style.backgroundColor='#9999FF'; this.style.color='#FFFFFF'");
+				    optionNodes[i].setAttribute("onmouseout","this.style.backgroundColor=''; this.style.color='#000000'");
+				    //optionNodes[i].setAttribute("onclick", "updateInput(this, " + target + "); $('options').style.display='none';");
+				    
+					if (optionNodes[i].innerHTML == tstInputTarget.value) {
+						optionNodes[i].style.backgroundColor = "lightblue";
+					}
+				}
+			}
+		}
+	}
+
+	function listSuggestions(dest_ctrl_id, src_ctrl_id) {		
+		var inputElement = $(src_ctrl_id); 
+	
+		if(inputElement.getAttribute("ajaxURL") != null){
+			ajaxRequest($(dest_ctrl_id),inputElement.getAttribute("ajaxURL")+inputElement.value, src_ctrl_id);
+		}
+	}
+	
+	function updateInput(obj, target){
+		$(target).value = obj.innerHTML.replace("&amp;","&");
+		obj.style.backgroundColor = "lightblue";
+	}
+	
+      
+    function keyup(obj){
+        
+        if($('options').style.display=='none'){
+            
+            var o = obj; 
+            var t = o.offsetTop + o.offsetHeight; 
+            var l = o.offsetLeft + 1; 
+            var w = obj.offsetWidth; 
+            var h = obj.offsetHeight;  
+
+            while(o.offsetParent != document.body){
+                o = o.offsetParent; 
+                t += o.offsetTop; 
+                l += o.offsetLeft;
+            } 
+
+            $('sel').style.width = w + 'px'; 
+            $('options').style.left = l + 'px'; 
+            $('options').style.top= t + 'px';
+
+            $('options').style.display = 'block';
+            
+        } else {
+         
+            var o = obj; 
+            var t = o.offsetTop + o.offsetHeight; 
+            var l = o.offsetLeft + 1; 
+            var w = this.offsetWidth; 
+            var h = this.offsetHeight;  
+
+            while(o.offsetParent != document.body){
+                o = o.offsetParent; 
+                t += o.offsetTop; 
+                l += o.offsetLeft;
+            } 
+
+            $('sel').style.width = w + 'px'; 
+            $('options').style.left = l + 'px'; 
+            $('options').style.top= t + 'px';                  
+
+        }
+        listSuggestions('sel', obj.id);
+    }
+    
+    function checkPos(event, n){   
+        if($('options').style.display=="block"){
+
+            if(event.clientX < parseInt($('options').style.left) || 
+			            (event.clientX > (parseInt($('options').style.left) +  parseInt($('options').offsetWidth))) || (event.clientY < parseInt($('options').style.top)) || 
+			            (event.clientY > (parseInt($('options').style.top) +  parseInt($('options').offsetHeight)))){
+			                 
+                $('options').style.display='none'; 
+                
+            } 
+        } 
+        
+    }
+
+    function checkFields(){
+        if(!$('concept_name').value.match(/\w+/)){
+            alert("Please fill in a Procedure Name before proceeding!");
+            $('concept_name').focus();
+            return;
+        }
+        if(!$('concept_category').value.match(/\w+/)){
+            alert("Please fill in a Procedure Category before proceeding!");
+            $('concept_category').focus();
+            return;
+        }
+        if(!$('concept_time').value.match(/\w+/)){
+            alert("Please fill in a Procedure Estimate Time before proceeding!");
+            $('concept_time').focus();
+            return;
+        }
+        $('frmNew').submit();
+    }
+    
+//-->
+</script>
+
+<% form_tag({:action => ((@edit)?"update_procedure":"create_procedure")}, {:id => "frmNew"}) do %>
+
+    <table cellpadding=5 cellspacing=1>
+        <tr>
+            <td colspan=3>
+                &nbsp;
+            </td>                            
+        </tr>
+        <tr>
+            <td>
+                Procedure Name
+            </td>
+            <td>
+                :
+            </td>
+            <td>
+                <input type="hidden" name="procedure_id" id="procedure_id" value="<%= ((@proc_id)?(@proc_id):"") %>" />
+                <input type="text" name="concept[name]" id="concept_name" value="<%= ((@procedure)?(@procedure):"") %>" class="text" onkeyup="keyup(this)" onmouseout="checkPos(event, this.id)" ajaxURL="/concept/search_proc?search=" />
+            </td>                            
+        </tr>
+        <tr>
+            <td valign="top">
+                Description
+            </td>
+            <td valign="top">
+                :
+            </td>
+            <td>
+                <textarea name="concept[description]" id="concept_description" class="text"><%= ((@description)?(@description):"") %></textarea>
+            </td>                            
+        </tr>
+        <tr>
+            <td>
+                Category
+            </td>
+            <td>
+                :
+            </td>
+            <td>
+                <input type="hidden" name="category_id" id="category_id" value="<%= ((@set_id)?(@set_id):"") %>" />
+                <input type="text" name="concept[category]" id="concept_category" value="<%= ((@set)?(@set):"") %>" onkeyup="keyup(this)" onmouseout="checkPos(event, this.id)" ajaxURL="/concept/search_cat?search=" class="text" />
+            </td>                            
+        </tr>
+        <tr>
+            <td>
+                Estimate Time <i>(in mins)</i>
+            </td>
+            <td>
+                :
+            </td>
+            <td>
+                <input type="hidden" name="category_id" id="category_id" value="<%= ((@set_id)?(@set_id):"") %>" />
+                <input type="text" name="concept[time]" id="concept_time" value="<%= ((@time)?(@time):"") %>" class="text" onkeyup="keyup(this)" onmouseout="checkPos(event, this.id)" ajaxURL="/concept/search_min?search=" style="text-align: center" />
+            </td>                            
+        </tr>
+        <tr rowspan=2>
+            <td colspan=3>
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td align="center">
+                <input type="button" id="btnSubmit" name="btnSubmit" value="Submit" class="smallsmallbutton" onclick="if(checkFields()){$('frmNew').submit();}" />
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td align="center">
+                <% if @viewer == "block" %>
+                    <input type="button" id="btnBack" name="btnBack" value="Back" class="smallsmallbutton" onclick="back()" />
+                <% end %>
+            </td>
+        </tr>
+    </table>
+    
+    <div name="options" id="options" style="position: absolute; display: none;z-index: 10000;" align="left">
+        <select id="sel" name="sel" size=7 style="width: 200px"></select>
+    </div> 
+    
+<% end %>

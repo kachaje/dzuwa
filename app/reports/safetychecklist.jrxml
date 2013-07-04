@@ -1,0 +1,1458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="enc_id" class="java.lang.Integer">
+		<parameterDescription><![CDATA[Encounter_ID]]></parameterDescription>
+		<defaultValueExpression><![CDATA[new Integer(0)]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT (SELECT CONCAT(given_name, ' ', family_name) FROM person_name n WHERE n.person_id = e.patient_id) name,
+    (SELECT FLOOR(DATEDIFF(NOW(), birthdate)/365) FROM person p WHERE p.person_id = e.patient_id) age,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 148) identifier,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 85) otti,
+    (SELECT name FROM location o WHERE o.location_id = e.location_id) theatre,
+    (SELECT DATE_FORMAT(value_datetime, '%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 86) dtaken,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 87) hb,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 88) wcc,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 89) plts,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 90) mps,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 91) other,
+    (SELECT CASE value_text WHEN 'ts' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 92) tns,
+    (SELECT CASE value_text WHEN 'xmatch' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 92) xmatch,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 94) units,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 95) consent,
+    (SELECT CASE value_text WHEN 'yes' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 96) site,
+    (SELECT CASE value_text WHEN 'na' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 96) sitena,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 97) medic,
+    (SELECT CASE value_text WHEN 'no' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 98) allergno,
+    (SELECT CASE value_text WHEN 'yes' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 98) allergyes,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 99) adrug,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 100) intern,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 101) ate,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 102) drank,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 103) weight,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 104) hr,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 105) bp,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 106) rr,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 107) spo2,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 108) nurse,
+    (SELECT CASE value_text WHEN 'no' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 109) riskno,
+    (SELECT CASE value_text WHEN 'yes' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 109) riskyes,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 110) taco,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) induction,
+    (SELECT DATE_FORMAT(value_datetime, '%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) inductdate,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 112) prep,
+    (SELECT CASE value_boolean WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 145) intro,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 146) team,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 113) surg,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 114) surgrev,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 115) anaerev,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 116) nurserev,
+    (SELECT CASE value_text WHEN 'yes' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 117) prophyyes,
+    (SELECT CASE value_text WHEN 'na' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 117) prophyna,
+    (SELECT CASE value_text WHEN 'yes' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 118) imgyes,
+    (SELECT CASE value_text WHEN 'na' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 118) imgna,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 119) knife,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 120) closure,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 121) proc,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 122) instrcount,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 123) spec,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 124) equip,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 125) tout,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 126) recovnurse,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 127) obs,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 128) npo,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 129) nextmed,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 130) freq,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 131) pain,
+    (SELECT value_text FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 132) dest,
+    (SELECT DATE_FORMAT(value_datetime, '%H:%i') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 133) recov,
+    (SELECT CASE value_text WHEN 'no' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 142) childno,
+    (SELECT CASE value_text WHEN 'yes' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 142) childyes,
+    (SELECT CASE value_text WHEN 'no' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 143) ivino,
+    (SELECT CASE value_text WHEN 'yes' THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 143) iviyes,
+    (SELECT CASE value_boolean WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 144) wrist,
+    (SELECT CASE value_text WHEN 1 THEN 'X' ELSE '' END FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 147) op
+FROM encounter e WHERE e.encounter_type = 6
+AND e.encounter_id = $P{enc_id}]]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="age" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="identifier" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="otti" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="theatre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dtaken" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="hb" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="wcc" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="plts" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="mps" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="other" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tns" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="xmatch" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="units" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="consent" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="site" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sitena" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="medic" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="allergno" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="allergyes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="adrug" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="intern" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ate" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="drank" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="weight" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="hr" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="bp" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="rr" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="spo2" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nurse" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="riskno" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="riskyes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="taco" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="induction" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="inductdate" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="prep" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="intro" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="team" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="surg" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="surgrev" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="anaerev" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nurserev" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="prophyyes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="prophyna" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="imgyes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="imgna" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="knife" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="closure" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="proc" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="instrcount" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="spec" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="equip" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tout" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="recovnurse" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="obs" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="npo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nextmed" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="freq" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pain" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="dest" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="recov" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="childno" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="childyes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ivino" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="iviyes" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="wrist" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="op" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band isSplitAllowed="false"/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="555">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="72" width="802" height="27"/>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="1" width="299" height="25" forecolor="#FFFFFF" backcolor="#000077"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="18"/>
+					</textElement>
+					<text><![CDATA[Before Induction of Anaesthesia]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="301" y="0" width="249" height="25" forecolor="#FFFFFF" backcolor="#33CC33"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="18"/>
+					</textElement>
+					<text><![CDATA[Before Skin Incision]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="552" y="1" width="250" height="25" forecolor="#FFFFFF" backcolor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="18"/>
+					</textElement>
+					<text><![CDATA[Before Skin Incision]]></text>
+				</staticText>
+			</frame>
+			<staticText>
+				<reportElement x="604" y="23" width="196" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DOB :   ..........................................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="604" y="43" width="196" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hospital No :  ............................................]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="0" y="98" width="299" height="457"/>
+				<rectangle radius="6">
+					<reportElement x="0" y="2" width="164" height="25" backcolor="#CCCCEE"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="4" y="2" width="102" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[OT In Time:]]></text>
+				</staticText>
+				<rectangle radius="6">
+					<reportElement x="167" y="2" width="132" height="25" backcolor="#CCCCEE"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="30" width="299" height="178" backcolor="#EAEAFF"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="212" width="299" height="106" backcolor="#EAEAFF"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="320" width="299" height="88" backcolor="#EAEAFF"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="6" y="30" width="71" height="20" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Surgical :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="6" y="50" width="280" height="20" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Blood Tests :               Date Taken :  ................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="71" width="109" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Hb/MCV : .................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="118" y="70" width="83" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Plts :  ................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="205" y="70" width="81" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[MPS : ...............]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="88" width="234" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Expected Blood Loss > 500mls (7mls/kg)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="104" width="109" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Child? Yes       No]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="131" y="104" width="51" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[T&S :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="204" y="103" width="51" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[X-Match :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="144" y="121" width="142" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Num Units Available : ..........]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="138" width="195" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Surgical Site Marked? Yes               NA]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="167" y="105" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="257" y="105" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="61" y="105" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="100" y="105" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="120" width="111" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Consent form signed?]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="121" y="121" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="134" y="137" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="201" y="137" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="155" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Current Medication  .....................................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="171" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Allergies    No             Yes            Drug  ......................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="187" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Confirmed by Intern (System ID) :  ................................]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="79" y="172" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="138" y="172" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="6" y="211" width="71" height="20" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nursing :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="230" width="292" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Starvation: Last Ate .................... Last Drank ..................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="246" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Weight  ................... kg   HR ................    BP  .............]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="263" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[RR .......................   SpO2  .............]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="278" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[IVI sited & running?  Y            N               ID wristband]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="120" y="280" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="167" y="280" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="272" y="279" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="299" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Confirmed by Nurse (System ID) :  ................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="6" y="320" width="86" height="20" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Anaesthesia :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="340" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Difficult Airway / Aspiration Risk?]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="24" y="355" width="248" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[No]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="24" y="373" width="248" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Yes, equipment & assistance requested]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="7" y="357" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="7" y="373" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="390" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Confirmed by (T)ACO (System ID) : ................................]]></text>
+				</staticText>
+				<rectangle radius="6">
+					<reportElement x="0" y="410" width="299" height="47" backcolor="#CCCCEE"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="410" width="278" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Induction Time: ...........................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="432" width="279" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Date:  ..........................................]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="95" y="2" width="64" height="25"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{otti}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="175" y="5" width="114" height="20"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{theatre}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="183" y="46" width="100" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{dtaken}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="51" y="66" width="62" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{hb}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="146" y="64" width="55" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{plts}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="233" y="64" width="56" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{mps}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="97" y="102" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{childno}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="57" y="102" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{childyes}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="163" y="102" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{tns}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="253" y="102" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{xmatch}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="117" y="118" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{consent}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="247" y="120" width="43" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{units}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="130" y="134" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{site}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="197" y="134" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{sitena}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="106" y="151" width="177" height="20"/>
+					<textElement>
+						<font size="12" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{medic}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="75" y="169" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{allergno}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="134" y="169" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{allergyes}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="202" y="168" width="87" height="20"/>
+					<textElement>
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{adrug}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement x="175" y="185" width="115" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{intern}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="105" y="227" width="59" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{ate}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="226" y="227" width="59" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{drank}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="47" y="244" width="59" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{weight}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="151" y="244" width="53" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{hr}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="229" y="244" width="54" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{bp}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="24" y="262" width="71" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{rr}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="137" y="262" width="60" height="20"/>
+					<textElement>
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{spo2}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="116" y="277" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{iviyes}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="163" y="277" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{ivino}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="268" y="276" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{wrist}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="175" y="296" width="100" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{nurse}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="3" y="354" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{riskno}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="3" y="370" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{riskyes}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="175" y="386" width="100" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{taco}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="154" y="412" width="100" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{induction}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="106" y="435" width="100" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{inductdate}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="301" y="98" width="249" height="457"/>
+				<rectangle radius="6">
+					<reportElement x="0" y="294" width="249" height="25" backcolor="#CCEECC"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="2" width="249" height="289" backcolor="#EAFFEA"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="323" width="249" height="105" backcolor="#EAFFEA"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="32" y="14" width="185" height="30" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Surgeon & Anaesthetist introduced 
+to patient.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="34" y="46" width="189" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Team to review the planned list]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="34" y="66" width="189" height="33" forecolor="#000077"/>
+					<textElement verticalAlignment="Top">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Surgeon, Anaesthetist, Nurse,
+Verbally confirm]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="12" y="145" width="168" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Anticipated Critical Events]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="33" y="92" width="11" height="16" forecolor="#000077"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[.]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="126" y="359" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="12" y="46" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="12" y="67" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="45" y="92" width="111" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Patient]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="126" y="407" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="32" y="240" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="32" y="163" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="12" y="16" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="32" y="205" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="15" y="328" width="229" height="27" forecolor="#000077"/>
+					<textElement verticalAlignment="Top">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Has antibiotic prophylaxis been given
+within 60 mins of skin incision?]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="15" y="406" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="15" y="360" width="13" height="14"/>
+				</rectangle>
+				<rectangle radius="6">
+					<reportElement x="0" y="432" width="249" height="25" backcolor="#CCEECC"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="432" width="228" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Knife to Skin : ...................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="8" y="295" width="227" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Prep Start Time : ..................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="45" y="111" width="135" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Site (if appropriate)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="45" y="127" width="135" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Procedure]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="33" y="109" width="11" height="16" forecolor="#000077"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="33" y="126" width="11" height="16" forecolor="#000077"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="51" y="165" width="105" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Surgeon Reviews:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="149" y="164" width="82" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[What are the]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="34" y="180" width="197" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[critical or unexpected steps, operative duration, anticipated blood loss?]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="51" y="206" width="129" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Anaesthetist Reviews:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="170" y="205" width="61" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Are there]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="222" width="199" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[any patient concerns?]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="180" y="241" width="51" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Has]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="257" width="199" height="28" forecolor="#000077"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[sterility been confirmed? Are there
+equipment issues or concerns? ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="51" y="241" width="129" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nursing Team Reviews:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="358" width="61" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Yes]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="143" y="358" width="61" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Not Needed]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="406" width="61" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Yes]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="143" y="405" width="61" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Not Needed]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="15" y="382" width="220" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Is Essential Imaging displayed?]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="8" y="13" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{intro}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="8" y="43" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{team}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="8" y="64" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{surg}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="28" y="160" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{surgrev}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="28" y="202" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{anaerev}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="28" y="237" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{nurserev}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="144" y="296" width="91" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{prep}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="11" y="357" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{prophyyes}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="122" y="356" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{prophyna}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="11" y="403" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{imgyes}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="122" y="404" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{imgna}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="119" y="433" width="100" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{knife}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement x="553" y="98" width="249" height="457"/>
+				<rectangle radius="6">
+					<reportElement x="0" y="174" width="249" height="25" backcolor="#CCCCCC"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="29" width="249" height="142" backcolor="#EAEAEA"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="203" width="249" height="225" backcolor="#EAEAEA"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="11" y="33" width="203" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nurse Verbally confims with the team:]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="13" y="256" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="10" y="58" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="10" y="82" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="30" y="58" width="190" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[The name of the procedure recorded]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="11" y="135" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="11" y="115" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="31" y="212" width="205" height="43" forecolor="#000077"/>
+					<textElement verticalAlignment="Top">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Surgeon, Anaesthetist, and Nurse convey key concerns to recovery Nurse]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="6" y="55" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{proc}]]></textFieldExpression>
+				</textField>
+				<rectangle>
+					<reportElement mode="Opaque" x="13" y="319" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="13" y="213" width="13" height="14"/>
+				</rectangle>
+				<rectangle radius="6">
+					<reportElement x="0" y="432" width="249" height="25" backcolor="#CCCCCC"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="432" width="228" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Recovery Out : ...................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="8" y="176" width="227" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Time Out : .....................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="80" width="207" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[That the instrument, sponge and needles counts are correct]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="112" width="203" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[How the specimen is labelled]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="135" width="197" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[Whether there are any equipment problems to be addressed]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="318" width="203" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Post op medication Prescribed?]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="13" y="337" width="222" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Frequency of ward observations]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="13" y="382" width="222" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Pain score on discharge ...................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="13" y="406" width="222" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Destination ...........................................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="31" y="256" width="204" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Observations in recovery charted?]]></text>
+				</staticText>
+				<rectangle radius="6">
+					<reportElement x="0" y="1" width="249" height="25" backcolor="#CCCCCC"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="11" y="2" width="203" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Closure : ........................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="13" y="276" width="222" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[NPO until ...............................................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="13" y="297" width="222" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Next medication due at ..................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="13" y="359" width="222" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[.......................................................................................................]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="94" y="3" width="100" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{closure}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="6" y="79" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{instrcount}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="7" y="112" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{spec}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="7" y="132" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{equip}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="97" y="178" width="100" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{tout}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="9" y="210" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{recovnurse}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="9" y="253" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{obs}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="89" y="272" width="100" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{npo}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="138" y="291" width="82" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{nextmed}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="9" y="316" width="20" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{op}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="30" y="354" width="184" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{freq}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="141" y="377" width="81" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{pain}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="77" y="400" width="145" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{dest}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="127" y="434" width="93" height="20"/>
+					<textElement textAlignment="Center">
+						<font size="12" isBold="true" isItalic="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{recov}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<textField isBlankWhenNull="true">
+				<reportElement x="643" y="19" width="146" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{age}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="643" y="2" width="149" height="14"/>
+				<textElement verticalAlignment="Middle">
+					<font size="12" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="0" width="595" height="69"/>
+				<graphicElement>
+					<pen lineColor="#33CC33"/>
+				</graphicElement>
+			</rectangle>
+			<image hAlign="Left" vAlign="Middle">
+				<reportElement x="2" y="2" width="77" height="65"/>
+				<imageExpression class="java.lang.String"><![CDATA["/root/rails/dzuwa/public/images/who.jpg"]]></imageExpression>
+			</image>
+			<image hAlign="Right" vAlign="Middle">
+				<reportElement x="524" y="3" width="71" height="63"/>
+				<imageExpression class="java.lang.String"><![CDATA["/root/rails/dzuwa/public/images/govlogo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="106" y="12" width="390" height="45" forecolor="#33CC33"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="32"/>
+				</textElement>
+				<text><![CDATA[Surgical Safety Checklist]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="600" y="0" width="202" height="69"/>
+				<graphicElement>
+					<pen lineColor="#33CC33"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="604" y="4" width="196" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name : ..........................................................]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="679" y="38" width="109" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{identifier}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

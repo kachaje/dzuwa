@@ -1,0 +1,152 @@
+<center>
+
+<% if @patient %>
+    <h4 style="color: #33CC33">Appointment for</h4> <h2 style="color: #33CC33"><%= "#{@patient.person.names.first.given_name} #{@patient.person.names.first.family_name}" %></h2>
+
+    <table width="100%" cellpadding="5">
+                    
+            <tr>
+                <th valign="top" align="left" width="180px" style="color: #6666FF">
+                    Theatre
+                </th> 
+                <th valign="top">
+                    :
+                </th>                                       
+                <td valign="top">
+                    <%= Location.find(@patient.encounters.first.location_id).name rescue "" %>
+                </td>
+            </tr>                               
+                
+            <% @i = 1 %>
+                  
+            <% @patient.encounters.first.observations.each{|o| 
+                @i += 1
+                @value = ""
+                @field = ""
+                case o.concept_id
+                    when 71
+                        @field = "SURGEON".capitalize()
+                           
+                        @value = Person.find(o.value_numeric.to_i).names.map{|p| "#{p.prefix} #{p.given_name} #{p.family_name}"}.first.strip rescue ""
+                        
+                    when 72
+                        @field = "INTERN".capitalize()                        
+                         
+                        @value = Person.find(o.value_numeric.to_i).names.map{|p| "#{p.prefix} #{p.given_name} #{p.family_name}"}.first.strip rescue ""
+                        
+                    when 69
+                        @field = "Date of Appointment"
+                        
+                        @value = o.value_datetime.strftime('%d %b %Y')
+                            
+                    when 70
+                        @field = "Planned Start Time"
+                        
+                        @value = o.value_datetime.strftime('%I:%M %p')
+                             
+                    when 60
+                        @field = "Ward"
+                        
+                        @value = Location.find(o.value_numeric.to_i).name rescue ""
+                                   
+                    when 62
+                        @field = "GA or LA"
+                        
+                        @value = o.value_text rescue ""
+                                         
+                    when 65
+                        @field = "COMMENTS".capitalize
+                        
+                        @value = o.value_text rescue ""
+                                              
+                    when 67
+                        @field = "Outcome"
+                        
+                        case o.value_text
+                            when "D"
+                                @value = "Delayed"
+                                
+                            when "O"
+                                @value = "Operated"
+                                              
+                            when "C"
+                                @value = "Cancelled"
+                            else
+                                @value = ""
+                        end
+                                      
+                    when 68
+                        @field = "Outcome Reason"
+                        
+                        case o.value_numeric.to_i
+                            when 1
+                                @value = "Non-Medical"
+                            when 2
+                                @value = "Anaesth Delay/Absence"
+                            when 3
+                                @value = "Surg Delay/Absence"
+                            when 4
+                                @value = "Lack of Blood"
+                            when 5
+                                @value = "Not Fit"
+                            when 6
+                                @value = "Inadequate Pre-op Preparation"
+                            when 7
+                                @value = "Equipment Deficiencies"
+                            when 8
+                                @value = "Time overrun"
+                            when 9
+                                @value = "Nursing Delay/Absence"
+                            when 10
+                                @value = "Ward Delay"
+                            when 11
+                                @value = "Not Needed"
+                            when 12
+                                @value = "Emergency"
+                            else
+                                @value = ""
+                        end
+                    when 63
+                        @field = "Blood Quantity Required"
+                        
+                        @value = o.value_numeric.to_i rescue ""                                   
+                             
+                    when 64
+                        @field = "ITU Bed Booked"
+                        
+                        @value = ((o.value_boolean==1)?"Yes":"No") rescue ""
+                               
+                    when 66
+                        @field = "Checklist Complete"
+                        
+                        @value = ((o.value_boolean==1)?"Yes":"No") rescue ""
+                        
+                    when 61
+                        @field = "Planned Procedure"
+                        
+                        @value = "#{o.answer_concept.concept_names.first.name.capitalize} (#{o.answer_concept.concept_answers.first.name} mins)" rescue ""
+                        
+                    else
+                        @field = "undefined" 
+                        @value = ""
+                end  %>     
+                         
+                <tr>
+                    <th valign="top" align="left" style="color: #6666FF">
+                        <%= @field %>
+                    </th> 
+                    <th>
+                        :
+                    </th>                                       
+                    <td>
+                        <%= @value %>
+                    </td>
+                </tr>                               
+                
+            <% } %>
+                      
+    </table>                                        
+<% end %>
+
+</center>    
+

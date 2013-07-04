@@ -1,0 +1,10 @@
+xml.instruct!
+xml.user_list_result do
+	xml.people_list do
+		@users.each do |user|
+			xml << user.to_xml(:dasherize=>false,:skip_instruct=>true,:only=>[:person_id,:given_name,:family_name],:root=>"user")
+		end
+	end
+end
+
+

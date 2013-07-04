@@ -1,0 +1,12 @@
+<center>
+<h1>New Hospital</h1>
+<% form_tag ({:action => "create_hospital"}, {:id => "frmMain"}) do %>
+
+    <%= render :partial => "form" %>
+    
+    <%= submit_tag "Save", :class => "smallbutton" %>
+    <%= submit_tag "Cancel", :class => "smallbutton", :onclick => "$('frmMain').action='/location/index';" %>
+
+<% end %>
+
+</center>

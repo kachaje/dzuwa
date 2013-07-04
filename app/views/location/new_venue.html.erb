@@ -1,0 +1,26 @@
+<center>
+<h1>New Hospital Sub-Unit</h1>
+
+<% form_tag ({:action => "create_venue"}, {:id => "frmMain"}) do %>
+
+    <table cellpadding=5>
+        <tr>
+            <td>
+                <label for="location_location_id">Select Hospital/Clinic</label>
+            </td>
+            <td>
+                :
+            </td>
+            <td>
+                <%= @locations = Location.find(:all, :conditions => ["UPPER(name) NOT LIKE ? AND COALESCE(parent_location,'') = ?","UNKNOWN LOCATION", ""]).map{|loc|[loc.name, loc.location_id]}
+                     select(:location, :location_id, @locations,{},{:include_blank => false, :style => "width: 205px; height: 30px"}) %>
+            </td>
+        </tr>
+        
+        <%= render :partial => "venue" %>
+
+    <%= submit_tag "Save", :class => "smallbutton" %>
+    <%= submit_tag "Cancel", :class => "smallbutton", :onclick => "$('frmMain').action='/location/index';" %>
+<% end %>
+
+</center>

@@ -1,0 +1,36 @@
+<center>
+<h1>Select an activity</h1>
+
+<% form_tag({:controller => "user", :action => "user_menu"}, {:id => "frmNav"}) do %>
+    
+    <table cellpadding=5>
+        <tr>
+            <td>
+                <%= submit_tag "Patient Administration", :id => "btnPatients", :onclick => "document.getElementById('frmNav').action = '/patients/index'; document.getElementById('frmNav').submit()", :class => "button" %>               
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <%= submit_tag "User Administration", :id => "btnUsers", :onclick => "document.getElementById('frmNav').action = '/user/user_menu'; document.getElementById('frmNav').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <%= submit_tag "Locations Administration", :id => "btnLocation", :onclick => "document.getElementById('frmNav').action = '/location/index'; document.getElementById('frmNav').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <%= submit_tag "View Reports", :id => "btnReports", :onclick => "document.getElementById('frmNav').action = '/reports/index'; document.getElementById('frmNav').submit()", :class => "button" %>               
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <%= submit_tag "Procedures", :id => "btnProcedures", :onclick => "document.getElementById('frmNav').action = '/concept/index'; document.getElementById('frmNav').submit()", :class => "button" %>               
+            </td>
+        </tr>
+    </table>                    
+    
+<% end %>
+</center>
+

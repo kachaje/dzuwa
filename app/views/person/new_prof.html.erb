@@ -1,0 +1,81 @@
+<center>
+<h1>Add New <%= ((@record_type=="4")?"Surgeon":((@record_type=="5")?"Intern":"User")) %></h1>
+
+<% form_tag({:action => "create_prof"}, {:id => "frmProf"}) do %>
+    
+    <input type="hidden" name="record_type" id="record_type" value="<%= @record_type%>" />
+    
+    <table cellspacing=1 cellpadding=5 border=0>
+        <tr>
+            <td>
+                Title
+            </td>
+            <td>
+                :
+            </td>
+            <td>
+                <input type="text" name="person[title]" id="person_title" value="" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                First Name
+            </td>
+            <td>
+                :
+            </td>
+            <td>
+                <input type="text" name="person[given_name]" id="person_given_name" value="" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Last Name
+            </td>
+            <td>
+                :
+            </td>
+            <td>
+                <input type="text" name="person[family_name]" id="person_family_name" value="" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Gender
+            </td>
+            <td>
+                :
+            </td>
+            <td>
+                <select name="person[gender]" id="person_gender">
+                    <option value="M">MALE</option>
+                    <option value="F">FEMALE</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Contact Number
+            </td>
+            <td>
+                :
+            </td>
+            <td>
+                <input type="text" name="person[contact]" id="person_contact" value="" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan=3 align="center">
+                &nbsp;
+            </td>
+        </tr>
+        <tr>
+            <td colspan=3 align="center">
+                <input type="submit" value="Save" class="smallsmallbutton"/>
+            </td>
+        </tr>
+    </table>
+    
+<% end %>
+
+</center>

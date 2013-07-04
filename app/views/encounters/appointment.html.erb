@@ -1,0 +1,1268 @@
+<center>
+
+<script language="javascript" type="text/javascript">
+<!--
+    var diff = 360;
+    var over = false;
+//-->
+</script>
+<script type="text/javascript" language="javascript">
+<!-- 
+    var field = "value";
+    
+	function ajaxRequest(aElement, aUrl, target, destResult, destResult2) {
+		var httpRequest = new XMLHttpRequest(); 
+		httpRequest.onreadystatechange = function() { 
+			handleResult(aElement, httpRequest, target, destResult, destResult2); 
+		};
+		try {
+			httpRequest.open('GET', aUrl, true);
+			httpRequest.send(null);    
+		} catch(e){
+		}
+	}
+
+	function handleResult(optionsList, aXMLHttpRequest, target, destResult, destResult2) {
+		if (!aXMLHttpRequest) return;
+		
+		if (!optionsList) return;
+
+		if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
+			tstInputTarget = $(target);
+			
+			optionsList.innerHTML = aXMLHttpRequest.responseText;
+
+			if(optionsList.innerHTML == "<option></option>" && $('lyrPopUp').style.display=='none'){
+			    $('options').style.display = "none";
+			    
+			    $('propagate').value = tstInputTarget.value;
+			    
+			    var response = confirm("Do you want to add a new " + field + "?");
+			    
+		        if($(destResult)) $(destResult).innerHTML = "";
+                if($(destResult2)) $(destResult2).innerHTML = "";
+            
+			    if(response==true){
+			        switch(field){
+			            case "procedure":
+			                $('frmPost').target='main'; 
+			                $('frmPost').action = '/concept/new_procedure?viewer=false';
+			                $('frmPost').submit(); 
+			                $('lyrPopUp').style.display='block'
+			                break;
+			            
+			            case "surgeon":		                
+			                $('frmPost').target='main'; 
+			                $('frmPost').action = '/person/new_prof?viewer=false';
+			                $('record_type').value = 4; 
+			                $('frmPost').submit(); 
+			                $('lyrPopUp').style.display='block'
+			                break;
+			            
+			            case "intern":			                
+			                $('frmPost').target='main'; 
+			                $('frmPost').action = '/person/new_prof?viewer=false';
+			                $('record_type').value = 5; 
+			                $('frmPost').submit(); 
+			                $('lyrPopUp').style.display='block'
+			                break;
+			            
+			            case "name":
+			                
+			            default:
+			                $('frmPost').target='main'; 
+			                $('frmPost').action = '/person/new?viewer=false';
+			                $('record_type').value = 3; 
+			                $('frmPost').submit(); 
+			                $('lyrPopUp').style.display='block'
+			                break;
+			        }
+			    }
+			    
+			} else {
+			    $('options').style.display = "block";
+			}
+			
+			if(optionsList.getElementsByTagName("option")[0] != null){
+				var optionNodes = optionsList.getElementsByTagName("option");
+				var optionNodeCount = optionNodes.length;
+				for(var i=0;i<optionNodeCount;i++){
+				    optionNodes[i].setAttribute("onmousedown","updateInput(this, '" + target + "'); ");
+				    optionNodes[i].setAttribute("onmouseover","this.style.backgroundColor='#9999FF'; this.style.color='#FFFFFF'");
+				    optionNodes[i].setAttribute("onmouseout","this.style.backgroundColor=''; this.style.color='#000000'");
+				    
+				    var axUrl = "";
+				    
+				    switch(field){
+				        case "procedure":				        
+				            axUrl = "/concept/search_tmr?search="
+				            break;
+				            
+				        case "name":
+				            
+				        default:
+				            axUrl = "/person/search_dob?search="
+				            break;
+				            
+				    }
+				    
+				    optionNodes[i].setAttribute("onclick", "$('sel').innerHTML=''; $('options').style.display='none'; getValue('" + axUrl + "', '" + destResult + "', '" + destResult2 + "', '" + target + "'); var n = '" + target + "'.match(/(Surg|Intern|\\d+-\\d+)/)[1]; if($('txt-' + n).type=='text'){$('lyr-' + n).innerHTML=$('txt-' + n).value; $('txt-' + n).type='hidden'; $('options').style.display='none'; if('" + destResult + "' == 'txtList-Surg' || '" + destResult + "' == 'txtList-Intern'){ massSave();}}");
+				    
+				    
+					if (optionNodes[i].innerHTML == tstInputTarget.value) {
+						optionNodes[i].style.backgroundColor = "lightblue";
+					}
+				}
+			}
+		}
+	}
+
+	function listSuggestions(dest_ctrl_id, src_ctrl_id, destResult, destResult2) {		
+		var inputElement = $(src_ctrl_id); 
+	    
+		if(inputElement.getAttribute("ajaxURL") != null){
+			ajaxRequest($(dest_ctrl_id),inputElement.getAttribute("ajaxURL")+inputElement.value, inputElement.id, destResult, destResult2);
+		}
+	}
+	
+	function updateInput(obj, target){
+		$(target).value = obj.innerHTML;
+		obj.style.backgroundColor = "lightblue";
+	}
+	
+	function showTime(){
+	    var time = 0;
+
+        for(var i = 1; i <= 50; i++){
+            var r = $('txtList-' + i + '-6').innerHTML.match(/(\d+)/);
+            if(r){
+                if($('id-' + i + '-6').innerHTML == "GA"){
+                    time += parseInt(r[1]) * 1.3    // Assuming Anaesthesia takes 30% of
+                                                    // surgery time when General Anaesthetics
+                                                    // (GA) or 0% when Local Anaesthetics(LA)
+                } else {
+                    time += parseInt(r[1])
+                }
+            }
+        }
+        
+        $('app_actual_start').value = $('app_planned_start').value;
+        
+        var hr = $('app_actual_start').value.match(/^(\d+)/)[1];
+        var mins = $('app_actual_start').value.match(/(\d+)$/)[1];
+
+        var init = (eval(hr) * 60) + eval(mins);
+
+        time = init + time;
+        
+        var m = Math.floor(time % 60);
+        var h = ((time - m) / 60).toFixed(0);
+
+        if(eval(h) > 12 && hr < 13){   // Cater for Lunch Hour
+            h = parseInt(h) + 1;
+        }
+        
+        if(h >= 24){
+            h -= 24;
+        }
+
+        if(eval(m) < 10) m = "0" + m;
+        if(eval(h) < 10) h = "0" + h;
+        
+        $('app_actual_finish').value = h + ":" + m;
+        
+	}
+	
+	function getValue(ajaxURL, dest_ctrl_id, dest_ctrl_id2, src_ctrl_id) {		
+		var inputElement = $(src_ctrl_id); 
+	    
+		ajaxValue($(dest_ctrl_id), $(dest_ctrl_id2), ajaxURL + inputElement.value);		
+	}
+	
+	function ajaxValue(aElement, aElement2, aUrl) {
+		var httpRequest = new XMLHttpRequest(); 
+		httpRequest.onreadystatechange = function() { 
+			echoResult(aElement, aElement2, httpRequest); 
+		};
+		try {
+			httpRequest.open('GET', aUrl, true);
+			httpRequest.send(null);    
+		} catch(e){
+		}
+	}
+
+    function echoResult(ctrl, ctrl2, aXMLHttpRequest) {
+        if (!aXMLHttpRequest) return;
+		
+		if (!ctrl) return;
+	
+		if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
+		    var s = aXMLHttpRequest.responseText;
+		    var y = s.split(",");
+		    
+		    ctrl.innerHTML = y[0];
+		    if(y[1]){
+		        ctrl2.innerHTML = y[1];
+		        
+		    } else {
+		        ctrl2.innerHTML = "GA";
+
+		        var c = ctrl2.id.match(/(\d+-\d+)/)[1];
+		        
+		        $("txtBlood-" + c).innerHTML = 0;
+		    }
+		    
+	        var n = ctrl2.id.match(/(\d+-\d+)/);
+	        
+	        if(n) saveEnc($('lyr-'+n[1]));
+		        
+		    showTime();
+		}
+    }
+    
+    function keyup(obj){
+        var c = obj.id.match(/(\d+-\d+)/);
+        
+        if(!c) c = obj.id.match(/\w+-(\w+)/);
+        
+        if(c) { c = c[1] } else { return }
+        
+        if($('options').style.display=='none'){
+            
+             var o = obj; 
+             var t = o.offsetTop + o.offsetHeight; 
+             var l = o.offsetLeft + 1; 
+             var w = obj.offsetWidth; 
+             var h = obj.offsetHeight;  
+             
+             while(o.offsetParent != document.body){
+                o = o.offsetParent; 
+                t += o.offsetTop; 
+                l += o.offsetLeft;
+             } 
+             
+             $('sel').style.width = w + 'px'; 
+             $('options').style.left = l + 'px'; 
+             $('options').style.top= (t - $('dvFrame').scrollTop) + 'px';
+            
+            $('options').style.display = 'block';
+            
+         } else {
+            if($('txtList-' + c)) $('txtList-' + c).innerHTML = "";
+            if($('id-' + c)) $('id-' + c).innerHTML = "";
+            
+            var o = obj; 
+            var t = o.offsetTop + o.offsetHeight; 
+            var l = o.offsetLeft + 1; 
+            var w = this.offsetWidth; 
+            var h = this.offsetHeight;  
+
+            while(o.offsetParent != document.body){
+                o = o.offsetParent; 
+                t += o.offsetTop; 
+                l += o.offsetLeft;
+            } 
+
+            $('sel').style.width = w + 'px'; 
+            $('options').style.left = l + 'px'; 
+            $('options').style.top= (t - $('dvFrame').scrollTop) + 'px';                  
+              
+         }
+         listSuggestions('sel','txt-' + c, 'txtList-' + c, 'id-' + c);
+    }
+    
+    function checkPos(event, n){
+        
+        
+        if($('options').style.display=="block"){
+            if(event.clientX < parseInt($('options').style.left) || 
+			            event.clientX > parseInt($('options').style.left) +  parseInt($('options').style.width) || event.clientY < parseInt($('options').style.top) || 
+			            event.clientY > parseInt($('options').style.top) +  parseInt($('options').style.height)){
+			            
+                $('lyr-' + n).innerHTML=$('txt-' + n).value;
+                $('txt-' + n).type='hidden'; 
+                $('sel').innerHTML=''; 
+                $('options').style.display='none';                                 
+                
+            } 
+        } else {
+            if($('txt-' + n).type=='text'){
+                $('lyr-' + n).innerHTML=$('txt-' + n).value;
+                $('txt-' + n).type='hidden'; 
+            }
+        }      
+         
+    }
+    
+	function saveEnc(obj){
+	    var httpRequest = new XMLHttpRequest(); 
+	    var n = obj.id.match(/(\d+)/);
+	    
+	    var aUrl = "/encounters/make_appointment?";
+	    var name = "";
+	    var identifier = "";
+	    var ward = "";
+	    var procedure = "";
+	    var gaorla = "";
+	    var blood = "";
+	    var itu = "";
+	    var comment = "";
+	    var chkList = "";
+	    var ocd = "";
+	    var ocd2 = "";
+	    
+	    if ($('lyr-' + n[1] + '-2')){
+	        name = $('lyr-' + n[1] + '-2').innerHTML.replace(" ","+");
+	        aUrl += "name=" + name;
+	    }
+	    if($('id-' + n[1] + '-2')){
+	        identifier = $('id-' + n[1] + '-2').innerHTML   //.replace(" ","+");
+	        aUrl += "identifier=" + identifier;
+        }
+        if($('ward-' + n[1] + '-2')){
+	        ward = $('ward-' + n[1] + '-2').innerHTML.replace(" ","+");
+	        aUrl += "ward=" + ward;
+	    }
+	    if($('lyr-' + n[1] + '-6')){
+	        procedure = $('lyr-' + n[1] + '-6').innerHTML.replace(" ","+");
+	        aUrl += "procedure=" + procedure;
+        }
+        if($('id-' + n[1] + '-6')){
+	        gaorla = $('id-' + n[1] + '-6').innerHTML.replace(" ","+");
+	        aUrl += "gaorla=" + gaorla;
+        }
+        if($('txtBlood-' + n[1] + '-6')){
+	        blood = $('txtBlood-' + n[1] + '-6').innerHTML.replace(" ","+");
+	        aUrl += "blood=" + blood;
+        }
+        if($('chkITU-' + n[1])){
+	        itu = $('chkITU-' + n[1]).checked;
+	        aUrl += "itu=" + itu;
+        }
+        if($('lyr-' + n[1] + '-8')){
+	        comment = $('lyr-' + n[1] + '-8').innerHTML.replace(" ","+");
+	        aUrl += "comment=" + comment;
+        }
+        if($('chkList-' + n[1])){
+	        chkList = $('chkList-' + n[1]).checked;
+	        aUrl += "chklist=" + chkList;
+        }
+        if($('txtOCD-' + n[1] + '-9')){
+	        ocd = $('txtOCD-' + n[1] + '-9').innerHTML.replace(" ","+");
+	        aUrl += "ocd=" + ocd;
+        }
+        if($('txtOCD-' + n[1] + '-10')){
+	        ocd2 = $('txtOCD-' + n[1] + '-10').innerHTML.replace(" ","+");
+	        aUrl += "ocd2=" + ocd2;
+        }
+	    
+	    var date = $('app_date').value;
+	    var start = $('app_planned_start').value;
+	    var theatre = $('txtLocation_location_id').innerHTML.replace(" ","+");
+	    var surg = $('lyr-Surg').innerHTML.replace(" ","+");
+	    var intern = $('lyr-Intern').innerHTML.replace(" ","+");
+	    
+	    var encounter_id = $('encounter_id'+n[1]).value;
+	       
+	    if(name.length <= 0) return;
+	    
+	    var aUrl = "/encounters/make_appointment?name=" + name + 
+	                                                    "&ward=" + ward +
+	                                                    "&procedure=" + procedure +
+	                                                    "&gaorla=" + gaorla +
+	                                                    "&blood=" + blood +
+	                                                    "&itu=" + itu +
+	                                                    "&comment=" + comment +
+	                                                    "&chklist=" + chkList +
+	                                                    "&ocd=" + ocd +
+	                                                    "&ocd2=" + ocd2 +
+	                                                    "&date=" + date +
+	                                                    "&start=" + start +
+	                                                    "&theatre=" + theatre +
+	                                                    "&surg=" + surg +
+	                                                    "&intern=" + intern +
+	                                                    "&encounter_id=" + encounter_id +
+	                                                    "&identifier=" + identifier;
+	    
+		httpRequest.onreadystatechange = function() { 
+			getEncID(obj, httpRequest); 
+		};
+		try {
+			httpRequest.open('GET', aUrl, true);
+			httpRequest.send(null);    
+			return true
+		} catch(e){
+		    return false
+		}
+		
+	}
+	
+	function getEncID(obj, aXMLHttpRequest){
+	    var n = obj.id.match(/(\d+)/)
+	    
+	    if(n){
+	        if (aXMLHttpRequest.readyState == 4 && aXMLHttpRequest.status == 200) {
+		        var s = aXMLHttpRequest.responseText;
+	            $('encounter_id' + n[1]).value = s;
+	        }
+	    }
+	}
+		    
+    function setMenu(id, row){
+        $('encounter_id').value = id;
+        $('patient').value = $('lyr-' + row + '-2').innerHTML;
+    }
+      
+    function transferPatient(loc){
+        $('loc_id').value = loc;
+        
+        $('frmPost').action = "/encounters/transferpatient";
+        $('frmPost').target = "_self";
+        $('frmPost').submit();
+    }
+       
+    function massSave(){
+        var i=0;
+        var output = {};
+        
+        for(i=1; i<=50; i++){
+            if($('lyr-'+i+'-2').innerHTML.match(/\w+/)){
+                output[i] = saveEnc($('lyr-'+i+'-2'));
+            } else {
+                break;
+            }
+        }
+    } 
+//-->
+</script>
+
+
+<% form_tag({:controller => "person", :action => "new"}, {:id => "frmPost", :target => "main"}) do %>
+
+    <input type="hidden" id="record_type" name="record_type" value="3" />
+    <input type="hidden" id="encounter_id" name="encounter_id" value="" />
+    <input type="hidden" id="loc_id" name="loc_id" value="" />
+    <input type="hidden" id="patient" name="patient" value="" />  
+    <input type="hidden" id="viewer" name="viewer" value="true">  
+    
+<% end %>
+
+<% form_tag({:controller => "encounters", :action => "theatre_list_pdf"}, {:id => "frmPDF", :target => "_blank"}) do %>
+
+    <input type="hidden" id="pdf_theatre" name="pdf_theatre" value="" />
+    <input type="hidden" id="pdf_date" name="pdf_date" value="" />
+    <input type="hidden" id="pdf_parent" name="pdf_parent" value="<%= session[:location_id] %>" />
+    
+<% end %>
+
+<input type="hidden" name="propagate" id="propagate" value="" />  
+
+    <table bgcolor=<%= ((@list_type == "list")?"#CCEECC":"#CCCCFF") %> width="100%">
+        <tr>
+            <td colspan=7 align="center">
+                <b style="font-size: 2.1em; color: #666666"><%= ((@list_type == "list")?"Theatre List":"Theatre Booking Form") %></b>
+            </td>
+        </tr>
+        
+        <tr>
+            <td>
+            
+                <% form_tag({:action => "appointment"}, {:id => "frmMain"}) do %>
+                    <input type="hidden" id="list_type" name="list_type" value="<%= @list_type %>" />    
+                    <table border=0 width="100%" cellpadding=5 cellspacing=1>
+                        <tr style="font-size: 0.8em; font-weight: bold; color: #666666">
+                            <td>
+                                Theatre
+                            </td>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td>
+                                Date
+                            </td>
+                            <td>
+                                Planned Start Time
+                            </td>
+                            <td>
+                                Operating Surgeon
+                            </td>
+                            <td>
+                                Intern (Name & Contact No.)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="cursor: pointer" onmouseover="if(over==false){if($('txtLocation_location_id').innerHTML==''){$('location_location_id').selectedIndex=-1}else{$('location_location_id').value=$('txtLocation_location_id').innerHTML}; $('txtLocation_location_id').innerHTML=''; $('location_location_id').style.display='block'}" onmouseout="if(over==false){$('location_location_id').style.display='none'; $('txtLocation_location_id').innerHTML=$('location_location_id').value}">
+                                <table border=0 cellspacing=2 cellpadding=2 width="100%" height="30px" bordercolor="#FFFFFF">
+                                    <tr>
+                                        <td bgcolor="#FFFFFF">
+                                            <div id="txtLocation_location_id" style="width: 100%; overflow: hidden; font-size: 0.8em"><%= @theatre %></div>
+                                            <input type="hidden" id="theatre" name="theatre" value="<%= @theatre %>" />
+                                            <%= @theatres = @locations.map{|p| p.name} 
+                            select(:location, :location_id, @theatres, {}, :style => "width: 100%; display:none", :onchange => "this.style.display='none'; $('txtLocation_location_id').innerHTML=$('location_location_id').value; ", :onclick => "if(over==false){over=true}else{over=false}", :onchange => "$('theatre').value=this.value; $('frmMain').action='/encounters/appointment'; $('frmMain').method='post'; $('frmMain').submit();") %>
+                                        </td>
+                                    </tr>
+                                </table>
+                    
+                            </td>
+                            <td>
+                                &nbsp;
+                            </td>
+                            <td>
+                                <table border=0 cellspacing=2 cellpadding=2 width="100%" height="30px" bordercolor="#FFFFFF">
+                                    <tr>
+                                        <td bgcolor="">
+                                        
+                                            <input type="text" id="app_date" name="app[date]" value="<%= @date %>" style="text-align: center; width: 98%" onmouseover="this.focus(); posCtrl(this)" onmouseout="checkCtrl(event,$('d1'))" reactorAction="$('frmMain').action='/encounters/appointment'; $('frmMain').method='post'; $('frmMain').submit();" />
+                                            
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td>
+                                <table border=0 cellspacing=2 cellpadding=2 width="100%" height="30px" bordercolor="#FFFFFF">
+                                    <tr>
+                                        <td bgcolor="">
+                                            <input type="text" id="app_planned_start" name="app[planned_start]" style="text-align: center; width: 98%; font-size: 0.8em;" value="<%= @start %>" onblur="checkTime(this); $('app_actual_start').value=this.value; showTime(); massSave();" value="<%= @start.to_i %>" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td id="surg" height="25px" align="left" onmouseover="if($('txt-Surg').type=='hidden'){$('txt-Surg').value=$('lyr-Surg').innerHTML; $('lyr-Surg').innerHTML=''; $('txt-Surg').type='text'; $('txt-Surg').focus()}" onmouseout="checkPos(event, 'Surg')" style="cursor:pointer">
+                                                        
+                                 <table border=0 cellspacing=2 cellpadding=2 width="100%" height="30px" bordercolor="#FFFFFF">
+                                    <tr>
+                                        <td bgcolor="#FFFFFF">
+                                            <div id="lyr-Surg" align="left" style="overflow: hidden; font-size: 0.8em "><%= @surg %></div>
+                                                        
+                                            <input type='hidden' id="txt-Surg" style="width: 98%; " name="txt-Surg" onkeyup="field='surgeon'; keyup(this);" value="" ajaxURL="/person/search_surg?search="/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                                        
+                            </td>
+                            <td id="intern" height="25px" align="left" onmouseover="if($('txt-Intern').type=='hidden'){$('txt-Intern').value=$('lyr-Intern').innerHTML; $('lyr-Intern').innerHTML=''; $('txt-Intern').type='text'; $('txt-Intern').focus()}" onmouseout="checkPos(event, 'Intern')" style="cursor:pointer">
+                                                                   
+                                 <table border=0 cellspacing=2 cellpadding=2 width="100%" height="30px" bordercolor="#FFFFFF">
+                                    <tr>
+                                        <td bgcolor="#FFFFFF">           
+                                             <div id="lyr-Intern" align="left" style="overflow: hidden; font-size: 0.8em "><%= @inter %></div>
+                                                        
+                                             <input type='hidden' id="txt-Intern" style="width: 98%; " name="txt-Intern" onkeyup="field='intern'; keyup(this);" value="" ajaxURL="/person/search_intern?search="/>                              
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td bgcolor="" colspan=3>
+                                <table border=0 cellspacing=2 cellpadding=2 height="30px" bordercolor="#FFFFFF">
+                                    <tr>
+                                        <td style="font-size: 0.8em;">
+                                            1<sup>st</sup>Patient Called at:
+                                        </td>
+                                        <td>
+                                            <input type="text" id="app_actual_start" name="app[actual_start]" style="text-align: center; width: 98%; font-size: 0.8em;" value="" onblur="checkTime(this)" disabled />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td bgcolor="" colspan=3 align="right">
+                                <table border=0 cellspacing=2 cellpadding=0 height="30px" bordercolor="#FFFFFF">
+                                    <tr>
+                                        <td style="font-size: 0.8em;">
+                                            Finish Time:
+                                        </td>
+                                        <td>
+                                            <input type="text" id="app_actual_finish" name="app[actual_finish]" style="text-align: center; width: 98%; font-size: 0.8em;" value="<%= DateTime.now.strftime("%H:%M") %>" onblur="checkTime(this)" disabled />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                                     
+                <% end %>
+                
+            </td>
+        </tr>
+        
+        <tr>
+            <td colspan=7 align="center">
+                             
+                    <table cellpadding=0 cellspacing=0>
+                        <tr>
+                            <td>
+                                <table cellpadding=2 cellspacing=1>
+                                    <tr>
+                                    
+                                        <% if @list_type == "list" %>
+                                            <td id="h1" align="center" style="font-size: 0.6em" bgcolor="#CCCCCC" >Actual Order</td>
+                                        <% else %>
+                                            <td id="h1" align="center" style="font-size: 0.6em" bgcolor="#CCCCCC" >&nbsp;</td>
+                                        <% end %>
+                                        
+                                        <td id="h2" width="25%" align="center" style="font-size: 2em" bgcolor="#CCCCCC">Name</td>
+                                        <td id="h3" align="center" style="font-size: 0.8em" bgcolor="#CCCCCC">THEATRE IDENTIFIER</td>
+                                        <td id="h4" align="center" style="font-size: 0.8em" bgcolor="#CCCCCC">DOB</td> 
+                                        <td id="h12" align="center" style="font-size: 0.8em" bgcolor="#CCCCCC">WARD</td>
+                                        <td id="h5" width="30%" align="center" style="font-size: 2em" bgcolor="#CCCCCC"><%= ((@list_type == "list")?"Procedure":"Planned Procedure") %></td>
+                                        <td id="h6" align="center" style="font-size: 0.6em" bgcolor="#CCCCCC">GA/LA</td>
+                                        <td id="h7" align="center" style="font-size: 0.6em" bgcolor="#CCCCCC">EXPECTED SURGICAL DURATION (MINS)</td>
+                                        <td id="h8" align="center" style="font-size: 0.6em" bgcolor="#CCCCCC">BLOOD: HOW MUCH?</td>
+                                            <td id="h13" align="center" style="font-size: 0.6em" bgcolor="#CCCCCC">ITU Bed Booked?</td>
+                                        <td id="h9" align="center" style="font-size: 0.6em" bgcolor="#CCCCCC">Comments?<br />Infected<br />Weight if Paed</td>
+                                        
+                                        <% if @list_type == "list" %>
+                                            
+                                            <td id="h10" align="center" style="font-size: 0.6em" bgcolor="#CCCCCC">Checklist Complete?</td>
+                                            <td id="h11" align="center" style="font-size: 0.6em" bgcolor="#CCCCCC" colspan=2>Outcome O/C/D Code</td>
+                                            <td bgcolor="#CCCCCC"><hr width="10px" bgcolor="#CCCCCC" style="height: 1px"/></td>
+                                            
+                                        <% else %>
+                                            
+                                            <td id="h10" align="center" style="font-size: 0.6em; color: #CCCCCC" bgcolor="#CCCCCC">Checklist Complete?</td>
+                                            <td id="h11" align="center" style="font-size: 0.6em; color: #CCCCCC" bgcolor="#CCCCCC" colspan=2>Outcome O/C/D Code</td>
+                                            <td bgcolor="#CCCCCC"><hr width="10px" bgcolor="#CCCCCC" style="height: 1px"/></td>
+                                            
+                                        <% end %>
+                                        
+                                    </tr>
+                                </table>
+                            </td>                                
+                        </tr>
+                        <tr>
+                            <td colspan=11>                       
+                                <div id="dvFrame" style="height:400px; z-index:10; position:relative; overflow: scroll;" width="100%">
+                                    <table width="100%" cellpadding=2 cellspacing=1>  
+                                        <% @j = 1 %>
+                                        
+                                                          
+                                        <% @encounters.each{|e| %>
+                                        
+                                            <%
+                                                @encounter_id = e.encounter_id
+                                                @name = "#{e.patient.person.names.first.given_name} #{e.patient.person.names.first.family_name}"
+                                                @identifier = "#{e.patient.patient_identifiers.first.identifier}"
+                                                
+                                                @tmpdob = ((Date.today - e.patient.person.birthdate).to_i / 365)
+                                                
+                                                if @tmpdob <= 3 
+                                                    @dob = ""
+                                                    
+                                                    @tmpmob = ((Date.today - e.patient.person.birthdate).to_i / 30)
+                                                     
+                                                    if @tmpmob == 0
+                                                        @tmpmob = ((Date.today - e.patient.person.birthdate).to_i % 30)
+                                                        @mob = @tmpmob.to_s + " days"
+                                                    else                                                    
+                                                        @mob = @tmpmob.to_s + " mths"
+                                                    end
+                                                else
+                                                    @dob = "#{ ((@tmpdob>0)?(@tmpdob.to_s):"") }"
+                                                    @mob = ""
+                                                end
+                                                                                                                                                
+                                                @ward = ""
+                                                @procedure = ""
+                                                @gaorla = ""
+                                                @duration = ""
+                                                @blood = ""
+                                                @itu = ""
+                                                @comment = ""
+                                                @chklist = ""
+                                                @ocd = ""
+                                                @ocd2 = ""
+                                                @datecreated = e.date_created.strftime("%Y-%m-%d")
+                                            
+                                                e.observations.each{|o|
+                                                    @concept = o.concept.concept_names.first.name
+                                                    
+                                                    case @concept
+                                                    
+                                                        when "WARD"
+
+                                                            @ward = Location.find(o.value_numeric.to_i).name rescue ""
+                                                            
+                                                        when "PLANNED PROCEDURE"
+                                                        
+                                                            @procedure = ConceptName.find(o.value_coded).name rescue ""
+                                                            @gaorla = o.value_text
+                                                            
+                                                            @duration = Concept.find(o.value_coded).concept_answers.first.answer.concept_names.first.name rescue ""
+                                                            
+                                                        when "GA OR LA"
+                                                        
+                                                            @gaorla = o.value_text
+                                                            
+                                                        when "BLOOD QUANTITY REQUIRED"
+                                                        
+                                                            @blood = o.value_numeric.to_i
+                                                            
+                                                        when "ITU BED BOOKED"
+                                                        
+                                                            @itu = o.value_boolean
+                                                            
+                                                        when "COMMENTS"
+                                                        
+                                                            @comment = o.value_text
+                                                        
+                                                        when "CHECKLIST COMPLETE"
+                                                        
+                                                            @chklist = o.value_boolean
+                                                        
+                                                        when "OUTCOME CODE"
+                                                        
+                                                            @ocd = o.value_text
+                                                        
+                                                        when "OUTCOME CODE CODE"
+                                                        
+                                                            @ocd2 = o.value_numeric.to_i rescue ""
+                                                            
+                                                            if @ocd2 == 0 
+                                                                @ocd2 = ""
+                                                            end
+                                                    end
+                                                }
+                                            %>
+                                            
+                                            <tr bgcolor="#FFFFFF" onmouseover="this.bgColor='<%= ((@list_type == "list")?"#99CC99":"#9999FF") %>'; this.style.color='#FFFFFF'" onmouseout="this.bgColor='#FFFFFF'; this.style.color='#000000'" onmousedown="this.bgColor='#0066CC'; if(event.button==2){setMenu(<%= "#{@encounter_id}, #{@j}" %>); showMenu(event)}">            
+                                            
+                                                <td align="center">
+                                                    <% if @list_type == "list" %>
+                                                        <%= @j %>   
+                                                        <input type="hidden" id="created<%= @j %>" name="created<%= @j %>" value="<%= @datecreated %>" />  
+                                                    <% end %>
+                                                    <input type="hidden" id="encounter_id<%= @j %>" name="encounter_id<%= @j %>" value="<%= @encounter_id %>" style="width: 20px" disabled />
+                                                </td> 
+                                                
+                                                <% n = @j %>
+                                                
+                                                <td id="cell-<%= n %>-2" height="25px" align="center" <% unless @list_type == "list" && @datecreated.to_s.strip != @date.to_s.strip %> onclick="if($('txt-<%= n %>-2').type=='hidden'){$('txt-<%= n %>-2').value=$('lyr-<%= n %>-2').innerHTML; $('lyr-<%= n %>-2').innerHTML=''; $('txt-<%= n %>-2').type='text'; $('txt-<%= n %>-2').focus()}" onmouseout="checkPos(event, '<%= n %>-2')" style="cursor:pointer" <% end %>>
+                                                    
+                                                    <div id="lyr-<%= n %>-2" align="left" style="overflow: hidden; font-size: 0.8em "><%= @name %></div>
+                                                    
+                                                    <input type='hidden' id="txt-<%= n %>-2" style="width: 95%; " name="txt-<%= n %>-2" onkeyup="field='name'; keyup(this);" value="" ajaxURL="/person/search?search="/>
+                                                    
+                                                </td>         
+                                                <td id="id-<%= n %>-2" style="overflow: hidden; font-size: 0.8em ">
+                                                    <%= @identifier %>
+                                                </td>         
+                                                <td id="txtList-<%= n %>-2" align="center" style="overflow: hidden; font-size: 0.8em ">
+                                                    <%= @dob %> <%= @mob %>
+                                                </td>       
+                                                <td id="cw-<%= n %>-2" align="center" <% unless @list_type == "list" && @datecreated.to_s.strip != @date.to_s.strip %> style="cursor: pointer" onmouseover="if(over==false){if($('ward-<%= n %>-2').innerHTML==''){$('wrd_location_id<%= n %>').selectedIndex=-1}else{$('wrd_location_id<%= n %>').value=$('ward-<%= n %>-2').innerHTML}; $('ward-<%= n %>-2').innerHTML=''; $('wrd_location_id<%= n %>').style.display='block'}" onmouseout="if(over==false){$('wrd_location_id<%= n %>').style.display='none'; $('ward-<%= n %>-2').innerHTML=$('wrd_location_id<%= n %>').value}" <% end %> >
+                                                    <div id="ward-<%= n %>-2" style="width: 100%; overflow: hidden; font-size: 0.8em"><%= @ward %></div>
+                                                    <%= select(:wrd, "location_id#{n}", @ward_arr, {}, :style => "width: 100%; display:none", :onchange => "this.style.display='none'; $('ward-#{n}-2').innerHTML=$('wrd_location_id#{n}').value; var n = this.id.match(/(\\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2')); }", :onclick => "if(over==false){over=true}else{over=false}") %>
+                                                </td>         
+                                                <td id="cell-<%= n %>-6" height="25px" align="center" <% unless @list_type == "list" && @datecreated.to_s.strip != @date.to_s.strip %> onclick="if($('txt-<%= n %>-6').type=='hidden'){$('txt-<%= n %>-6').value=$('lyr-<%= n %>-6').innerHTML; $('lyr-<%= n %>-6').innerHTML=''; $('txt-<%= n %>-6').type='text'; $('txt-<%= n %>-6').focus()}" onmouseout="checkPos(event, '<%= n %>-6'); var n = this.id.match(/(\\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2')); over=false}" style="cursor:pointer" <% end %> >
+                                                    
+                                                    <div id="lyr-<%= n %>-6" align="left" style="overflow: hidden; font-size: 0.8em "><%= @procedure.titleize %></div>
+                                                    
+                                                    <input type='hidden' id="txt-<%= n %>-6" style="width: 95%; " name="txt-<%= n %>-6" onkeyup="field='procedure'; keyup(this);" value="" ajaxURL="/concept/search_proc?search=">
+                                                </td>        
+                                                <td id="cw-<%= n %>-6" align="center" <% unless @list_type == "list" && @datecreated.to_s.strip != @date.to_s.strip %> style="cursor: pointer" onmouseover="if(over==false){if($('id-<%= n %>-6').innerHTML==''){$('selGaLa<%= n %>').selectedIndex=-1}else{$('selGaLa<%= n %>').value=$('id-<%= n %>-6').innerHTML}; $('id-<%= n %>-6').innerHTML=''; $('selGaLa<%= n %>').style.display='block'}" onmouseout="if(over==false){$('selGaLa<%= n %>').style.display='none'; $('id-<%= n %>-6').innerHTML=$('selGaLa<%= n %>').value}" <% end %> >
+                                                    <div id="id-<%= n %>-6" style="width: 100%; overflow: hidden; font-size: 0.8em"><%= @gaorla %></div>
+                                                    <select name="selGaLa<%= n %>" id="selGaLa<%= n %>" onchange="this.style.display='none'; $('id-<%= n %>-6').innerHTML=$('selGaLa<%= n %>').value; showTime(); var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2')); over=false;}" onclick="if(over==false){over=true}else{over=false}" style="width: 100%; display:none">
+                                                        <option>GA</option>
+                                                        <option>LA</option>
+                                                    </select>
+                                                </td>         
+                                                <td id="txtList-<%= n %>-6" align="center" style="font-size: 0.8em ">
+                                                    <%= @duration %>
+                                                </td>      
+                                                <td align="center" <% unless @list_type == "list" && @datecreated.to_s.strip != @date.to_s.strip %> style="cursor: pointer" onmouseover="if(over==false){if($('txtBlood-<%= n %>-6').innerHTML==''){$('blood-<%= n %>-6').selectedIndex=-1}else{$('blood-<%= n %>-6').value=$('txtBlood-<%= n %>-6').innerHTML}; $('txtBlood-<%= n %>-6').innerHTML=''; $('blood-<%= n %>-6').style.display='block'}" onmouseout="if(over==false){$('blood-<%= n %>-6').style.display='none'; $('txtBlood-<%= n %>-6').innerHTML=$('blood-<%= n %>-6').value}" <% end %>>
+                                                    <div id="txtBlood-<%= n %>-6" style="width: 100%; overflow: hidden; font-size: 0.8em"><%= @blood %></div>
+                                                    <select id="blood-<%= n %>-6" name="blood-<%= n %>-6" style="width: 100%; display:none" onchange="this.style.display='none'; $('txtBlood-<%= n %>-6').innerHTML=$('blood-<%= n %>-6').value; var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));}" onclick="if(over==false){over=true}else{over=false}">
+                                                        <option>0</option>
+                                                        <option>1</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                     </select>
+                                                </td>        
+                                                <td align="center">
+                                                    <input name="chkITU-<%= n %>" type="checkbox" id="chkITU-<%= n %>" <%= ((@itu==1) ? "checked" : "")%> <% unless @list_type == "list" && @datecreated.to_s.strip != @date.to_s.strip %> onchange="var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));}" <% else %> disabled <% end %> />
+                                                </td>        
+                                                <td id="cell-<%= n %>-8" height="25px" align="center" <% unless @list_type == "list" && @datecreated.to_s.strip != @date.to_s.strip %> onclick="if($('txt-<%= n %>-8').type=='hidden'){$('txt-<%= n %>-8').value=$('lyr-<%= n %>-8').innerHTML; $('lyr-<%= n %>-8').innerHTML=''; $('txt-<%= n %>-8').type='text'; $('txt-<%= n %>-8').focus()}" onmouseout="checkPos(event, '<%= n %>-8'); var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));}" style="cursor:pointer" <% end %> >
+                                                    
+                                                    <div id="lyr-<%= n %>-8" align="left" style="overflow: hidden; font-size: 0.8em "><%= @comment %></div>
+                                                    
+                                                    <input type='hidden' id="txt-<%= n %>-8" style="width: 95%; " name="txt-<%= n %>-8" value="" >
+                                                </td>        
+                                                
+                                                <% if @list_type == "list" %>
+                                                    <td align="center">
+                                                        <input name="chkList-<%= n %>" type="checkbox" id="chkList-<%= n %>" <%= ((@chklist==1) ? "checked" : "")%> onchange="var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'))}" disabled <%= ((e.checklist_complete) ? "checked" : "")%> />
+                                                    </td>        
+                                                    <td align="center" style="cursor: pointer" onmouseover="if(over==false){if($('txtOCD-<%= n %>-9').innerHTML==''){$('ocd-<%= n %>-9').selectedIndex=-1}else{$('ocd-<%= n %>-9').value=$('txtOCD-<%= n %>-9').innerHTML}; $('txtOCD-<%= n %>-9').innerHTML=''; $('ocd-<%= n %>-9').style.display='block'}" onmouseout="if(over==false){$('ocd-<%= n %>-9').style.display='none'; $('txtOCD-<%= n %>-9').innerHTML=$('ocd-<%= n %>-9').value}">
+                                                        <div id="txtOCD-<%= n %>-9" style="width: 100%; overflow: hidden; font-size: 0.8em"><%= @ocd %></div>
+                                                        <select id="ocd-<%= n %>-9" name="ocd-<%= n %>-9" style="width: 100%; display:none" onchange="this.style.display='none'; $('txtOCD-<%= n %>-9').innerHTML=$('ocd-<%= n %>-9').value; if(this.value=='O'){$('txtOCD-<%= n %>-10').innerHTML=''} var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));}" onclick="if(over==false){over=true}else{over=false}">
+                                                            <option value="O">Operated</option>
+                                                            <option value="D">Delayed</option>
+                                                            <option value="C">Cancelled</option>
+                                                         </select>
+                                                    </td>        
+                                                    <td align="center" onmouseover="if(($('txtOCD-<%= n %>-9').innerHTML=='D' || $('txtOCD-<%= n %>-9').innerHTML=='C') && ($('txtOCD-<%= n %>-9').innerHTML != '')){if(over==false){if($('txtOCD-<%= n %>-10').innerHTML==''){$('ocd-<%= n %>-10').selectedIndex=-1}else{$('ocd-<%= n %>-10').value=$('txtOCD-<%= n %>-10').innerHTML}; $('txtOCD-<%= n %>-10').innerHTML=''; $('ocd-<%= n %>-10').style.display='block'} }" onmouseout="if(($('txtOCD-<%= n %>-9').innerHTML=='D' || $('txtOCD-<%= n %>-9').innerHTML=='C') && ($('txtOCD-<%= n %>-9').innerHTML != '')){if(over==false){$('ocd-<%= n %>-10').style.display='none'; $('txtOCD-<%= n %>-10').innerHTML=$('ocd-<%= n %>-10').value}}">
+                                                        <div id="txtOCD-<%= n %>-10" style="width: 100%; overflow: hidden; font-size: 0.8em"><%= @ocd2 %></div>
+                                                        <select id="ocd-<%= n %>-10" name="ocd-<%= n %>-10" style="width: 100%; display:none" onchange="this.style.display='none'; $('txtOCD-<%= n %>-10').innerHTML=$('ocd-<%= n %>-10').value; var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));}" onclick="if(over==false){over=true}else{over=false}">
+                                                            <option value="1">Non-Medical</option>
+                                                            <option value="2">Anaesth Delay/Absence</option>
+                                                            <option value="3">Surg Delay/Absence</option>
+                                                            <option value="4">Lack of Blood</option>
+                                                            <option value="5">Not Fit</option>
+                                                            <option value="6">Inadequate Pre-op Preparation</option>
+                                                            <option value="7">Equipment Deficiencies</option>
+                                                            <option value="8">Time Overrun</option>
+                                                            <option value="9">Nursing Delay/Absence</option>
+                                                            <option value="10">Ward Delay</option>
+                                                            <option value="11">Not Needed</option>
+                                                            <option value="12">Emergency</option>
+                                                         </select>
+                                                    </td>  
+                                                
+                                                <% else %>
+                                                
+                                                    <td>
+                                                        &nbsp;
+                                                    </td>
+                                                    <td>
+                                                        &nbsp;
+                                                    </td>
+                                                
+                                                <% end %>
+                                                  
+                                            </tr> 
+
+                                            <% @j += 1 %>
+                                            
+                                        <% } %>
+                                        
+                                                    
+                                        <% (@j..50).each{|n| %>
+                                            <tr bgcolor="#FFFFFF" onmouseover="this.bgColor='<%= ((@list_type == "list")?"#99CC99":"#9999FF") %>'; this.style.color='#FFFFFF'" onmouseout="this.bgColor='#FFFFFF'; this.style.color='#000000'" onmousedown="this.bgColor='#0066CC'">            
+                                            
+                                                <% if @list_type == "list" %>
+                                                    <td align="center">
+                                                        <%= n %>
+                                                        <input type="hidden" id="encounter_id<%= n %>" name="encounter_id<%= n %>" value="" style="width: 20px" />
+                                                    </td> 
+                                                <% else %>
+                                                    <td align="center">
+                                                        <input type="hidden" id="encounter_id<%= n %>" name="encounter_id<%= n %>" value="" style="width: 20px" />
+                                                    </td>           
+                                                <% end %>
+                                                
+                                                <td id="cell-<%= n %>-2" height="25px" align="center" onclick="if($('txt-<%= n %>-2').type=='hidden'){$('txt-<%= n %>-2').value=$('lyr-<%= n %>-2').innerHTML; $('lyr-<%= n %>-2').innerHTML=''; $('txt-<%= n %>-2').type='text'; $('txt-<%= n %>-2').focus()}" onmouseout="checkPos(event, '<%= n %>-2')" style="cursor:pointer">
+                                                    
+                                                    <div id="lyr-<%= n %>-2" align="left" style="overflow: hidden; font-size: 0.8em "></div>
+                                                    
+                                                    <input type='hidden' id="txt-<%= n %>-2" style="width: 95%; " name="txt-<%= n %>-2" onkeyup="field='name'; keyup(this);" value="" ajaxURL="/person/search?search="/>
+                                                    
+                                                </td>         
+                                                <td id="id-<%= n %>-2" style="overflow: hidden; font-size: 0.8em ">
+                                                    &nbsp;
+                                                </td>         
+                                                <td id="txtList-<%= n %>-2" align="center" style="overflow: hidden; font-size: 0.8em ">
+                                                    &nbsp;
+                                                </td>       
+                                                <td id="cw-<%= n %>-2" align="center" style="cursor: pointer" onmouseover="if(over==false){if($('ward-<%= n %>-2').innerHTML==''){$('wrd_location_id<%= n %>').selectedIndex=-1}else{$('wrd_location_id<%= n %>').value=$('ward-<%= n %>-2').innerHTML}; $('ward-<%= n %>-2').innerHTML=''; $('wrd_location_id<%= n %>').style.display='block'}" onmouseout="if(over==false){$('wrd_location_id<%= n %>').style.display='none'; $('ward-<%= n %>-2').innerHTML=$('wrd_location_id<%= n %>').value}">
+                                                    <div id="ward-<%= n %>-2" style="width: 100%; overflow: hidden; font-size: 0.8em"></div>
+                                                    <%= select(:wrd, "location_id#{n}", @ward_arr, {}, :style => "width: 100%; display:none", :onchange => "this.style.display='none'; $('ward-#{n}-2').innerHTML=$('wrd_location_id#{n}').value; var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));}", :onclick => "if(over==false){over=true}else{over=false}") %>
+                                                </td>         
+                                                <td id="cell-<%= n %>-6" height="25px" align="center" onclick="if($('txt-<%= n %>-6').type=='hidden'){$('txt-<%= n %>-6').value=$('lyr-<%= n %>-6').innerHTML; $('lyr-<%= n %>-6').innerHTML=''; $('txt-<%= n %>-6').type='text'; $('txt-<%= n %>-6').focus()}" onmouseout="checkPos(event, '<%= n %>-6')" style="cursor:pointer">
+                                                    
+                                                    <div id="lyr-<%= n %>-6" align="left" style="overflow: hidden; font-size: 0.8em "></div>
+                                                    
+                                                    <input type='hidden' id="txt-<%= n %>-6" style="width: 95%; " name="txt-<%= n %>-6" onkeyup="field='procedure'; keyup(this);" value="" ajaxURL="/concept/search_proc?search=">
+                                                </td>        
+                                                <td id="cw-<%= n %>-6" align="center" style="cursor: pointer" onmouseover="if(over==false){if($('id-<%= n %>-6').innerHTML==''){$('selGaLa<%= n %>').selectedIndex=-1}else{$('selGaLa<%= n %>').value=$('id-<%= n %>-6').innerHTML}; $('id-<%= n %>-6').innerHTML=''; $('selGaLa<%= n %>').style.display='block'}" onmouseout="if(over==false){$('selGaLa<%= n %>').style.display='none'; $('id-<%= n %>-6').innerHTML=$('selGaLa<%= n %>').value}">
+                                                    <div id="id-<%= n %>-6" style="width: 100%; overflow: hidden; font-size: 0.8em"></div>
+                                                    <select name="selGaLa<%= n %>" id="selGaLa<%= n %>" onchange="this.style.display='none'; $('id-<%= n %>-6').innerHTML=$('selGaLa<%= n %>').value; showTime(); var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));};" onclick="if(over==false){over=true}else{over=false}" style="width: 100%; display:none">
+                                                        <option>GA</option>
+                                                        <option>LA</option>
+                                                    </select>
+                                                </td>         
+                                                <td id="txtList-<%= n %>-6" align="center" style="font-size: 0.8em ">
+                                                    &nbsp;
+                                                </td>      
+                                                <td align="center" style="cursor: pointer" onmouseover="if(over==false){if($('txtBlood-<%= n %>-6').innerHTML==''){$('blood-<%= n %>-6').selectedIndex=-1}else{$('blood-<%= n %>-6').value=$('txtBlood-<%= n %>-6').innerHTML}; $('txtBlood-<%= n %>-6').innerHTML=''; $('blood-<%= n %>-6').style.display='block'}" onmouseout="if(over==false){$('blood-<%= n %>-6').style.display='none'; $('txtBlood-<%= n %>-6').innerHTML=$('blood-<%= n %>-6').value}">
+                                                    <div id="txtBlood-<%= n %>-6" style="width: 100%; overflow: hidden; font-size: 0.8em"></div>
+                                                    <select id="blood-<%= n %>-6" name="blood-<%= n %>-6" style="width: 100%; display:none" onchange="this.style.display='none'; $('txtBlood-<%= n %>-6').innerHTML=$('blood-<%= n %>-6').value; var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));};" onclick="if(over==false){over=true}else{over=false}">
+                                                        <option>0</option>
+                                                        <option>1</option>
+                                                        <option>2</option>
+                                                        <option>3</option>
+                                                        <option>4</option>
+                                                     </select>
+                                                </td>        
+                                                <td align="center">
+                                                    <input name="chkITU-<%= n %>" type="checkbox" id="chkITU-<%= n %>" onchange="var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));}" />
+                                                </td>        
+                                                <td id="cell-<%= n %>-8" height="25px" align="center" onclick="if($('txt-<%= n %>-8').type=='hidden'){$('txt-<%= n %>-8').value=$('lyr-<%= n %>-8').innerHTML; $('lyr-<%= n %>-8').innerHTML=''; $('txt-<%= n %>-8').type='text'; $('txt-<%= n %>-8').focus()}" onmouseout="checkPos(event, '<%= n %>-8'); var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));}" style="cursor:pointer">
+                                                    
+                                                    <div id="lyr-<%= n %>-8" align="left" style="overflow: hidden; font-size: 0.8em "></div>
+                                                    
+                                                    <input type='hidden' id="txt-<%= n %>-8" style="width: 95%; " name="txt-<%= n %>-8" value="" >
+                                                </td>  
+                                                
+                                                <% if @list_type == "list" %> 
+                                                     
+                                                    <td align="center">
+                                                        <input name="chkList-<%= n %>" type="checkbox" id="chkList-<%= n %>" onchange="var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));}" />
+                                                    </td>        
+                                                    <td align="center" style="cursor: pointer" onmouseover="if(over==false){if($('txtOCD-<%= n %>-9').innerHTML==''){$('ocd-<%= n %>-9').selectedIndex=-1}else{$('ocd-<%= n %>-9').value=$('txtOCD-<%= n %>-9').innerHTML}; $('txtOCD-<%= n %>-9').innerHTML=''; $('ocd-<%= n %>-9').style.display='block'}" onmouseout="if(over==false){$('ocd-<%= n %>-9').style.display='none'; $('txtOCD-<%= n %>-9').innerHTML=$('ocd-<%= n %>-9').value}">
+                                                        <div id="txtOCD-<%= n %>-9" style="width: 100%; overflow: hidden; font-size: 0.8em"></div>
+                                                        <select id="ocd-<%= n %>-9" name="ocd-<%= n %>-9" style="width: 100%; display:none" onchange="this.style.display='none'; $('txtOCD-<%= n %>-9').innerHTML=$('ocd-<%= n %>-9').value; if(this.value=='O'){$('txtOCD-<%= n %>-10').innerHTML=''}; var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));}" onclick="if(over==false){over=true}else{over=false}">
+                                                            <option value="O">Operated</option>
+                                                            <option value="D">Delayed</option>
+                                                            <option value="C">Cancelled</option>
+                                                         </select>
+                                                    </td>        
+                                                    <td align="center" onmouseover="if(($('txtOCD-<%= n %>-9').innerHTML=='D' || $('txtOCD-<%= n %>-9').innerHTML=='C') && ($('txtOCD-<%= n %>-9').innerHTML != '')){if(over==false){if($('txtOCD-<%= n %>-10').innerHTML==''){$('ocd-<%= n %>-10').selectedIndex=-1}else{$('ocd-<%= n %>-10').value=$('txtOCD-<%= n %>-10').innerHTML}; $('txtOCD-<%= n %>-10').innerHTML=''; $('ocd-<%= n %>-10').style.display='block'} }" onmouseout="if(($('txtOCD-<%= n %>-9').innerHTML=='D' || $('txtOCD-<%= n %>-9').innerHTML=='C') && ($('txtOCD-<%= n %>-9').innerHTML != '')){if(over==false){$('ocd-<%= n %>-10').style.display='none'; $('txtOCD-<%= n %>-10').innerHTML=$('ocd-<%= n %>-10').value}}">
+                                                        <div id="txtOCD-<%= n %>-10" style="width: 100%; overflow: hidden; font-size: 0.8em"></div>
+                                                        <select id="ocd-<%= n %>-10" name="ocd-<%= n %>-10" style="width: 100%; display:none" onchange="this.style.display='none'; $('txtOCD-<%= n %>-10').innerHTML=$('ocd-<%= n %>-10').value; var n = this.id.match(/(\d+)/); if(n) {saveEnc($('lyr-'+n[1]+'-2'));}" onclick="if(over==false){over=true}else{over=false}">
+                                                            <option value="1">Non-Medical</option>
+                                                            <option value="2">Anaesth Delay/Absence</option>
+                                                            <option value="3">Surg Delay/Absence</option>
+                                                            <option value="4">Lack of Blood</option>
+                                                            <option value="5">Not Fit</option>
+                                                            <option value="6">Inadequate Pre-op Preparation</option>
+                                                            <option value="7">Equipment Deficiencies</option>
+                                                            <option value="8">Time Overrun</option>
+                                                            <option value="9">Nursing Delay/Absence</option>
+                                                            <option value="10">Ward Delay</option>
+                                                            <option value="11">Not Needed</option>
+                                                            <option value="12">Emergency</option>
+                                                         </select>
+                                                    </td>
+                                                
+                                                <% else %>
+                                                
+                                                    <td>
+                                                        &nbsp;
+                                                    </td>
+                                                    <td>
+                                                        &nbsp;
+                                                    </td>
+                                                
+                                                <% end %>
+                                                    
+                                            </tr> 
+                                        <% } %>
+                                        
+                                        
+                                        <tr style="color: #FFFFFF; cursor: default; height: 0px">
+                                            <% if @list_type == "list" %>
+                                                <td id="h2-1" align="center" style="font-size: 0.6em" bgcolor="#FFFFFF" >Actual Order</td>
+                                            <% else %>
+                                                <td id="h2-1" align="center" style="font-size: 0.6em" bgcolor="#FFFFFF" >&nbsp;</td>
+                                            <% end %>
+                                            
+                                            <td id="h2-2" width="25%" align="center" style="font-size: 2em" bgcolor="#FFFFFF">Name</td>
+                                            <td id="h2-3" align="center" style="font-size: 0.8em" bgcolor="#FFFFFF">THEATRE IDENTIFIER</td>
+                                            <td id="h2-4" align="center" style="font-size: 0.8em" bgcolor="#FFFFFF">DOB</td>
+                                            <td id="h2-12" align="center" style="font-size: 0.8em" bgcolor="#FFFFFF">WARD</td>
+                                            <td id="h2-5" width="30%" align="center" style="font-size: 2em" bgcolor="#FFFFFF"><%= ((@list_type == "list")?"Procedure":"Planned Procedure") %></td>
+                                            <td id="h2-6" align="center" style="font-size: 0.6em" bgcolor="#FFFFFF">GA/LA</td>
+                                            <td id="h2-7" align="center" style="font-size: 0.6em" bgcolor="#FFFFFF">EXPECTED SURGICAL DURATION (MINS)</td>
+                                            <td id="h2-8" align="center" style="font-size: 0.6em" bgcolor="#FFFFFF">BLOOD: HOW MUCH?</td>
+                                            <td id="h2-13" align="center" style="font-size: 0.6em" bgcolor="#FFFFFF">ITU Bed Booked?</td>
+                                            <td id="h2-9" align="center" style="font-size: 0.6em" bgcolor="#FFFFFF">Comments?<br />Infected<br />Weight if Paed</td>
+                                            <td id="h2-10" align="center" style="font-size: 0.6em" bgcolor="#FFFFFF">Checklist Complete?</td>
+                                            <td id="h2-11" align="center" style="font-size: 0.6em" bgcolor="#FFFFFF" colspan=2>Outcome O/C/D Code</td> 
+                                        </tr>
+                                    </table>    
+                                </div>    
+                            </td>
+                        </tr>
+                    </table>                                                    
+            <td>
+        </tr>
+    </table> 
+
+<% @server = "http://" + request.host.to_s + ":8080/jasperserver" %>
+
+    <table width="100%" border=0>
+        <tr>
+            <td align="left">
+                <% if session[:user_type] == "GENERAL" %>
+                <input type="button" value="home" style="width: 200px; height: 80px; font-size: 2em; cursor: pointer; background-color: <%= ((@list_type == "list") ? ("#99CC99") : ("#9999FF")) %>; color: white" onclick="$('frmMain').action='/patients/index'; $('frmMain').submit()"/>
+                <% else %>
+                    &nbsp;
+                <% end %>
+            </td>
+             
+            <td>
+                <table cellspacing=5 cellpadding=5>
+                    <tr> 
+                        <td align="center">
+                            <img src="/images/pdf.gif" alt="Export the report to PDF" border=0  alternate="Export to PDF" style="cursor: pointer; border-color:rgb(192,0,0)" onclick="$('frmPDF').action='<%= @server %>/flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/<%= ((@list_type == "list")?"TheatreListForm":"TheatreBookingForm") %>&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&theatre_id=<%= @theatreId %>&op_date=' + $('app_date').value + '&output=pdf'; $('frmPDF').submit()" />
+                        </td>
+                        
+                        <td align="center" valign="middle">
+                            <img src="/images/csv.gif" alt="Export the report to CSV" border=0  alternate="Export to CSV" style="cursor: pointer; border-color:rgb(192,0,0)" onclick="$('frmPDF').action='<%= @server %>/flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/<%= ((@list_type == "list")?"TheatreListForm":"TheatreBookingForm") %>&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&theatre_id=<%= @theatreId %>&op_date=' + $('app_date').value + '&output=csv'; $('frmPDF').submit()" />
+                        </td>
+                    </tr>
+                    <tr> 
+                        <td align="center">
+                            <img src="/images/rtf.gif" alt="Export the report to RTF" border=0  alternate="Export to PDF" style="cursor: pointer; border-color:rgb(192,0,0)" onclick="$('frmPDF').action='<%= @server %>/flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/<%= ((@list_type == "list")?"TheatreListForm":"TheatreBookingForm") %>&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&theatre_id=<%= @theatreId %>&op_date=' + $('app_date').value + '&output=rtf'; $('frmPDF').submit()" />
+                        </td>
+                        
+                        <td align="center" valign="middle">
+                            <img src="/images/xls.gif" alt="Export the report to Excel" border=0  alternate="Export to Excel" style="cursor: pointer; border-color:rgb(192,0,0)" onclick="$('frmPDF').action='<%= @server %>/flow.html?_flowId=viewReportFlow&reportUnit=/reports/dzuwa/<%= ((@list_type == "list")?"TheatreListForm":"TheatreBookingForm") %>&standAlone=true&ParentFolderUri=/reports/dzuwa&j_username=joeuser&j_password=joeuser&theatre_id=<%= @theatreId %>&op_date=' + $('app_date').value + '&output=xls'; $('frmPDF').submit()" />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+                       
+            <td align="right">
+                <table style="font-size: 0.8em" border=0>
+                    <tr>
+                        <td colspan=2 style="color: #0099FF">
+                            <b>Outcome</b>
+                        </td>  
+                        <td>
+                            &nbsp;
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>O</b>:
+                        </td>
+                        <td>
+                            Operated
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>C</b>:
+                        </td>
+                        <td>
+                            Cancelled
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>D</b>:
+                        </td>
+                        <td>
+                            Delayed
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: #0099FF">
+                            <b>Code</b>
+                        </td>
+                    <!--/tr>
+                    <tr-->
+                        <td style="color: #0099FF">
+                            <b>1:</b>
+                        </td>
+                        <td>
+                            Non-Medical&nbsp;
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>4:</b>
+                        </td>
+                        <td>
+                            Lack of Blood&nbsp;
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>7:</b>
+                        </td>
+                        <td>
+                            Equipment Deficiencies&nbsp;
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>10:</b>
+                        </td>
+                        <td>
+                            Ward Delay&nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>2:</b>
+                        </td>
+                        <td>
+                            Anaesth Delay/Absence&nbsp;
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>5:</b>
+                        </td>
+                        <td>
+                            Not Fit&nbsp;
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>8:</b>
+                        </td>
+                        <td>
+                            Time Overrun&nbsp;
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>11:</b>
+                        </td>
+                        <td>
+                            Not Needed&nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            &nbsp;
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>3:</b>
+                        </td>
+                        <td>
+                            Surg Delay/Absence&nbsp;
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>6:</b>
+                        </td>
+                        <td>
+                            Inadequate Pre-op Preparation&nbsp;
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>9:</b>
+                        </td>
+                        <td>
+                            Nursing Delay/Absence&nbsp;
+                        </td>
+                        <td style="color: #0099FF">
+                            <b>12:</b>
+                        </td>
+                        <td>
+                            Emergency&nbsp;
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>    
+
+    <div name="options" id="options" style="position: absolute; display: none;z-index: 995;" align="left">
+        <select id="sel" name="sel" size=7 style="width: 200px"></select>
+    </div>  
+     
+ 
+    <div id="divMnu" style="background-color:#CCCCFF; width: 200px auto; position:absolute; display:none; z-index:997; " onclick="">
+        
+        <table cellpadding=5 id="tblMnu">
+            
+            <%  if @list_type == "list"
+                    s = [
+                            ["Surgical Checklist", "$('frmPost').action = '/encounters/checklist?encounter_id='+$('encounter_id').value+'&viewer=false'; $('frmPost').target='_blank'; $('frmPost').submit()"
+                            ],
+                            ["Appointment Details", "$('viewer').value = 'false'; $('frmPost').action = '/patients/show'; $('frmPost').target='main'; $('frmPost').submit(); $('lyrPopUp').style.display = 'block'; "                        
+                            ]
+                       ] 
+                else
+                    s = @locations.map{|p| 
+                            
+                                ["Transfer to #{p.name}", "var response = confirm('Are you sure you want to transfer ' + $('patient').value + ' to #{p.name}?'); if(response){transferPatient(#{p.location_id})}"]
+                           
+                        }
+                end
+            %>
+            
+            <script >
+            <!--
+                            
+                <%  @j = 0
+                    @k = 0
+                    @c = {}     # get maximum length per set
+                    @r = 0
+                    s.each{|w| 
+                        ((w[0].to_s.length > @j)?(@j=w[0].to_s.length):"")
+                        @k += 1
+                        @c[@k] = 0
+                        if w[2]
+                            @e = 0
+                            w[2].each{|f|
+                                ((f[0].to_s.length > @c[@k])?(@c[@k]=f[0].to_s.length):"")
+                                @e += 1
+                            }
+                            if @e > @r
+                                @r = @e
+                            end
+                        end
+                    }
+                %>
+                var mnuWidth = <%= @j %>
+                var subRows = <%= @r %>
+                var mnuSubWidth = {}                
+                <%  @c.each{|c| %>                     
+                       <%= "mnuSubWidth[#{c[0]}] = #{c[1]}" %>                        
+                <%  } %>                
+                
+                <% if @r > 0 
+                        @divMnu = s
+                   end
+                %>
+            //-->
+            </script>
+            
+            <%  @i = 0 
+                s.each{|p| 
+                    @i += 1
+            %>
+                <tr id="<%= "mnu#{@i}" %>" onmouseover="hideAll(); this.bgColor='#9999FF'; this.style.color='#FFFFFF'; 
+                <%= if !p[2].nil?
+                        " var tx = event.clientX; var ty = event.clientY; var x,y; if(tx+(mnuSubWidth[#{@i}] * 15) < innerWidth){x=(parseInt($('divMnu').style.left) + (mnuWidth * 11))}else{x=(parseInt($('divMnu').style.left) - (mnuSubWidth[#{@i}] * 9.5))}; $('divSubMnu#{@i}').style.left = x + 'px'; if((ty+#{(@r*33)}) < innerHeight){y=(parseInt($('divMnu').style.top) + (#{@i-1} * 31))}else{y=(parseInt($('divMnu').style.top) + (#{@i} * 31)) - (#{@r} * 31)}; $('divSubMnu#{@i}').style.top=y + 'px';  "
+                    end  
+                %> $('<%= "divSubMnu#{@i}" %>').style.display='block';" onmouseout="this.bgColor='#CCCCFF'; this.style.color='#000000'" onmousedown="this.bgColor='#0066CC'" style="cursor:pointer">
+                    <td <%= ((p[2].nil?)?("onclick=\"$('divMnu').style.display='none'; #{p[1]}\""):"")  %> >
+                        <%= p[0] %>
+                    </td>
+                </tr>
+            <% } %>
+            
+        </table>            
+                                                        
+    </div>
+    
+    <%  @i = 0
+        s.each{|d| 
+            @i += 1
+            if d[2]
+    %>
+            <div id="<%= "divSubMnu#{@i}" %>" style="background-color:#000000; width: 200px auto; position:absolute; display:none; z-index:999; ">
+                <table cellpadding=5 id="<%= "divSubMnu#{@i}tbl" %>">
+                    <% d[2].each{|s| %>
+                        <tr onmouseover="this.bgColor='#9999FF'; m_over == true; this.style.color='#FFFFFF'; <%= "$('mnu#{@i}').bgColor='#9999FF'; $('mnu#{@i}').style.color='#FFFFFF'" %>" onmouseout="this.bgColor='#CCCCFF'; this.style.color='#000000'; m_over == false" onmousedown="this.bgColor='#0066CC'" style="cursor:pointer">
+                            <td onclick="$('divMnu').style.display='none'; $('<%= "divSubMnu#{@i}"%>').style.display='none'; <%= s[1] %>; ">
+                                <%= s[0] %>
+                            </td>
+                        </tr>
+                    <% } %>
+                </table>            
+            </div>
+    <%      end
+        } %>            
+        
+<script type="text/javascript" language="javascript">
+<!--
+
+    var mnuRows = <%= ((@i.nil?)?0:@i) %>
+    
+    function hideAll(){
+        for(var i = 1; i <= mnuRows; i++){
+            if($('divSubMnu' + i)){
+                $('divSubMnu' + i).style.display = "none";
+                $('mnu' + i).bgColor = '#CCCCFF';
+                $('mnu' + i).style.color = '#000000';
+            }
+        }
+    }
+
+//-->
+</script>
+
+<script type="text/javascript" language="javascript">
+<!--
+
+    <%= ((@loc)?"$('location_location_id').value=#{@loc};":"") %>
+    showTime();
+
+//-->
+</script>
+</center>

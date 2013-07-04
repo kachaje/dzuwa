@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<theatre_list_result>
+<observation>
+  <intern>Benwell Kamoyo (KB-523)</intern>
+  <name>Chifundo Kachapira</name>
+  <surg>Prof Eric Borgstein (BE-510)</surg>
+  <period>180</period>
+  <procedure>Gastrectomy</procedure>
+
+  <ocd2>2</ocd2>
+  <comments></comments>
+  <chklist>No</chklist>
+  <theatre>Burns Theatre</theatre>
+  <ocd>D</ocd>
+  <start>08:00</start>
+
+  <gaorla>GA</gaorla>
+  <created>2009-09-24 : 20:45</created>
+  <appdate>2009-09-25</appdate>
+  <blood>0</blood>
+  <duration>234.0</duration>
+  <age>35</age>
+
+  <identifier>520CK-9</identifier>
+  <itu>No</itu>
+  <ward>3B</ward>
+</observation>
+<observation>
+  <intern>Benwell Kamoyo (KB-523)</intern>
+  <name>George Mwambera</name>
+
+  <surg>Prof Eric Borgstein (BE-510)</surg>
+  <period>210</period>
+  <procedure>Oesophagectomy</procedure>
+  <ocd2>0</ocd2>
+  <comments></comments>
+  <chklist>No</chklist>
+
+  <theatre>Burns Theatre</theatre>
+  <ocd>O</ocd>
+  <start>08:00</start>
+  <gaorla>GA</gaorla>
+  <created>2009-09-24 : 20:45</created>
+  <appdate>2009-09-25</appdate>
+
+  <blood>0</blood>
+  <duration>273.0</duration>
+  <age>42</age>
+  <identifier>521GM-9</identifier>
+  <itu>No</itu>
+  <ward>4A</ward>
+
+</observation>
+<observation>
+  <intern>Benwell Kamoyo (KB-523)</intern>
+  <name>Chifundo Kachapira</name>
+  <surg>Prof Eric Borgstein (BE-510)</surg>
+  <period>60</period>
+  <procedure>Spina Bifida Repair</procedure>
+
+  <ocd2>0</ocd2>
+  <comments></comments>
+  <chklist>No</chklist>
+  <theatre>Burns Theatre</theatre>
+  <ocd>O</ocd>
+  <start>08:00</start>
+
+  <gaorla>GA</gaorla>
+  <created>2009-09-25 : 13:03</created>
+  <appdate>2009-09-25</appdate>
+  <blood>0</blood>
+  <duration>78.0</duration>
+  <age>35</age>
+
+  <identifier>520CK-9</identifier>
+  <itu>No</itu>
+  <ward>3B</ward>
+</observation>
+<observation>
+  <intern>Benwell Kamoyo (KB-523)</intern>
+  <name>George Mwambera</name>
+
+  <surg>Prof Eric Borgstein (BE-510)</surg>
+  <period>60</period>
+  <procedure>Burr Holes</procedure>
+  <ocd2>0</ocd2>
+  <comments></comments>
+  <chklist>No</chklist>
+
+  <theatre>Burns Theatre</theatre>
+  <ocd></ocd>
+  <start>08:00</start>
+  <gaorla>GA</gaorla>
+  <created>2009-09-25 : 13:35</created>
+  <appdate>2009-09-25</appdate>
+
+  <blood>0</blood>
+  <duration>78.0</duration>
+  <age>42</age>
+  <identifier>521GM-9</identifier>
+  <itu>No</itu>
+  <ward>4A</ward>
+
+</observation>
+<observation>
+  <intern>Benwell Kamoyo (KB-523)</intern>
+  <name>Chifundo Kachapira</name>
+  <surg>Prof Eric Borgstein (BE-510)</surg>
+  <period>40</period>
+  <procedure>Colostomy Closure</procedure>
+
+  <ocd2>0</ocd2>
+  <comments></comments>
+  <chklist>No</chklist>
+  <theatre>Burns Theatre</theatre>
+  <ocd>O</ocd>
+  <start>08:00</start>
+
+  <gaorla>GA</gaorla>
+  <created>2009-09-25 : 13:41</created>
+  <appdate>2009-09-25</appdate>
+  <blood>0</blood>
+  <duration>52.0</duration>
+  <age>35</age>
+
+  <identifier>520CK-9</identifier>
+  <itu>No</itu>
+  <ward>2B</ward>
+</observation>
+</theatre_list_result>
+
+

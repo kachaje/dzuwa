@@ -1,0 +1,78 @@
+class PatientsController < ApplicationController
+  def index
+    # flash[:notice] = "Time to work with patients"
+  end
+     
+  def appointments
+    if params[:parent_location]
+        session[:parent_location] = params[:parent_location]
+        
+        @parent_location = params[:parent_location]
+        
+        if params[:period]  # [:week] rescue nil
+            @period_week = params[:period][:week]
+        end
+        
+        if params[:location]    #[:unit]
+            @period_unit = params[:location][:unit]
+        end
+        
+        if params[:location]    #[:unit]
+            @encounter = Encounter.find(:all, :include => [:type, :observations], :conditions => ["encounter.voided = ? AND encounter.location_id = ? AND UPPER(encounter_type.name) = ? AND ((DAYOFYEAR(obs.value_datetime) DIV 7) + ROUND((DAYOFYEAR(obs.value_datetime) % 7) * 0.1)) = ?",0, params[:location][:unit], "APPOINTMENT", ((@period_week)?(@period_week):((Time.now.yday/7)+((Time.now.yday%7)*0.1).round))], :order => "obs.value_datetime")
+        else
+            @u = Location.find(:all, :conditions => ["COALESCE(parent_location,'') = ? AND NOT UPPER(description) LIKE ?", session[:parent_location], "%WARD%"], :order => "name").first
+            
+            if @u.nil?
+                flash[:notice] = "No Records Found"
+                redirect_to :action => "index"
+                return
+            end
+            
+            @encounter = Encounter.find(:all, :include => [:type, :observations], :conditions => ["encounter.voided = ? AND encounter.location_id = ? AND UPPER(encounter_type.name) = ? AND ((DAYOFYEAR(obs.value_datetime) DIV 7) + ROUND((DAYOFYEAR(obs.value_datetime) % 7) * 0.1)) = ?",0, @u.location_id, "APPOINTMENT", ((@period_week)?(@period_week):((@period_week)?(@period_week):((Time.now.yday/7)+((Time.now.yday%7)*0.1).round)))], :order => "obs.value_datetime")
+        end
+        
+        @units = Location.find(:all, :conditions => ["COALESCE(parent_location,'') = ? AND NOT UPPER(description) LIKE ?", session[:parent_location], "%WARD%"], :order => "name")
+    
+        # flash[:notice] = "View all Booked Appointments"
+    end
+  end
+        
+  def booking
+    flash[:notice] = "Book an Appointment"
+  end
+      
+  def new
+    flash[:notice] = "Add New Patient"
+  end
+        
+  def show
+        if params[:viewer]
+            if params[:viewer] == "false"
+                @viewer = "none"
+            else
+                @viewer = "block"
+            end
+        end
+        
+        if params[:encounter_id]
+            @patient = Patient.find(:all, :include => [{:encounters => [:type]}], :conditions => ["encounter.encounter_id = ?", params[:encounter_id]]).first
+        elsif params[:selectId]
+            @patient = Patient.find(params[:selectId], :include => [{:encounters => [:type]}])       
+        elsif session[:patient_id]
+            @patient = Patient.find(session[:patient_id], :include => [{:encounters => [:type]}])
+        else
+            #flash[:notice] = "No records found"
+            redirect_to(:controller => "patients", :action => "index")
+        end                        
+    end
+  
+  def print
+    @patient = Patient.find(params[:id] || session[:patient_id]) rescue nil
+    print_and_redirect("/patients/print_national_id/?patient_id=#{@patient.id}", next_task(@patient))  
+  end
+  
+  def print_national_id
+    print_string = Patient.find(params[:patient_id]).national_id_label rescue (raise "Unable to find patient (#{params[:patient_id]}) or generate a national id label for that patient")
+    send_data(print_string,:type=>"application/label; charset=utf-8", :stream=> false, :filename=>"#{params[:patient_id]}#{rand(10000)}.lbl", :disposition => "inline")
+  end
+end

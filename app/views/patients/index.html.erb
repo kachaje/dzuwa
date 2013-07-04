@@ -1,0 +1,76 @@
+<center>
+<h1>Welcome to Patients Corner</h1>
+
+<% form_tag( {:action => 'index'}, {:id => 'frmNav'} ) do %>
+    <p><input type="hidden" name="record_type" id="record_type" value="3" /></p>
+    <p><input type="hidden" name="origin" id="origin" value="/patients/index" /></p>
+    <p><input type="hidden" name="title" id="title" value="Patient" /></p>
+    <p><input type="hidden" name="parent_location" id="parent_location" value="<%= session[:location_id] %>" /></p>
+    <p><input type="hidden" name="list_type" id="list_type" value="booking" /></p>
+    <table cellpadding=5>
+        <tr>
+            <td align="center">
+                <%= submit_tag 'Search for Patients', :id => 'btnSearch', :onclick => "document.getElementById('frmNav').action = '/person/index'; document.getElementById('frmNav').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">                                
+                <%= submit_tag 'Register New Patient', :id => 'btnAppointments', :onclick => "document.getElementById('frmNav').action = '/person/new'; document.getElementById('frmNav').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">                                
+                <%= submit_tag 'Theatre Booking Form', :id => 'btnAppointments', :onclick => "document.getElementById('frmNav').action = '/encounters/appointment'; $('list_type').value = 'booking'; document.getElementById('frmNav').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">                                
+                <%= submit_tag 'Theatre List', :id => 'btnAppointments', :onclick => "document.getElementById('frmNav').action = '/encounters/appointment'; $('list_type').value = 'list'; document.getElementById('frmNav').submit()", :class => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">                                
+                <%= submit_tag 'Patient Appointments Management', :id => 'btnAppointments', :onclick => "$('divReason').style.display='block'; $('lyrBg').style.display='block'", :class => "button", :type => "button" %>
+            </td>
+        </tr>
+        <tr>
+            <td align="center">                                
+                <%= submit_tag 'Home', :id => 'btnHome', :onclick => "document.getElementById('frmNav').action = '/task/index'; document.getElementById('frmNav').submit()", :class => "button" %>
+            </td>
+        </tr>
+    </table>                                            
+    
+        
+    <div id="divReason"style="position:absolute; z-index:999; bottom: 40%; right: 40%; top:30%; left:40%; text-align: center; display: none ">
+	    <table height="100%" width="100%" bgcolor="#EAEAEA" cellpadding="5" border="0" bordercolor="#EAEAEA" >
+			    <tr>
+				    <th height="30" align="left" bgcolor="#0000FF" style="color:#FFFFFF " colspan=2>
+					    Hospital
+				    </th>
+			    </tr>
+		        <tr>			   
+			        <td align="center" valign="middle" colspan=2>
+				        Select Hospital of interest
+				    </td>
+				</tr>
+		        <tr>			   
+			        <td align="center" valign="middle" colspan=2>
+				        <%= @locations = Location.find(:all, :conditions => ["UPPER(name) NOT LIKE ? AND COALESCE(parent_location,'') = ?","UNKNOWN LOCATION", ""], :order => "name")
+				        select(:hospital, "location", @locations.map{|p| [p.name, p.location_id]})%>
+				    </td>
+				</tr>
+				<tr>
+				    <td>
+				        <input name="btnConfirm" type="button" id="btnConfirm" style="cursor:pointer; width: 100px; height:30px " onClick=" $('parent_location').value=$('hospital_location').value; $('frmNav').action = '/patients/appointments'; $('frmNav').submit(); $('divReason').style.display='none'; $('lyrBg').style.display='none';" value="Submit" />
+				    </td>
+				    <td>
+				        <input name="btnCancel" type="button" id="btnCancel" style="cursor:pointer; width: 100px; height:30px " onClick="document.getElementById('divReason').style.display='none'; document.getElementById('lyrBg').style.display='none'" value="Cancel" />
+			        </td>
+		        </tr>
+	    </table>
+    </div>
+    
+    <div id="lyrBg" style="position:absolute; z-index:998; bottom: 0px; right: 0px; top:0px; left:0px; text-align: center; background-color:#FFFFFF; opacity:.95; display: none "></div>
+    
+<% end %>    
+</center>

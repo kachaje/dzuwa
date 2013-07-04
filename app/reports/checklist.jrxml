@@ -1,0 +1,728 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="71">
+			<rectangle>
+				<reportElement mode="Transparent" x="0" y="0" width="595" height="69"/>
+				<graphicElement>
+					<pen lineColor="#33CC33"/>
+				</graphicElement>
+			</rectangle>
+			<image hAlign="Left" vAlign="Middle">
+				<reportElement x="2" y="2" width="77" height="65"/>
+				<imageExpression class="java.lang.String"><![CDATA["/root/rails/dzuwa/public/images/who.jpg"]]></imageExpression>
+			</image>
+			<image hAlign="Right" vAlign="Middle">
+				<reportElement x="524" y="3" width="71" height="63"/>
+				<imageExpression class="java.lang.String"><![CDATA["/root/rails/dzuwa/public/images/govlogo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="106" y="12" width="390" height="45" forecolor="#33CC33"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="32"/>
+				</textElement>
+				<text><![CDATA[Surgical Safety Checklist]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement mode="Transparent" x="600" y="0" width="202" height="69"/>
+				<graphicElement>
+					<pen lineColor="#33CC33"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="604" y="6" width="196" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name : ..........................................................]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="483">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="802" height="27"/>
+				<staticText>
+					<reportElement mode="Opaque" x="0" y="0" width="299" height="25" forecolor="#FFFFFF" backcolor="#000077"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="18"/>
+					</textElement>
+					<text><![CDATA[Before Induction of Anaesthesia]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="301" y="0" width="249" height="25" forecolor="#FFFFFF" backcolor="#33CC33"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="18"/>
+					</textElement>
+					<text><![CDATA[Before Skin Incision]]></text>
+				</staticText>
+				<staticText>
+					<reportElement mode="Opaque" x="552" y="0" width="250" height="25" forecolor="#FFFFFF" backcolor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="18"/>
+					</textElement>
+					<text><![CDATA[Before Skin Incision]]></text>
+				</staticText>
+			</frame>
+			<staticText>
+				<reportElement x="604" y="-44" width="196" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DOB :   ..........................................................]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="604" y="-24" width="196" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Hospital No :  ............................................]]></text>
+			</staticText>
+			<frame>
+				<reportElement x="0" y="26" width="299" height="457"/>
+				<rectangle radius="6">
+					<reportElement x="0" y="2" width="164" height="25" backcolor="#CCCCEE"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="4" y="2" width="102" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[OT In Time:]]></text>
+				</staticText>
+				<rectangle radius="6">
+					<reportElement x="167" y="2" width="132" height="25" backcolor="#CCCCEE"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="30" width="299" height="178" backcolor="#EAEAFF"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="211" width="299" height="106" backcolor="#EAEAFF"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="320" width="299" height="88" backcolor="#EAEAFF"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="6" y="30" width="71" height="20" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Surgical :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="6" y="50" width="280" height="20" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Blood Tests :               Date Taken :  ................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="71" width="109" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Hb/MCV : .................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="118" y="70" width="83" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Plts :  ................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="205" y="70" width="81" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[MPS : ...............]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="88" width="234" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Expected Blood Loss > 500mls (7mls/kg)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="104" width="109" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Child? Yes       No]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="131" y="104" width="51" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[T&S :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="204" y="103" width="51" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[X-Match :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="144" y="120" width="142" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Num Units Available : ..........]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="137" width="195" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Surgical Site Marked? Yes               NA]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="167" y="105" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="257" y="105" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="61" y="105" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="100" y="105" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="120" width="111" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Consent form signed?]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="121" y="121" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="134" y="137" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="201" y="137" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="155" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Current Medication  .....................................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="171" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Allergies    No             Yes            Drug  ......................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="187" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Confirmed by Intern (System ID) :  ................................]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="79" y="172" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="138" y="172" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="6" y="211" width="71" height="20" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nursing :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="230" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Starvation: Last Ate                       Last Drank]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="246" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Weight  ................... kg   HR ................    BP  .............]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="262" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[RR .......................   SpO2  .............]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="278" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[IVI sited & running?  Y            N               ID wristband]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="120" y="279" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="167" y="279" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="272" y="279" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="298" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Confirmed by Nurse (System ID) :  ................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="6" y="320" width="86" height="20" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Anaesthesia :]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="339" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Difficult Airway / Aspiration Risk?]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="24" y="355" width="248" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[No]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="24" y="373" width="248" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Yes, equipment & assistance requested]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="7" y="356" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="7" y="373" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="390" width="279" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Confirmed by (T)ACO (System ID) : ................................]]></text>
+				</staticText>
+				<rectangle radius="6">
+					<reportElement x="0" y="410" width="299" height="47" backcolor="#CCCCEE"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="410" width="278" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Induction Time: ...........................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="7" y="432" width="279" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="14" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Date:  ..........................................]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="301" y="26" width="249" height="457"/>
+				<rectangle radius="6">
+					<reportElement x="0" y="294" width="249" height="25" backcolor="#CCEECC"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="2" width="249" height="289" backcolor="#EAFFEA"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="323" width="249" height="105" backcolor="#EAFFEA"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="32" y="14" width="185" height="30" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Surgeon & Anaesthetist introduced 
+to patient.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="34" y="46" width="189" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Team to review the planned list]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="34" y="66" width="189" height="33" forecolor="#000077"/>
+					<textElement verticalAlignment="Top">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Surgeon, Anaesthetist, Nurse,
+Verbally confirm]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="12" y="145" width="168" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Anticipated Critical Events]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="33" y="92" width="11" height="16" forecolor="#000077"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[.]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="126" y="359" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="12" y="46" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="12" y="66" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="45" y="92" width="111" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Patient]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="126" y="406" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="32" y="240" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="32" y="163" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="12" y="15" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="32" y="205" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="15" y="328" width="229" height="27" forecolor="#000077"/>
+					<textElement verticalAlignment="Top">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Has antibiotic prophylaxis been given
+within 60 mins of skin incision?]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="15" y="406" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="15" y="359" width="13" height="14"/>
+				</rectangle>
+				<rectangle radius="6">
+					<reportElement x="0" y="432" width="249" height="25" backcolor="#CCEECC"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="432" width="228" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Knife to Skin : ...................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="8" y="295" width="227" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Prep Start Time : ..................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="45" y="110" width="135" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Site (if appropriate)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="45" y="127" width="135" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Procedure]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="33" y="109" width="11" height="16" forecolor="#000077"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="33" y="126" width="11" height="16" forecolor="#000077"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="10" isBold="true"/>
+					</textElement>
+					<text><![CDATA[.]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="51" y="164" width="105" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Surgeon Reviews:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="149" y="164" width="82" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[What are the]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="34" y="180" width="197" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[critical or unexpected steps, operative duration, anticipated blood loss?]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="51" y="205" width="129" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Anaesthetist Reviews:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="170" y="205" width="61" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Are there]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="222" width="199" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[any patient concerns?]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="180" y="240" width="51" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Has]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="257" width="199" height="28" forecolor="#000077"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[sterility been confirmed? Are there
+equipment issues or concerns? ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="51" y="240" width="129" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nursing Team Reviews:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="358" width="61" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Yes]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="143" y="358" width="61" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Not Needed]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="405" width="61" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Yes]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="143" y="405" width="61" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[Not Needed]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="15" y="382" width="220" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Is Essential Imaging displayed?]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="553" y="26" width="249" height="457"/>
+				<rectangle radius="6">
+					<reportElement x="0" y="174" width="249" height="25" backcolor="#CCCCCC"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="29" width="249" height="142" backcolor="#EAEAEA"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<rectangle radius="10">
+					<reportElement x="0" y="203" width="249" height="225" backcolor="#EAEAEA"/>
+					<graphicElement>
+						<pen lineWidth="0.1"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="11" y="33" width="203" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nurse Verbally confims with the team:]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="13" y="256" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="10" y="58" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="10" y="81" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="30" y="58" width="190" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[The name of the procedure recorded]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="11" y="135" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="11" y="114" width="13" height="14"/>
+				</rectangle>
+				<staticText>
+					<reportElement x="31" y="212" width="205" height="43" forecolor="#000077"/>
+					<textElement verticalAlignment="Top">
+						<font size="11" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Surgeon, Anaesthetist, and Nurse convey key concerns to recovery Nurse]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement mode="Opaque" x="13" y="318" width="13" height="14"/>
+				</rectangle>
+				<rectangle>
+					<reportElement mode="Opaque" x="13" y="213" width="13" height="14"/>
+				</rectangle>
+				<rectangle radius="6">
+					<reportElement x="0" y="432" width="249" height="25" backcolor="#CCCCCC"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="7" y="432" width="228" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Recovery Out : ...................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="8" y="175" width="227" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Time Out : .....................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="80" width="207" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[That the instrument, sponge and needles counts are correct]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="112" width="203" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle"/>
+					<text><![CDATA[How the specimen is labelled]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="135" width="197" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Top"/>
+					<text><![CDATA[Whether there are any equipment problems to be addressed]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="32" y="318" width="203" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Post op medication Prescribed?]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="13" y="337" width="222" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Frequency of ward observations]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="13" y="382" width="222" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Pain score on discharge ...................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="13" y="406" width="222" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Destination ...........................................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="31" y="256" width="204" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Observations in recovery charted?]]></text>
+				</staticText>
+				<rectangle radius="6">
+					<reportElement x="0" y="1" width="249" height="25" backcolor="#CCCCCC"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</rectangle>
+				<staticText>
+					<reportElement x="11" y="2" width="203" height="25" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Closure : ........................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="13" y="276" width="222" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[NPO until ...............................................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="13" y="297" width="222" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Next medication due at ..................................]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="13" y="359" width="222" height="16" forecolor="#000077"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[.......................................................................................................]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

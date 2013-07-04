@@ -1,0 +1,70 @@
+
+    <table cellpadding=10>
+        <tr>
+            <td valign="top">
+                <label for="location_name">Hospital Name</label>
+            </td>
+            <td valign="top">
+                :
+            </td>
+            <td>
+                <input type="text" id="location_name" name="location[name]" value="<%= ( (@location)?(@location.name):("") ) %>" class="text" />
+            </td>
+        </tr>   
+        <tr>
+            <td valign="top">
+                <label for="location_description">Description</label>
+            </td>
+            <td valign="top">
+                :
+            </td>
+            <td>
+                <textarea id="location_description" name="location[description]" class="text textarea"><%= ( (@location.description)?(@location.description):("") ) %></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <label for="location_address1">Address</label>
+            </td>
+            <td valign="top">
+                :
+            </td>
+            <td>
+                <input type="text" id="location_address1" name="location[address1]" value="<%= ( (@location.address1)?(@location.address1):("") ) %>" class="text" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                &nbsp;
+            </td>
+            <td>
+                <input type="text" id="location_address2" name="location[address2]" value="<%= ( (@location.address2)?(@location.address2):("") ) %>" class="text" />
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <label for="location_county_district">District/City</label>
+            </td>
+            <td valign="top">
+                :
+            </td>
+            <td>
+                <input type="text" id="location_county_district" name="location[county_district]" value="<%= ( (@location.county_district)?(@location.county_district):("") ) %>" class="text" />
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <label for="location_country">Country</label>
+            </td>
+            <td valign="top">
+                :
+            </td>
+            <td>
+                <input type="text" id="location_country" name="location[country]" value="<%= ( (@location.country)?(@location.country):("") ) %>" class="text" />
+            </td>
+        </tr> 
+    </table>
+    

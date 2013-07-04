@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<subDataset name="ds">
+		<parameter name="startdate" class="java.lang.String">
+			<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+		</parameter>
+		<parameter name="enddate" class="java.lang.String">
+			<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT
+    (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) d, 
+    (SELECT name FROM location l WHERE l.location_id = e.location_id) theatre, 
+     (SELECT TRIM(CONCAT(COALESCE(prefix,''), ' ', COALESCE(given_name,''), ' ', COALESCE(family_name,'Undefined'))) FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN person_name p ON p.person_id = b.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 71) surgeon,     
+    ((SELECT TIME_TO_SEC(TIMEDIFF(TIME(o.value_datetime), TIME(s.value_datetime)))/60 FROM obs o LEFT OUTER JOIN obs s ON s.encounter_id = o.encounter_id WHERE o.encounter_id = e.encounter_id AND o.concept_id = 125 AND s.concept_id = 111) -    
+    (SELECT name FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN concept_answer a ON a.concept_id = b.value_coded LEFT OUTER JOIN concept_name n ON n.concept_id = a.answer_concept WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 61)) diffmins,
+         
+    SUM((((SELECT TIME_TO_SEC(TIMEDIFF(TIME(o.value_datetime), TIME(s.value_datetime)))/60 FROM obs o LEFT OUTER JOIN obs s ON s.encounter_id = o.encounter_id WHERE o.encounter_id = e.encounter_id AND o.concept_id = 125 AND s.concept_id = 111) /    
+    (SELECT name FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN concept_answer a ON a.concept_id = b.value_coded LEFT OUTER JOIN concept_name n ON n.concept_id = a.answer_concept WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 61)))) * 100 diffperc,
+    
+    CONVERT((SELECT name FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN concept_answer a ON a.concept_id = b.value_coded LEFT OUTER JOIN concept_name n ON n.concept_id = a.answer_concept WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 61),SIGNED) proctime
+FROM encounter e
+LEFT OUTER JOIN encounter_type y ON y.encounter_type_id = e.encounter_type
+WHERE y.name = "SURGICAL OPERATION" AND (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) >= $P{startdate} AND (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) <= $P{enddate}
+GROUP BY surgeon, d]]>
+		</queryString>
+		<field name="d" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="theatre" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="surgeon" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="diffmins" class="java.lang.Double">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="diffperc" class="java.lang.Double">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="proctime" class="java.lang.Long">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="mainstartdate" class="java.lang.String">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<parameter name="mainenddate" class="java.lang.String">
+		<defaultValueExpression><![CDATA[new String("")]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+    (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) d, 
+    (SELECT name FROM location l WHERE l.location_id = e.location_id) theatre, 
+     (SELECT TRIM(CONCAT(COALESCE(prefix,''), ' ', COALESCE(given_name,''), ' ', COALESCE(family_name,'Undefined'))) FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN person_name p ON p.person_id = b.value_numeric WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 71) surgeon,     
+    ((SELECT TIME_TO_SEC(TIMEDIFF(TIME(o.value_datetime), TIME(s.value_datetime)))/60 FROM obs o LEFT OUTER JOIN obs s ON s.encounter_id = o.encounter_id WHERE o.encounter_id = e.encounter_id AND o.concept_id = 125 AND s.concept_id = 111) -    
+    (SELECT name FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN concept_answer a ON a.concept_id = b.value_coded LEFT OUTER JOIN concept_name n ON n.concept_id = a.answer_concept WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 61)) diffmins,
+         
+    SUM((((SELECT TIME_TO_SEC(TIMEDIFF(TIME(o.value_datetime), TIME(s.value_datetime)))/60 FROM obs o LEFT OUTER JOIN obs s ON s.encounter_id = o.encounter_id WHERE o.encounter_id = e.encounter_id AND o.concept_id = 125 AND s.concept_id = 111) /    
+    (SELECT name FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN concept_answer a ON a.concept_id = b.value_coded LEFT OUTER JOIN concept_name n ON n.concept_id = a.answer_concept WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 61)))) * 100 diffperc,
+    
+    CONVERT((SELECT name FROM obs o LEFT OUTER JOIN obs b ON b.encounter_id = o.value_numeric LEFT OUTER JOIN concept_answer a ON a.concept_id = b.value_coded LEFT OUTER JOIN concept_name n ON n.concept_id = a.answer_concept WHERE o.encounter_id = e.encounter_id AND o.concept_id = 141 AND b.concept_id = 61),SIGNED) proctime
+FROM encounter e
+LEFT OUTER JOIN encounter_type y ON y.encounter_type_id = e.encounter_type
+WHERE y.name = "SURGICAL OPERATION" AND (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) >= $P{mainstartdate} AND (SELECT DATE_FORMAT(value_datetime,'%Y-%m-%d') FROM obs o WHERE o.encounter_id = e.encounter_id AND o.concept_id = 111) <= $P{mainenddate}
+GROUP BY surgeon, d]]>
+	</queryString>
+	<field name="d" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="theatre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="surgeon" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="diffmins" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="diffperc" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="proctime" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="547">
+			<bar3DChart>
+				<chart isShowLegend="false" evaluationTime="Report">
+					<reportElement x="0" y="0" width="802" height="547"/>
+					<chartTitle>
+						<font size="14" isBold="true"/>
+						<titleExpression><![CDATA["Surgeon Procedure Finishes Per Month 3D Bar Chart"]]></titleExpression>
+					</chartTitle>
+					<chartSubtitle>
+						<font isItalic="true"/>
+						<subtitleExpression><![CDATA["Chart Displaying Surgeon Percentage Finish Time to Procedure Standard Period Length Per Month for " + $F{d}]]></subtitleExpression>
+					</chartSubtitle>
+					<chartLegend/>
+					<hyperlinkTooltipExpression><![CDATA["Bar 3D Chart"]]></hyperlinkTooltipExpression>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="ds">
+							<datasetParameter name="startdate">
+								<datasetParameterExpression><![CDATA[$P{mainstartdate}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{d}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{surgeon}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{diffperc}]]></valueExpression>
+						<labelExpression><![CDATA[$F{d}]]></labelExpression>
+						<itemHyperlink/>
+					</categorySeries>
+				</categoryDataset>
+				<bar3DPlot>
+					<plot labelRotation="45.0"/>
+					<categoryAxisLabelExpression><![CDATA["Surgeon Name"]]></categoryAxisLabelExpression>
+					<categoryAxisFormat>
+						<axisFormat>
+							<labelFont>
+								<font isBold="true"/>
+							</labelFont>
+							<tickLabelFont/>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Actual Procedure Duration As Percentage of Total Procedure Length per Month"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat>
+							<labelFont>
+								<font isBold="true"/>
+							</labelFont>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</bar3DPlot>
+			</bar3DChart>
+		</band>
+	</summary>
+</jasperReport>

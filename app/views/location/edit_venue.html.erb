@@ -1,0 +1,18 @@
+<center>
+
+<% @parent = Location.find(@location.parent_location).name rescue "Hospital" %>
+
+<h1>Edit <%= @parent %> Sub-Unit</h1>
+
+<% form_tag ({:action => "update_venue"}, {:id => "frmMain"}) do %>
+
+    <input type="hidden" value="<%= @location.location_id %>" name="location[location_id]" id="location_location_id" />
+    
+    <table cellpadding=5>
+        <%= render :partial => "venue" %>
+
+    <%= submit_tag "Save", :class => "smallbutton" %>
+    <%= submit_tag "Cancel", :class => "smallbutton", :onclick => "$('frmMain').action='/location/show';" %>
+<% end %>
+
+</center>

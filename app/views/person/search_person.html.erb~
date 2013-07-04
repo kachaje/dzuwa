@@ -1,0 +1,22 @@
+<% @item = @result.names.first %>
+<% form_tag( {:action => :edit}, {:id => 'frmMain'} ) do %>
+
+    <h1><%= 'Editing ' + @item.given_name + ' ' + @item.family_name %></h1>
+    <table>
+        <tr>
+            <th bgcolor="#EAEAEA">
+                Title:
+            </th>
+            <td>
+                <input name="prefix" type="text" value="<%= @item.prefix %>"
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="submit" name="btnBack" value="Back" onClick="document.getElementById('frmMain').action = '/person/index'" />
+            </td>
+        </tr>
+    </table>
+<% end %>
